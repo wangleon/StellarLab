@@ -14,6 +14,7 @@ setup(
     packages = [
         'stella',
         'stella/catalog',
+        'stella/extinction',
         'stella/utils',
         ],
     )
