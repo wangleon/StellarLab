@@ -1,17 +1,18 @@
-.. Stella documentation master file, created by
-   sphinx-quickstart on Fri May 13 00:48:41 2016.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+Stella Documentation
+====================
 
-Welcome to Stella's documentation!
-==================================
+.. automodule:: stella
+   :members:
 
-Contents:
+Introduction
+------------
 
-.. toctree::
-   :maxdepth: 2
+.. currentmodule:: stella.extinction
 
+.. autosummary::
 
+   DustMap
+   get_Stromgren_Eby
 
 Indices and tables
 ==================
