@@ -1,5 +1,8 @@
 
 def find_sortedfile(target,filename,findfunc=None,outfunc=None,header=0):
+    '''
+    Find a value in a sorted ascii file.
+    '''
     find = False
     infile = open(filename)
     infile.seek(header,0)
@@ -20,8 +23,10 @@ def find_sortedfile(target,filename,findfunc=None,outfunc=None,header=0):
     else:
         return None
 
-
 def quickfind_sortedfile(target,filename,findfunc=None,outfunc=None,header=0):
+    '''
+    Find a value in a sorted ascii file using binary search.
+    '''
     infile = open(filename)
     infile.seek(header,0)
     # read the first row

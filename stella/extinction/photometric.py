@@ -3,7 +3,7 @@ from scipy.interpolate import InterpolatedUnivariateSpline
 
 def get_Stromgren_Eby(by,m1,c1,beta):
     """
-    get E(b-y) based on the method of Olsen, 1988, A&A, 189, 173
+    get E(b-y) based on the method of Olsen, 1988, *A&A*, 189, 173.
     """
 
     # interpolated table from Crawford, 1975, AJ, 80, 955 table 1
@@ -12,8 +12,8 @@ def get_Stromgren_Eby(by,m1,c1,beta):
                          0.189,0.196,0.204,0.214,0.226])
     c1_lst   = np.array([0.580,0.560,0.530,0.495,0.465,0.440,0.415,0.390,0.370,
                          0.350,0.330,0.310,0.290,0.270])
-    f_m1 = intp.InterpolatedUnivariateSpline(beta_lst,m1_lst[::-1],k=3)
-    f_c1 = intp.InterpolatedUnivariateSpline(beta_lst,c1_lst[::-1],k=3)
+    f_m1 = InterpolatedUnivariateSpline(beta_lst,m1_lst[::-1],k=3)
+    f_c1 = InterpolatedUnivariateSpline(beta_lst,c1_lst[::-1],k=3)
     m1_in = f_m1(beta)
     c1_in = f_c1(beta)
 

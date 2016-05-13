@@ -6,8 +6,13 @@ import astropy.io.fits as fits
 from scipy.interpolate import RectBivariateSpline
 
 class DustMap(object):
-    """Galactic dust map of Schlegel et al. 1998
-    usage::
+    """Galactic dust map of Schlegel et al., 1998, *ApJ*, 500, 525.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        from stella.extinction import DustMap
         dust_map = DustMap()
         EBV = dust_map.get_EBV(l,b)
 
@@ -24,7 +29,10 @@ class DustMap(object):
         based on the observaions of IRAS and DIRBE on COBE.
 
         also read http://www.astro.princeton.edu/~Schlegel/dust/local/local.html
-        call::
+
+        .. code-block:: python
+            
+            from stella.extinction import DustMap
             dust_map = DustMap()
             EBV = dust_map.get_EBV(l,b)
 
@@ -33,7 +41,7 @@ class DustMap(object):
         info, also read Arce & Goodman, 1999, ApJ, 512, L135.
 
         if inlayer is True and d is given, namely for stars in the reddening
-        layer, correct the E(B-V) by a factor of 1-exp(-|Dsinb|/h), where D is
+        layer, correct the E(B-V) by a factor of 1-exp(-\|Dsinb\|/h), where D is
         the distance in unit of pc, b is the galactic latitude, and h=125pc is
         the scale height of the reddening layer.
         """
