@@ -7,6 +7,46 @@ from scipy.interpolate import splprep, splev
 from ..param.metal import feh_to_z
 from ..utils.interpolation import newton
 
+
+_data_path = '%s/evolution/y2_tracks.fits'%os.getenv('STELLA_DATA')
+_data = None
+
+_mass_nodes = np.array([0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4,
+    1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9,
+    3.0, 3.2, 3.4, 3.6, 3.8, 4.0, 4.2, 4.5, 5.0])
+
+_z_nodes = np.array([0.00001, 0.0001, 0.0004, 0.001, 0.004, 0.007, 0.01, 0.02,
+    0.04, 0.06, 0.08])
+
+_alpha_nodes = np.array([0.0, 0.3, 0.6])
+
+def _read_track(mass,z,alpha=0.0):
+    '''
+    Read Y2 evolution track for given alpha, mass and z
+    '''
+    if _data == None:
+        _data = fits.getdata(_data_path)
+    # search the track
+    for row in _data:
+        if abs(row['alpha']-alpha)<1e-4 and \
+           abs(row['mass']-mass)<1e-4 and \
+           abs(math.log10(row['z'])-math.log10(z))<1e-4:
+            return row['logTeff'], row['logL'], row['age']
+    print 'Warning: the given track does not exist'
+    return None, None, None
+
+def _is_problematic_grid(self,mass,z,alpha):
+
+    if abs(alpha-0.0)<1e-3:
+        return (z,mass) in [(0.00001,2.4), (0.0001,2.9), (0.0004,3.8),
+            (0.0004,1.9), (0.001,2.3), (0.001,2.8), (0.001,4.0), (0.007,2.7),
+            (0.01, 2.9), (0.02, 4.0)]
+    else:
+        return False
+
+
+
+
 class Y2Track(object):
 
     _data_path = '%s/evolution/y2_tracks.fits'%os.getenv('STELLA_DATA')
@@ -75,7 +115,7 @@ class Y2Track(object):
                 logL_lst    = tmp[1]
                 age_lst     = tmp[2]
         else:
-            logTeff_lst, logL_lst, age_lst = None, None, None, None
+            logTeff_lst, logL_lst, age_lst = None, None, None
 
         return (logTeff_lst, logL_lst, age_lst)
 
