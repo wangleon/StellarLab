@@ -28,23 +28,33 @@ def _read_track(mass,z,alpha=0.0):
         _data = fits.getdata(_data_path)
     # search the track
     for row in _data:
-        if abs(row['alpha']-alpha)<1e-4 and \
-           abs(row['mass']-mass)<1e-4 and \
-           abs(math.log10(row['z'])-math.log10(z))<1e-4:
+        if alpha == row['alpha'] and mass == row['mass'] and z == row['z']:
             return row['logTeff'], row['logL'], row['age']
     print 'Warning: the given track does not exist'
     return None, None, None
 
-def _is_problematic_grid(self,mass,z,alpha):
+def _is_problematic_grid(mass,z,alpha):
 
-    if abs(alpha-0.0)<1e-3:
+    if alpha == 0.0:
         return (z,mass) in [(0.00001,2.4), (0.0001,2.9), (0.0004,3.8),
             (0.0004,1.9), (0.001,2.3), (0.001,2.8), (0.001,4.0), (0.007,2.7),
-            (0.01, 2.9), (0.02, 4.0)]
+            (0.01,2.9), (0.02,4.0)]
     else:
         return False
 
+def _in_grid(mass,z,alpha):
+    if alpha not in _alpha_nodes or mass not in _mass_nodes or \
+        z not in _z_nodes:
+        return False
 
+    if alpha == 0.0:
+        return (z,mass) not in [(0.0001,2.3), (0.001,2.1), (0.02,4.2),
+            (0.04,4.2), (0.06,4.2), (0.08,2.6), (0.08,4.0), (0.08,4.2),
+            (0.08,5.0)]
+    elif alpha == 0.6:
+        return mass != 4.2:
+    else:
+        return True
 
 
 class Y2Track(object):
