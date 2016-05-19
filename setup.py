@@ -16,7 +16,7 @@ setup(
         'stella/catalog',
         'stella/evolution',
         'stella/extinction',
-        'stella/param',
+        'stella/parameter',
         'stella/utils',
         ],
     )
