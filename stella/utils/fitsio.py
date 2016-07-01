@@ -38,6 +38,23 @@ def tform_to_dtype(tform):
 
 
 def get_bintable_info(filename,extension=1):
+    '''
+    Return the information of the binary table in FITS file.
+    Parameters
+    ----------
+    filename : string
+        Name of the FITS file
+    extension : integer
+        Which extension is the binary table in
+    Returns
+    -------
+    naxis1 : integer
+    naxis2 : integer
+    tfields : list
+    position : integer
+    dtype : 
+    fmtfunc : function
+    '''
     infile = open(filename)
     current_hdu = 0
     while(True):
