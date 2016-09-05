@@ -52,7 +52,7 @@ def _in_grid(mass,z,alpha):
             (0.04,4.2), (0.06,4.2), (0.08,2.6), (0.08,4.0), (0.08,4.2),
             (0.08,5.0)]
     elif alpha == 0.6:
-        return mass != 4.2:
+        return mass != 4.2
     else:
         return True
 

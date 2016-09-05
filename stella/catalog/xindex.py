@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import os
 import numpy as np
+import astropy.io.fits as fits
 
 from ..utils.asciifile import find_sortedfile, quickfind_sortedfile
 
@@ -62,7 +63,7 @@ def HIP_to_TYC(starname):
         hip = int(starname[3:])
 
     fn = '%s/HIP-TYC.fits'%xindex_path
-    f = pf.open(fn)
+    f = fits.open(fn)
     data = f[1].data
     f.close()
     m = data['HIP']==hip
@@ -76,7 +77,7 @@ def HIP_to_2MASS(starname,full=False):
         hip = int(starname[3:])
 
     fn = '%s/HIP-2MASS.fits'%xindex_path
-    f = pf.open(fn)
+    f = fits.open(fn)
     data = f[1].data
     i = np.searchsorted(data['HIP'],hip)
     row = data[i]
@@ -154,7 +155,7 @@ def TYC_to_HIP(starname):
         tyc1,tyc2,tyc3 = int(g[0]),int(g[1]),int(g[2])
 
     fn = '%s/TYC-HIP.fits'%xindex_path
-    f = pf.open(fn)
+    f = fits.open(fn)
     data = f[1].data
     f.close()
     m1 = data['TYC1']==tyc1
@@ -171,7 +172,7 @@ def TYC_to_2MASS(starname,full=False):
         tyc1,tyc2,tyc3 = int(g[0]),int(g[1]),int(g[2])
 
     fn = '%s/TYC-2MASS.fits'%xindex_path
-    f = pf.open(fn)
+    f = fits.open(fn)
     data = f[1].data
     f.close()
 

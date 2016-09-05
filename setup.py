@@ -9,7 +9,7 @@ setup(
     author_email = 'wang.leon@gmail.com',
     license = 'BSD',
     scripts = [
-        #'scripts/findstar',
+        'scripts/findstar',
         ],
     packages = [
         'stella',

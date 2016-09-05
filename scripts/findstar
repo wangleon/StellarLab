@@ -1,0 +1,168 @@
+#!/usr/bin/env python
+import sys
+import math
+import numpy as np
+from astropy.coordinates import SkyCoord
+import stella.catalog as starcat
+
+def main():
+    starname = ' '.join(sys.argv[1:])
+    if len(starname.strip()) > 0:
+        find_star(starname)
+
+def find_star(starname):
+    eqcoord_lst   = []
+    magnitude_lst = []
+    color_lst     = []
+    para_lst      = []
+    pm_lst        = []
+    spectype_lst  = []
+    atmosphere_lst = []
+    abundance_lst  = []
+
+    name_lst = starcat.name.cross_starnames(starname)
+
+    if 'HIP' in name_lst:
+        row = starcat.find_HIP(name_lst['HIP'][0])
+        catname = 'Hipparcos (I/239, Perryman 1997)'
+        #eqcoord = SkyCoord(row['radeg'],row['dedeg'], frame='icrs', unit='deg')
+        #eqcoord_lst.append(('ICRS',eqcoord,catname))
+        magnitude_lst.append(('V',row['Vmag'],None,catname))
+        color_lst.append(('B','V',row['B-V'],row['e_B-V'],catname))
+        color_lst.append(('V','I',row['V-I'],row['e_V-I'],catname))
+        if not np.isnan(row['BTmag']) and not np.isnan(row['VTmag']):
+            BTVT = row['BTmag']-row['VTmag']
+            e_BTVT = math.sqrt(row['e_BTmag']**2+row['e_VTmag']**2)
+            color_lst.append(('Bt','Vt',BTVT,e_BTVT,catname))
+        para_lst.append((row['Plx'],row['e_Plx'],catname))
+        spectype_lst.append((row['SpType'],catname))
+
+
+        row = starcat.find_HIP2(name_lst['HIP'][0])
+        catname = 'Hipparcos New (I/311, van Leeuwen 2007)'
+        eqcoord = SkyCoord(row['radeg'], row['dedeg'], frame='icrs', unit='deg')
+        eqcoord_lst.append(('ICRS',eqcoord,catname))
+        #color_lst.append(('B','V',row['B-V'],row['e_B-V'],catname))
+        #color_lst.append(('V','I',row['V-I'],None,catname))
+        pm_lst.append((row['pmRA'],row['e_pmRA'],row['pmDE'],row['e_pmDE'],catname))
+        para_lst.append((row['Plx'],row['e_Plx'],catname))
+
+    if 'TYC' in name_lst:
+        row = starcat.find_TYC(name_lst['TYC'][0])
+        catname = 'Tycho-2 (I/259, Hog 2000)'
+        eqcoord = SkyCoord(row['RAdeg'], row['DEdeg'], frame='icrs', unit='deg')
+        eqcoord_lst.append(('ICRS',eqcoord,catname))
+        magnitude_lst.append(('Bt',row['BTmag'],row['e_BTmag'],catname))
+        magnitude_lst.append(('Vt',row['VTmag'],row['e_VTmag'],catname))
+        pm_lst.append((row['pmRA'],row['e_pmRA'],row['pmDE'],row['e_pmDE'],catname))
+
+    if '2MASS' in name_lst:
+        if 'HIP' in name_lst:
+            tmp = starcat.xindex.HIP_to_2MASS(name_lst['HIP'][0], full=True)
+        elif 'TYC' in name_lst:
+            tmp = starcat.xindex.TYC_to_2MASS(name_lst['TYC'][0], full=True)
+        catname = '2MASS (II/246, Cutri 2003)'
+        magnitude_lst.append(('J',  tmp[0][1],tmp[0][4],catname))
+        magnitude_lst.append(('H',  tmp[0][2],tmp[0][5],catname))
+        magnitude_lst.append(('Ks', tmp[0][3],tmp[0][6],catname))
+
+        #atmosphere_lst = starcat.find_atmosphere(name_lst['2MASS'][0])
+        #abundance_lst  = starcat.find_abundance(name_lst['2MASS'][0])
+
+
+    print 'Names'
+    pri_lst = ['HD','HIP','BD','CD','TYC','2MASS']
+    for cat in pri_lst:
+        if cat in name_lst:
+            if type(name_lst[cat])==type([]):
+                for name in name_lst[cat]:
+                    print ' * %-20s'%name,
+            else:
+                print ' * %-20s'%name_lst[cat],
+    print
+
+    if len(eqcoord_lst)>0:
+        print 'Equational Coordinates'
+        for rec in eqcoord_lst:
+            system, eqcoord, catname  = rec
+            gal = eqcoord.galactic
+            l, b = gal.l, gal.b
+            print ' * %-6s %13s %13s (%7.3f %+7.3f) -- %s'%(
+                    system,
+                    eqcoord.ra.to_string(unit='deg',sep=':'),
+                    eqcoord.dec.to_string(unit='deg',sep=':'),
+                    l.degree, b.degree, catname)
+
+    if len(pm_lst)>0:
+        print 'Proper Motions'
+        for rec in pm_lst:
+            pmRA,e_pmRA,pmDE,e_pmDE,catname = rec
+            print u' * %7.2f \xb1 %.2f, %7.2f \xb1 %.2f -- %s'%(pmRA,e_pmRA,pmDE,e_pmDE,catname)
+
+    if len(magnitude_lst)>0:
+        print 'Magnitudes'
+        for rec in magnitude_lst:
+            band = rec[0]
+            mag  = rec[1]
+            err  = rec[2]
+            if err == None:
+                err_s = ''
+            else:
+                err_s = u'(\xb1%5.3f)'%err
+            catname = rec[3]
+            print u' * %2s %6.3f %8s -- %s'%(band,mag,err_s,catname)
+
+    if len(color_lst)>0:
+        print 'Colour indices'
+        for rec in color_lst:
+            band1, band2, color, err, catname = rec
+            if err is None:
+                err_s = ''
+            else:
+                err_s = u'(\xb1%5.3f)'%err
+            catname = rec[4]
+            print u' * %2s-%2s %6.3f %6s -- %s'%(band1,band2,color,err_s,catname)
+
+    if len(para_lst)>0:
+        print 'Parallax'
+        for rec in para_lst:
+            para = rec[0]
+            e_para = rec[1]
+            catname = rec[2]
+            re_para = e_para/para*100.
+            d = 1000./para
+            e_d = d*re_para/100.
+            print u' * %.2f \xb1 %.2f mas (\xb1%4.1f%%) %5.2f \xb1 %4.2f pc -- %s'%(para,e_para,re_para,d,e_d,catname)
+
+    if len(spectype_lst)>0:
+        print 'Spectral Type'
+        for rec in spectype_lst:
+            spectype = rec[0]
+            catname  = rec[1]
+            print ' * %-5s -- %s'%(spectype,catname)
+
+    if len(atmosphere_lst)>0:
+        print 'Atmospheric parameters'
+        for rec in atmosphere_lst:
+            if 'vturb' in rec:
+                vturb = '%5.2f'%rec['vturb'].value
+            else:
+                vturb = ''
+
+            print '%6d %5.2f %5.2f %5s %s'%(
+                    rec['Teff'].value,
+                    rec['logg'].value,
+                    rec['[Fe/H]'].value,
+                    vturb,
+                    rec['dataset'])
+
+    if len(abundance_lst)>0:
+        print 'Chemical abundances'
+        #for rec in abundance_lst:
+        #    for key in rec:
+        #        print key,rec[key]
+
+
+
+if __name__=='__main__':
+    main()

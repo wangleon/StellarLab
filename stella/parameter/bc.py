@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import math
 
-from .errors import ColorIndexError, ParamRangeError, MissingParamError
+from .error import ColorIndexError, ParamRangeError, MissingParamError
 
 def get_BC(ref, **kwargs):
     ref = ref.strip().lower()
@@ -84,7 +84,7 @@ def _get_dwarf_bc_Alonso1995(**kwargs):
     coeff2 = [+2.23403e-4, -1.71897e-4, +5.51085e-5, -6.41071e-6,
               -3.71945e-5, +4.99847e-5, -2.41517e-5, +4.10655e-6]
 
-    phi = lambda coeff,color,feh:
+    phi = lambda coeff,color,feh: \
             coeff[0] + coeff[1]*color + coeff[2]*color**2 + coeff[3]*color**3 +\
             coeff[4]*feh + coeff[5]*color*feh + coeff[6]*color**2*feh +\
             coeff[7]*color**3*feh
