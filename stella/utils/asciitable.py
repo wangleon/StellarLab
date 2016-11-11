@@ -12,43 +12,66 @@ def load_txt(filename):
 
     # initialize parameters
     names, formats, custom, delimiter, data = None, None, None, None, None
+    add_names, add_formats, add_values = [], [], []
 
     for row in file1:
         row = row.strip()
-
-        if len(row)==0 or row[0]=='#':
-            # comment line or empty line
+        if len(row) == 0 or row[0] == '#':
             continue
 
-        elif row[0]=='%':
+        if row[0] == '%':
+            row = row[1:].strip()
+            if '=' in row:
+                g = row.split('=')
+                key   = g[0].strip()
+                value = g[1].strip()
+                if key == 'names':
+                    names = [v.strip() for v in value.split(',')]
+                elif key == 'formats':
+                    formats = [v.strip() for v in value.split(',')]
+                elif key == 'delimiter':
+                    delimiter = value.strip()
+                elif key[0:6] == 'global':
+                    g2 = key.split()
+                    name = g2[2]
+                    fmt = g2[1]
+                    if fmt == 'string':
+                        value = value
+                        fmt = 'S%d'%len(value)
+                    elif fmt == 'float':
+                        value = float(value)
+                        fmt = 'f'
+                    elif fmt == 'double':
+                        value = float(value)
+                        fmt = 'd'
+                    elif fmt == 'int':
+                        value = int(value)
+                        fmt = 'i'
+                    else:
+                        raise ValueError
+                    add_names.append(name)
+                    add_formats.append(fmt)
+                    add_values.append(value)
+                else:
+                    pass
+        else:
+            # data begin
+            # initialize dytpe
+            if custom is None and None not in [names, formats]:
+                ncol = len(names)
+                if len(add_names)>0:
+                    for name, fmt in zip(add_names, add_formats):
+                        names.append(name)
+                        formats.append(fmt)
+                custom = np.dtype({'names':list(names),'formats':list(formats)})
+                data = []
 
-            if '=' not in row:
-                continue
-            key   = row[1:].split('=')[0].strip()
-            value = row[1:].split('=')[1].strip()
-            if key == 'names':
-                names = [v.strip() for v in value.split(',')]
-            elif key == 'formats':
-                formats = [v.strip() for v in value.split(',')]
-            elif key == 'delimiter':
-                delimiter = value.strip()
-            else:
-                pass
-            continue
-
-        # if names and formats are ready, initialize dytpe
-        # execute only once.
-        if custom is None and names is not None and formats is not None:
-            custom = np.dtype({'names':list(names), 'formats': list(formats)})
-            data = []
-
-        if custom is not None:
             if delimiter is None:
                 g = row.split()
             else:
                 g = row.split(delimiter)
             rec = []
-            for i, descr in enumerate(custom.descr):
+            for i, descr in enumerate(custom.descr[0:ncol]):
                 if descr[1][1]=='i':
                     try:
                         d = int(g[i])
@@ -64,10 +87,10 @@ def load_txt(filename):
                 else:
                     print 'Unknow describer: ',descr[1]
                 rec.append(d)
+            for value in add_values:
+                rec.append(value)
             recdata = np.array(tuple(rec), dtype=custom)
             data.append(recdata)
-        else:
-            print 'Numpy.dtype not defined'
     file1.close()
     data = np.array(data, dtype=custom)
     return data
