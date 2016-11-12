@@ -45,7 +45,14 @@ def load_txt(filename):
                         value = float(value)
                         fmt = 'd'
                     elif fmt == 'int':
-                        value = int(value)
+                        if len(value)>2 and value[0:2]=='0b':
+                            value = int(value, 2)
+                        elif len(value)>2 and value[0:2]=='0x':
+                            value = int(value, 16)
+                        elif len(value)>1 and value[0]=='0':
+                            value = int(value, 8)
+                        else:
+                            value = int(value)
                         fmt = 'i'
                     else:
                         raise ValueError
@@ -72,21 +79,26 @@ def load_txt(filename):
                 g = row.split(delimiter)
             rec = []
             for i, descr in enumerate(custom.descr[0:ncol]):
+                value = g[i].strip()
                 if descr[1][1]=='i':
-                    try:
-                        d = int(g[i])
-                    except:
-                        d = None
+                    if len(value)>2 and value[0:2]=='0b':
+                        value = int(value, 2)
+                    elif len(value)>2 and value[0:2]=='0x':
+                        value = int(value, 16)
+                    elif len(value)>1 and value[0]=='0':
+                        value = int(value, 8)
+                    else:
+                        value = int(value)
                 elif descr[1][1] in ['f','d']:
                     try:
-                        d = float(g[i])
+                        value = float(value)
                     except:
-                        d = None
+                        value = None
                 elif descr[1][1]=='S':
-                    d = g[i]
+                    value = value
                 else:
                     print 'Unknow describer: ',descr[1]
-                rec.append(d)
+                rec.append(value)
             for value in add_values:
                 rec.append(value)
             recdata = np.array(tuple(rec), dtype=custom)
