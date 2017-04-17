@@ -37,24 +37,30 @@ def find_star(starname):
         para_lst.append((row['Plx'],row['e_Plx'],catname))
         spectype_lst.append((row['SpType'],catname))
 
-
-        row = starcat.find_HIP2(name_lst['HIP'][0])
-        catname = 'Hipparcos New (I/311, van Leeuwen 2007)'
-        eqcoord = SkyCoord(row['radeg'], row['dedeg'], frame='icrs', unit='deg')
-        eqcoord_lst.append(('ICRS',eqcoord,catname))
-        #color_lst.append(('B','V',row['B-V'],row['e_B-V'],catname))
-        #color_lst.append(('V','I',row['V-I'],None,catname))
-        pm_lst.append((row['pmRA'],row['e_pmRA'],row['pmDE'],row['e_pmDE'],catname))
-        para_lst.append((row['Plx'],row['e_Plx'],catname))
+        try:
+            row = starcat.find_HIP2(name_lst['HIP'][0])
+            catname = 'Hipparcos New (I/311, van Leeuwen 2007)'
+            eqcoord = SkyCoord(row['RAdeg'], row['DEdeg'], frame='icrs', unit='deg')
+            eqcoord_lst.append(('ICRS',eqcoord,catname))
+            #color_lst.append(('B','V',row['B-V'],row['e_B-V'],catname))
+            #color_lst.append(('V','I',row['V-I'],None,catname))
+            pm_lst.append((row['pmRA'],row['e_pmRA'],row['pmDE'],row['e_pmDE'],catname))
+            para_lst.append((row['Plx'],row['e_Plx'],catname))
+        except:
+            pass
 
     if 'TYC' in name_lst:
         row = starcat.find_TYC(name_lst['TYC'][0])
         catname = 'Tycho-2 (I/259, Hog 2000)'
-        eqcoord = SkyCoord(row['RAdeg'], row['DEdeg'], frame='icrs', unit='deg')
-        eqcoord_lst.append(('ICRS',eqcoord,catname))
-        magnitude_lst.append(('Bt',row['BTmag'],row['e_BTmag'],catname))
-        magnitude_lst.append(('Vt',row['VTmag'],row['e_VTmag'],catname))
-        pm_lst.append((row['pmRA'],row['e_pmRA'],row['pmDE'],row['e_pmDE'],catname))
+        if not np.isnan(row['RAdeg']) and not np.isnan(row['DEdeg']):
+            eqcoord = SkyCoord(row['RAdeg'], row['DEdeg'], frame='icrs', unit='deg')
+            eqcoord_lst.append(('ICRS',eqcoord,catname))
+        if not np.isnan(row['BTmag']):
+            magnitude_lst.append(('Bt',row['BTmag'],row['e_BTmag'],catname))
+        if not np.isnan(row['VTmag']):
+            magnitude_lst.append(('Vt',row['VTmag'],row['e_VTmag'],catname))
+        if not np.isnan(row['pmRA']) and not np.isnan(row['pmDE']):
+            pm_lst.append((row['pmRA'],row['e_pmRA'],row['pmDE'],row['e_pmDE'],catname))
 
     if '2MASS' in name_lst:
         if 'HIP' in name_lst:
@@ -105,7 +111,7 @@ def find_star(starname):
             band = rec[0]
             mag  = rec[1]
             err  = rec[2]
-            if err == None:
+            if err is None:
                 err_s = ''
             else:
                 err_s = u'(\xb1%5.3f)'%err
