@@ -17,6 +17,8 @@ setup(
         'stella/evolution',
         'stella/extinction',
         'stella/parameter',
+        'stella/spectroscopy',
+        'stella/kinetics',
         'stella/utils',
         ],
     )
