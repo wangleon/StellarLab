@@ -7,4 +7,5 @@ Table of Contents
 
    index
    extinction
+   parameter
    utilities
