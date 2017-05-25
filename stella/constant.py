@@ -19,6 +19,9 @@ pc = 3.08567758e16      # m,            parsec in meter
 ly = 9460730472580800.  # m,            light-year, exactly
 d_earth_sun = 14961875300. # m,         mean Earth-Sun distance
 
+# time
+tropical_year = 365.242190419 # days,    tropical year in SI days (Moisson, 1999, A&A, 341, 318)
+
 # celestial bodies      
 R_sun   = 695508000.    # m,            solar radius
 R_earth =   6378136.    # m,            earth equatorial radius
