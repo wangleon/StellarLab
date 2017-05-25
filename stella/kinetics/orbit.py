@@ -214,3 +214,56 @@ def compute_uvw(**kwargs):
         V_err = math.sqrt(e[1,0] + e2c*B[1,1]*B[1,2])
         W_err = math.sqrt(e[2,0] + e2c*B[2,1]*B[2,2])
         return UVW((U, U_err), (V, V_err), (W, W_err), U_plus=U_plus)
+
+def compute_GalXYZ(**kwargs):
+    '''
+    comput Galactic position (X, Y, Z)
+    '''
+    from astropy.coordinates import SkyCoord
+    # parse RA and Dec
+    if 'eqcoord' in kwargs:
+        eqcoord = kwargs.pop('eqcoord')
+        if not isinstance(eqcoord, SkyCoord):
+            ra, dec = parse_pairwise(eqcoord)
+            frame   = kwargs.pop('frame', 'icrs')
+            eqcoord = SkyCoord(ra, dec, frame=frame, unit='deg')
+        gal = eqcoord.galactic
+        l, b = gal.l.degree, gal.b.degree
+    elif 'ra' in kwargs and 'dec' in kwargs:
+        ra    = kwargs.pop('ra')
+        dec   = kwargs.pop('dec')
+        frame = kwargs.pop('frame', 'icrs')
+        eqcoord = SkyCoord(ra, dec, frame=frame, unit='deg')
+        gal = eqcoord.galactic
+        l, b = gal.l.degree, gal.b.degree
+    elif 'galactic' in kwargs:
+        l, b = parse_pairwise(eqcoord)
+    elif 'l' in kwargs and 'b' in kwargs:
+        l = kwargs.pop('l')
+        b = kwargs.pop('b')
+    else:
+        raise ValueError
+
+    l = l/180.*math.pi
+    b = b/180.*math.pi
+
+    # parse distance
+    if 'distance' in kwargs:
+        d, d_err = parse_value_err(kwargs.pop('distance'))
+    elif 'parallax' in kwargs:
+        para, para_err = parse_value_err(kwargs.pop('parallax'))
+        d = 1000./para
+        if para_err is None:
+            d_err = None
+        else:
+            d_err = d*para_err/para
+    else:
+        raise ValueError
+
+    Rsun = kwargs.pop('Rsun', 8.5e3)
+
+    x = Rsun - d*math.cos(b)*math.cos(l)
+    y = d*math.cos(b)*math.sin(l)
+    z = d*math.sin(b)
+
+    return (x, y, z)
