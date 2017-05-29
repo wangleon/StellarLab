@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os
 import struct
 import numpy as np
@@ -50,15 +51,20 @@ def find_HIP2(starname):
     elif starname.isdigit():
         hip = int(starname)
 
-    if hip<=0 or hip > 118218:
-        return None
+    nbyte, nrow, ncol, pos, dtype, fmtfunc = get_bintable_info(filename)
 
-    f = fits.open(filename)
-    data = f[1].data
-    i = np.searchsorted(data['HIP'],hip)
-    row = data[i]
-    f.close()
-    return row
+    if hip<=0 or hip > 118218 or hip > nrow:
+        raise ItemNotFound(hip)
+
+    infile = open(filename)
+    infile.seek(pos+(hip-1)*nbyte, 0)
+    item = fmtfunc(infile.read(nbyte))
+    infile.close()
+
+    if item['HIP'] <= 0:
+        raise ItemNotFound(hip)
+
+    return item
 
 def find_TYC(starname):
 
@@ -99,11 +105,11 @@ def find_TYC(starname):
         if key2 == key + 1:
             infile.seek(-4,1)
             row2 = fmtfunc(infile.read(nbyte))
-            print 'Warning: There are more than 1 star matched'
+            print('Warning: There are more than 1 star matched')
             t1 = (key2 & 0b11111111111111000000000000000000)/2**18
             t2 = (key2 & 0b00000000000000111111111111110000)/2**4
             t3 = (key2 & 0b00000000000000000000000000001110)/2
-            print t1,t2,t3,row2
+            print(t1,t2,t3,row2)
     infile.close()
     return row
 

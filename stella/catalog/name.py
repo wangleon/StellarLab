@@ -154,15 +154,15 @@ def _get_regular_HIP_name(starname):
 
     '''get regular HIP name'''
 
-    if type(starname)==type('a'):
+    if isinstance(starname, str):
         starname = starname.strip()
         starname = 'HIP '+starname[3:].strip()
 
-    elif type(starname) in [type(1),type(1L)]:
+    elif isinstance(starname, int):
         starname = 'HIP '+str(starname)
 
     else:
-        print 'Error'
+        raise ValueError
 
     return starname
 
@@ -170,7 +170,7 @@ def _get_regular_HD_name(starname):
 
     '''get regular HD name'''
 
-    if type(starname)==type('a'):
+    if isinstance(starname, str):
 
         starname = starname.strip()
 
@@ -180,11 +180,11 @@ def _get_regular_HD_name(starname):
         else:
             starname = 'HD %d'%(int(starname[2:]))
 
-    elif type(starname) in [type(1),type(1L)]:
+    elif isinstance(starname, int):
         starname = 'HD %d'%starname
 
     else:
-        print 'Error: starname=',starname
+        raise ValueError
 
     return starname
 
@@ -213,7 +213,7 @@ def _get_regular_BD_name(starname):
         elif comp.islower():
             starname = starname[:-1].strip()+comp
         else:
-            print 'Error: Wrong component',starname
+            raise ValueError
 
     # parse 'BD -3 23' to 'BD -03 23'
     g = starname.split()
@@ -245,7 +245,7 @@ def _get_regular_CD_name(starname):
         elif comp.islower():
             starname = starname[:-1].strip()+comp
         else:
-            print 'Error: Wrong component',starname
+            raise ValueError
 
     # parse 'CD -22 0023' to 'CD -22 23'
     g = starname.split()
@@ -283,7 +283,7 @@ def _get_regular_G_name(starname):
 
 def _get_regular_TYC_name(*args):
     '''get regular TYC name'''
-    if len(args)==1 and type(args[0])==type('a'):
+    if len(args)==1 and isinstance(args[0], str):
         starname = args[0].strip()
         starname = 'TYC '+starname[3:].strip()
 

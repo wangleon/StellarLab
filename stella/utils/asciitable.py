@@ -97,7 +97,7 @@ def load_txt(filename):
                 elif descr[1][1]=='S':
                     value = value
                 else:
-                    print 'Unknow describer: ',descr[1]
+                    raise ValueError
                 rec.append(value)
             for value in add_values:
                 rec.append(value)
@@ -135,7 +135,6 @@ def save_txt(filename, data, format_dict=None):
         else:
             break
     if has_delimiter:
-        print "can't find seperator"
         raise ValueError
 
     # write delimiter, names and formats.

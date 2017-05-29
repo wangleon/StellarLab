@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+from __future__ import print_function
 import os
 import math
 import numpy as np
@@ -103,7 +103,7 @@ class DustMap(object):
                 xpix = (cd2_2 * xtemp - cd1_2 * ytemp) / denom + (crpix1 - 1.)
                 ypix = (cd1_1 * ytemp - cd2_1 * xtemp) / denom + (crpix2 - 1.)
         else:
-            print 'Unsupported projection method in CTYPE keywords'
+            print('Unsupported projection method in CTYPE keywords')
     
         x1 = min(max(int(xpix)-3,0),naxis1-6)
         x2 = x1 + 6

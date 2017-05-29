@@ -12,5 +12,4 @@ def get_track(track,**kwargs):
     elif track == 'geneva':
         return GenevaTrack(**kwargs)
     else:
-        print 'Error: Cannot find this track',track
         raise ValueError

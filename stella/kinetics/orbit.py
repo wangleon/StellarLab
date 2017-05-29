@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 import math
 import numpy as np
 
@@ -43,7 +42,6 @@ class UVW(object):
                 solar_V, solar_V_err = v, 0.0
                 solar_W, solar_W_err = w, 0.0
         else:
-            print 'Unknown reference %s'%ref
             raise ValueError
 
         if self.U_plus == 'center':
@@ -237,7 +235,7 @@ def compute_GalXYZ(**kwargs):
         gal = eqcoord.galactic
         l, b = gal.l.degree, gal.b.degree
     elif 'galactic' in kwargs:
-        l, b = parse_pairwise(eqcoord)
+        l, b = parse_pairwise(kwargs.pop('galactic'))
     elif 'l' in kwargs and 'b' in kwargs:
         l = kwargs.pop('l')
         b = kwargs.pop('b')

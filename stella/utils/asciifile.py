@@ -1,12 +1,19 @@
+from __future__ import print_function
+import time
 
-def find_sortedfile(target,filename,findfunc=None,outfunc=None,header=0):
+def find_sortedfile(target,filename,findfunc=None,outfunc=None,header=0,
+        verbose=False):
     '''
     Find a value in a sorted ascii file.
     '''
+    if verbose:
+        t1 = time.time()
     find = False
     infile = open(filename)
     infile.seek(header,0)
+    count = 0
     for row in infile:
+        count += 1
         info = findfunc(row)
         if target == info:
             find = True
@@ -19,14 +26,20 @@ def find_sortedfile(target,filename,findfunc=None,outfunc=None,header=0):
     infile.close()
 
     if find:
+        if verbose:
+            t2 = time.time()
+            print('%10d readings, %10.3f msec'%(count, (t2-t1)*1000))
         return outfunc(row)
     else:
         return None
 
-def quickfind_sortedfile(target,filename,findfunc=None,outfunc=None,header=0):
+def quickfind_sortedfile(target,filename,findfunc=None,outfunc=None,header=0,
+        verbose=False):
     '''
     Find a value in a sorted ascii file using binary search.
     '''
+    if verbose:
+        t1 = time.time()
     infile = open(filename)
     infile.seek(header,0)
     # read the first row
@@ -59,12 +72,19 @@ def quickfind_sortedfile(target,filename,findfunc=None,outfunc=None,header=0):
             i1 = i3
         else:
             infile.close()
+            if verbose:
+                t2 = time.time()
+                print('%10d readings, %10.3f msec'%(count, (t2-t1)*1000))
             return outfunc(row3)
 
     infile.seek(i1,0)
     while(infile.tell()<i2+rowlen):
+        count += 1
         row = infile.read(rowlen)
         if target == findfunc(row):
             infile.close()
+            if verbose:
+                t2 = time.time()
+                print('%10d readings, %10.3f msec'%(count, (t2-t1)*1000))
             return outfunc(row)
     return None
