@@ -1,10 +1,11 @@
+from __future__ import print_function
 import os
 import math
 import numpy as np
 import astropy.io.fits as fits
 from scipy.interpolate import splprep, splev
 
-from ..param.metal import feh_to_z
+from ..parameter.metal import feh_to_z
 from ..utils.interpolation import newton
 
 
@@ -30,7 +31,7 @@ def _read_track(mass,z,alpha=0.0):
     for row in _data:
         if alpha == row['alpha'] and mass == row['mass'] and z == row['z']:
             return row['logTeff'], row['logL'], row['age']
-    print 'Warning: the given track does not exist'
+    print('Warning: the given track does not exist')
     return None, None, None
 
 def _is_problematic_grid(mass,z,alpha):

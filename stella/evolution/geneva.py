@@ -1,11 +1,10 @@
-#!/usr/bin/env python
 import os
 import math
 import numpy as np
 import astropy.io.fits as fits
 from scipy.interpolate import splprep, splev
 
-from ..param.metal import feh_to_z
+from ..parameter.metal import feh_to_z
 from ..utils.interpolation import newton
 
 class GenevaTrack(object):
