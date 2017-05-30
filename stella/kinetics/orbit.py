@@ -197,6 +197,8 @@ def compute_GalXYZ(**kwargs):
 
     R0 = kwargs.pop('R0', 8.5)
 
+    d *= 1e-3
+
     x = R0 - d*math.cos(b)*math.cos(l)
     y = d*math.cos(b)*math.sin(l)
     z = d*math.sin(b)
