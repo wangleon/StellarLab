@@ -1,69 +1,6 @@
 import math
 import numpy as np
 
-class UVW(object):
-    '''Galactic UVW velocities
-    '''
-    def __init__(self, U, V, W, U_plus='center'):
-        self.U, self.U_err = parse_value_err(U)
-        self.V, self.V_err = parse_value_err(V)
-        self.W, self.W_err = parse_value_err(W)
-        self.U_plus = U_plus
-
-    def __str__(self):
-        return '(U, V, W) = (%f +- %f, %f +- %f, %f +- %f) km/s (U+ = %s)'%(
-                self.U, self.U_err, self.V, self.V_err, self.W, self.W_err, self.U_plus)
-
-    def correct_to_LSR(self, ref='Dehnen1998'):
-        '''
-        Correct solar U, V, W velocity to LSR
-
-        Notes
-        ------
-        * `Mihalas1968`: Mihalas, D. & Routly, P.M., 1968, *Galactic Astronomy*
-            (San Francisco: W.H. Freeman), chap. 5 ("standard solar motion")
-        * `Dehnen1998`: Dehnen & Binney, 1998, *MNRAS*, 298, 387
-        * `Huang2015`: Huang et al., 2015, *MNRAS*, 449, 162
-        '''
-
-        uvw = {
-                'Mihalas1968': (10.4, 14.8, 7.3),
-                'Dehnen1998': ((10.00, 0.36), ( 5.25, 0.62), (7.17, 0.38)),
-                'Huang2015':  (( 7.01, 0.20), (10.13, 0.12), (4.95, 0.09)),
-                }
-        if ref in uvw:
-            u, v, w = uvw[ref]
-            if isinstance(u, tuple):
-                solar_U, solar_U_err = u
-                solar_V, solar_V_err = v
-                solar_W, solar_W_err = w
-            else:
-                solar_U, solar_U_err = u, 0.0
-                solar_V, solar_V_err = v, 0.0
-                solar_W, solar_W_err = w, 0.0
-        else:
-            raise ValueError
-
-        if self.U_plus == 'center':
-            U_LSR = self.U + solar_U
-        elif self.U_plus == 'anticenter':
-            U_LSR = self.U - solar_U
-        else:
-            raise ValueError
-        V_LSR = self.V + solar_V
-        W_LSR = self.W + solar_W
-
-        if None in [self.U_err, self.V_err, self.W_err]:
-            return UVW(U_LSR, V_LSR, W_LSR, U_plus = self.U_plus)
-        else:
-            U_LSR_err = math.sqrt(self.U_err**2 + solar_U_err**2)
-            V_LSR_err = math.sqrt(self.V_err**2 + solar_V_err**2)
-            W_LSR_err = math.sqrt(self.W_err**2 + solar_W_err**2)
-            return UVW((U_LSR, U_LSR_err),
-                       (V_LSR, V_LSR_err),
-                       (W_LSR, W_LSR_err), U_plus = self.U_plus)
-
-
 def parse_pairwise(arg):
     ''' parse value with error'''
     if (isinstance(arg, list) or isinstance(arg, tuple)) and \
@@ -211,7 +148,7 @@ def compute_uvw(**kwargs):
         U_err = math.sqrt(e[0,0] + e2c*B[0,1]*B[0,2])
         V_err = math.sqrt(e[1,0] + e2c*B[1,1]*B[1,2])
         W_err = math.sqrt(e[2,0] + e2c*B[2,1]*B[2,2])
-        return UVW((U, U_err), (V, V_err), (W, W_err), U_plus=U_plus)
+        return ((U, U_err), (V, V_err), (W, W_err))
 
 def compute_GalXYZ(**kwargs):
     '''
@@ -258,10 +195,37 @@ def compute_GalXYZ(**kwargs):
     else:
         raise ValueError
 
-    Rsun = kwargs.pop('Rsun', 8.5e3)
+    R0 = kwargs.pop('R0', 8.5)
 
-    x = Rsun - d*math.cos(b)*math.cos(l)
+    x = R0 - d*math.cos(b)*math.cos(l)
     y = d*math.cos(b)*math.sin(l)
     z = d*math.sin(b)
 
     return (x, y, z)
+
+def compute_Galorbit(**kwargs):
+    potential_lst = kwarargs.pop('potential')
+
+    if 'xyz' in kwargs:
+        x, y, z = kwargs.pop('xyz')
+        if isinstance(x, list) or isinstance(x, tuple):
+            x, y, z = x[0], y[0], z[0]
+        elif isinstance(x, float):
+            pass
+        else:
+            raise ValueError
+
+    if 'uvw' in kwargs:
+        uvw = kwargs.pop('uvw')
+        if isinstance(uvw, UVW):
+            u, v, w = UVW.U, UVW.V, UVW.W
+            if UVW.U_plus == 'center':
+                u = -u
+        elif isinstance(uvw, tuple) or isinstance(uvw, list):
+            u, _ = parse_value_err(uvw[0])
+            v, _ = parse_value_err(uvw[1])
+            w, _ = parse_value_err(uvw[2])
+        else:
+            raise ValueError
+
+
