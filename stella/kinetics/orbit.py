@@ -1,5 +1,6 @@
 import math
 import numpy as np
+from astropy.coordinates import SkyCoord
 
 def parse_pairwise(arg):
     ''' parse value with error'''
@@ -31,7 +32,6 @@ def compute_uvw(**kwargs):
     rv: radial velocity in km/s
     parallax in mas
     '''
-    from astropy.coordinates import SkyCoord
     from ..constant import ALPHA_NGP, DELTA_NGP, L_NCP, AU, tropical_year
 
     sin = math.sin
@@ -150,11 +150,10 @@ def compute_uvw(**kwargs):
         W_err = math.sqrt(e[2,0] + e2c*B[2,1]*B[2,2])
         return ((U, U_err), (V, V_err), (W, W_err))
 
-def compute_GalXYZ(**kwargs):
+def compute_Galxyz(**kwargs):
     '''
     comput Galactic position (X, Y, Z)
     '''
-    from astropy.coordinates import SkyCoord
     # parse RA and Dec
     if 'eqcoord' in kwargs:
         eqcoord = kwargs.pop('eqcoord')
@@ -206,7 +205,10 @@ def compute_GalXYZ(**kwargs):
     return (x, y, z)
 
 def compute_Galorbit(**kwargs):
-    potential_lst = kwarargs.pop('potential')
+    from scipy.integrate import odeint
+    from ..constant import pc
+
+    potential_lst = kwargs.pop('potential')
 
     if 'xyz' in kwargs:
         x, y, z = kwargs.pop('xyz')
@@ -219,15 +221,44 @@ def compute_Galorbit(**kwargs):
 
     if 'uvw' in kwargs:
         uvw = kwargs.pop('uvw')
-        if isinstance(uvw, UVW):
-            u, v, w = UVW.U, UVW.V, UVW.W
-            if UVW.U_plus == 'center':
-                u = -u
-        elif isinstance(uvw, tuple) or isinstance(uvw, list):
+        if isinstance(uvw, tuple) or isinstance(uvw, list):
             u, _ = parse_value_err(uvw[0])
             v, _ = parse_value_err(uvw[1])
             w, _ = parse_value_err(uvw[2])
         else:
             raise ValueError
 
+    solar_uvw = kwargs.pop('solar_uvw')
+    if isinstance(solar_uvw, tuple) or isinstance(solar_uvw, list):
+        solar_u, _ = parse_value_err(solar_uvw[0])
+        solar_v, _ = parse_value_err(solar_uvw[1])
+        solar_w, _ = parse_value_err(solar_uvw[2])
+    else:
+        raise ValueError
 
+    target_u = u + solar_u
+    target_v = v + solar_v
+    target_w = w + solar_w
+
+    t = kwargs.pop('t')
+    t_lst = t*1e9*365.2422*86400 # convert Gyr to second
+
+    def derive(var, t, potential_lst):
+        x, y, z, vx, vy, vz = var
+        acce_lst = np.array([potential.acce_cartesian(x, y, z)
+                             for potential in potential_lst])
+        ax = acce_lst[:,0].sum()
+        ay = acce_lst[:,1].sum()
+        az = acce_lst[:,2].sum()
+        return [vx/pc, vy/pc, vz/pc, ax, ay, az]
+
+    vx, vy, vz = -target_u, target_v, target_w
+    var0 = x, y, z, vx, vy, vz
+    sol = odeint(derive, var0, t_lst, args=(potential_lst,))
+
+    x_lst = sol[:,0]
+    y_lst = sol[:,1]
+    z_lst = sol[:,2]
+    r_lst = np.sqrt(x_lst**2 + y_lst**2 + z_lst**2)
+
+    return x_lst, y_lst, z_lst
