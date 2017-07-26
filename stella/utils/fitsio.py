@@ -55,37 +55,39 @@ def get_bintable_info(filename,extension=1):
     dtype : 
     fmtfunc : function
     '''
-    infile = open(filename)
+    infile = open(filename,'rb')
     current_hdu = 0
     while(True):
         block = infile.read(36*80)
-        if block[0:8] == 'XTENSION':
+        if block[0:8].decode('ascii') == 'XTENSION':
             current_hdu += 1
-            if block[10:30].strip()[1:-1]=='BINTABLE' and \
+            if block[10:30].decode('ascii').strip()[1:-1]=='BINTABLE' and \
                 current_hdu==extension:
-                infile.seek(-36*80,1)
+                current_position = infile.tell()
+                #infile.seek(-36*80,1)
+                infile.seek(current_position-36*80)
                 break
     count = 0
     while(True):
         row = infile.read(80)
         count += 1
-        if row[0:3]=='END':
+        if row[0:3].decode('ascii')=='END':
             infile.seek((36-count%36)*80,1)
             break
-        elif row[0:6]=='NAXIS1':
+        elif row[0:6].decode('ascii')=='NAXIS1':
             naxis1 = int(row[10:30])
-        elif row[0:6]=='NAXIS2':
+        elif row[0:6].decode('ascii')=='NAXIS2':
             naxis2 = int(row[10:30])
-        elif row[0:7]=='TFIELDS':
+        elif row[0:7].decode('ascii')=='TFIELDS':
             tfields = int(row[10:30])
             ttype_lst = ['' for j in range(tfields)]
             tform_lst = ['' for j in range(tfields)]
-        elif row[0:5]=='TTYPE':
+        elif row[0:5].decode('ascii')=='TTYPE':
             index = int(row[5:8])
-            ttype_lst[index-1] = row[10:30].strip()[1:-1].strip()
-        elif row[0:5]=='TFORM':
+            ttype_lst[index-1] = row[10:30].decode('ascii').strip()[1:-1].strip()
+        elif row[0:5].decode('ascii')=='TFORM':
             index = int(row[5:8])
-            tform_lst[index-1] = row[10:30].strip()[1:-1].strip()
+            tform_lst[index-1] = row[10:30].decode('ascii').strip()[1:-1].strip()
 
     position = infile.tell()
     infile.close()

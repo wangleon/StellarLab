@@ -27,7 +27,7 @@ def find_HIP(starname):
     if hip > nrow:
         raise ItemNotFound(hip)
 
-    infile = open(filename)
+    infile = open(filename,'rb')
     infile.seek(pos+(hip-1)*nbyte,0)
     item = fmtfunc(infile.read(nbyte))
     infile.close()
