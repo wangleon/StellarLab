@@ -8,4 +8,6 @@ Table of Contents
    index
    extinction
    parameter
+   catalog
+   catalog/*
    utilities
