@@ -1,10 +1,12 @@
 #!/usr/bin/env python
 import re
+import numpy as np
 from . import xindex
 
 def get_catalog(starname):
-    """return name of the star catalog
-    """
+    '''
+    Return name of the star catalog from name of the star.
+    '''
     starcat_re = {
         '^[Hh][Dd][\d\s]+[ABC]?$'          : 'HD',
         '^[Hh][Ii][Pp][\d\s]+$'            : 'HIP',
@@ -133,6 +135,9 @@ def cross_starnames(starname):
 
 
 def get_regular_name(starname):
+    '''
+    Get regular name of a star
+    '''
     cat = get_catalog(starname)
     if cat == 'HIP':
         return _get_regular_HIP_name(starname)
@@ -149,10 +154,52 @@ def get_regular_name(starname):
     else:
         return starname
 
+def _get_HIP_number(starname):
+    '''
+    Private function to convert star name to an integer HIP number.
+
+    The input starname can be either integer, string, or numpy.int_. If fail,
+    a `None` value is returned.
+    '''
+    if isinstance(starname, int):
+        return starname
+    elif isinstance(starname, np.int_):
+        return starname
+    elif isinstance(starname, str):
+        if starname[0:3] == 'HIP':
+            return int(starname[3:])
+        elif starname.isdigit():
+            return int(starname)
+        else:
+            return None
+    else:
+        return None
+
+def _get_KIC_number(starname):
+    '''
+    Private function to convert star name to an integer KIC number.
+
+    The input starname can be either an integer, string, or numpy.int_. If
+    fail, a `None` value is returned.
+    '''
+    if isinstance(starname, int):
+        return starname
+    elif isinstance(starname, np.int_):
+        return starname
+    elif isinstance(starname, str):
+        if starname[0:3] == 'KIC':
+            return int(starname[3:])
+        elif starname.isdigit():
+            return int(starname)
+        else:
+            return None
+    else:
+        return None
 
 def _get_regular_HIP_name(starname):
-
-    '''get regular HIP name'''
+    '''
+    Private function to convert an HIP name to its regular form.
+    '''
 
     if isinstance(starname, str):
         starname = starname.strip()
@@ -167,8 +214,9 @@ def _get_regular_HIP_name(starname):
     return starname
 
 def _get_regular_HD_name(starname):
-
-    '''get regular HD name'''
+    '''
+    Private function to convert an HD name to its regular form.
+    '''
 
     if isinstance(starname, str):
 
@@ -190,8 +238,9 @@ def _get_regular_HD_name(starname):
 
 
 def _get_regular_BD_name(starname):
-
-    ''' get regular BD name'''
+    '''
+    Private function to convert a BD name to its regular form.
+    '''
 
     starname = starname.strip()
 
@@ -229,8 +278,9 @@ def _get_regular_BD_name(starname):
     return starname
 
 def _get_regular_CD_name(starname):
-
-    '''get regular CD name'''
+    '''
+    Private function to convert a CD name to its regular form.
+    '''
 
     starname = starname.strip()
 
@@ -256,7 +306,9 @@ def _get_regular_CD_name(starname):
 
 
 def _get_regular_G_name(starname):
-    ''' get regular G name'''
+    '''
+    Private function to convert a G name to its regular form.
+    '''
 
     starname = starname.strip()
     if starname[0]=='G' and not starname[1].isalpha():
@@ -282,7 +334,9 @@ def _get_regular_G_name(starname):
     return starname
 
 def _get_regular_TYC_name(*args):
-    '''get regular TYC name'''
+    '''
+    Private function to convert a TYC name to its regular form.
+    '''
     if len(args)==1 and isinstance(args[0], str):
         starname = args[0].strip()
         starname = 'TYC '+starname[3:].strip()

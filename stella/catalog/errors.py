@@ -1,4 +1,4 @@
-class FileNotFound(Exception):
+class FileNotExist(Exception):
     def __init__(self, filename):
         self.filename = filename
     def __str__(self):
@@ -9,3 +9,9 @@ class ItemNotFound(Exception):
         self.itemid = itemid
     def __str__(self):
         return repr(self.itemid)
+
+class UnrecognizedName(Exception):
+    def __init__(self, name):
+        self.name = name
+    def __str__(self):
+        return repr(self.name)
