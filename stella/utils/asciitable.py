@@ -2,6 +2,17 @@
 import os
 import numpy as np
 
+def structitem_to_dict(item):
+    result = {}
+    for key in item.dtype.names:
+        value = item[key].item()
+        if isinstance(value, bytes):
+            value = value.decode('ascii')
+        result[key] = value
+    return result
+
+
+
 def load_txt(filename):
     '''
     Load structured array from an ascii file.

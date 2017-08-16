@@ -257,3 +257,21 @@ def Kepler_to_KOI(string):
     else:
         return quickfind_sortedfile(kepler,fn,f1,f2)
 
+def HIP_to_Gaia(name):
+    if isinstance(name, int):
+        hip = name
+    elif isinstance(name, str):
+        if name[0:3]=='HIP':
+            hip = int(name[3:])
+        else:
+            print('Unknown starname: %s'%name)
+    else:
+        print('Unknown starname')
+
+    data = fits.getdata('%s/HIP-Gaia.fits'%xindex_path)
+    m = data['HIP']==hip
+    if m.sum()==0:
+        return None
+    else:
+        return data[m][0]['source_id']
+         
