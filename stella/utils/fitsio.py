@@ -39,21 +39,38 @@ def tform_to_dtype(tform):
 
 def get_bintable_info(filename,extension=1):
     '''
-    Return the information of the binary table in FITS file.
+    Return the information of the binary table in a given FITS file.
+
     Parameters
     ----------
-    filename : string
+    filename : *string*
         Name of the FITS file
-    extension : integer
-        Which extension is the binary table in
+    extension : *integer* (optional)
+        The extension of binary table
+
     Returns
     -------
-    naxis1 : integer
-    naxis2 : integer
-    tfields : list
-    position : integer
-    dtype : 
-    fmtfunc : function
+    naxis1 : *integer*
+        Length of bytes for every record
+    naxis2 : *integer*
+        Number of records of the whole table
+    tfields : *integer*
+        Number of columns in this table
+    position : *integer*
+        The position that binary table starts
+    dtype : numpy.dtype instance
+        The dtype of the catalog record
+    fmtfunc : *function*
+        A function to format the record
+
+    Examples
+    --------
+
+    .. code-block:: python
+
+        from stella.utils.fitsio import get_bintable_info
+        nbyte, nrow, ncol, pos, dtype, fmtfunc = get_bintable_info(filename)
+
     '''
     infile = open(filename,'rb')
     current_hdu = 0
@@ -63,39 +80,43 @@ def get_bintable_info(filename,extension=1):
             current_hdu += 1
             if block[10:30].decode('ascii').strip()[1:-1]=='BINTABLE' and \
                 current_hdu==extension:
-                current_position = infile.tell()
-                #infile.seek(-36*80,1)
-                infile.seek(current_position-36*80)
+                infile.seek(-36*80,1)
+                #current_position = infile.tell()
+                #infile.seek(current_position-36*80)
                 break
     count = 0
+
+    # read the header of binary table
     while(True):
-        row = infile.read(80)
+        row = infile.read(80).decode('ascii')
         count += 1
-        if row[0:3].decode('ascii')=='END':
+        if row[0:3]=='END':
             infile.seek((36-count%36)*80,1)
             break
-        elif row[0:6].decode('ascii')=='NAXIS1':
+        elif row[0:6]=='NAXIS1':
             naxis1 = int(row[10:30])
-        elif row[0:6].decode('ascii')=='NAXIS2':
+        elif row[0:6]=='NAXIS2':
             naxis2 = int(row[10:30])
-        elif row[0:7].decode('ascii')=='TFIELDS':
+        elif row[0:7]=='TFIELDS':
             tfields = int(row[10:30])
             ttype_lst = ['' for j in range(tfields)]
             tform_lst = ['' for j in range(tfields)]
-        elif row[0:5].decode('ascii')=='TTYPE':
+        elif row[0:5]=='TTYPE':
             index = int(row[5:8])
-            ttype_lst[index-1] = row[10:30].decode('ascii').strip()[1:-1].strip()
-        elif row[0:5].decode('ascii')=='TFORM':
+            ttype_lst[index-1] = row[10:30].strip()[1:-1].strip()
+        elif row[0:5]=='TFORM':
             index = int(row[5:8])
-            tform_lst[index-1] = row[10:30].decode('ascii').strip()[1:-1].strip()
+            tform_lst[index-1] = row[10:30].strip()[1:-1].strip()
+        else:
+            pass
 
     position = infile.tell()
     infile.close()
 
     formats = tuple([tform_to_dtype(v) for v in tform_lst])
-    dtype = np.dtype({'names':ttype_lst,'formats':formats})
+    record = np.dtype({'names':ttype_lst,'formats':formats})
 
     fmt = '>'+(''.join([tform_to_format(v) for v in tform_lst]))
-    fmtfunc = lambda string: np.array(struct.unpack(fmt, string),dtype=dtype)
-    return naxis1,naxis2,tfields,position,dtype,fmtfunc
+    fmtfunc = lambda string: np.array(struct.unpack(fmt, string),dtype=record)
+    return naxis1,naxis2,tfields,position,record,fmtfunc
 
