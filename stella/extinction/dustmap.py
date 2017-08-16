@@ -6,7 +6,8 @@ import astropy.io.fits as fits
 from scipy.interpolate import RectBivariateSpline
 
 class DustMap(object):
-    """Galactic dust map of Schlegel et al., 1998, *ApJ*, 500, 525.
+    """
+    Galactic dust map of Schlegel et al. 1998 [#Schlegel1998]_.
 
     Examples
     --------
@@ -16,7 +17,7 @@ class DustMap(object):
         dust_map = DustMap()
         EBV = dust_map.get_EBV(l,b)
 
-    l, b are the Galactic coordinates
+    where *l*, *b* are Galactic coordinate
     """
     def __init__(self):
 
@@ -24,8 +25,8 @@ class DustMap(object):
         self.head = {'n': None, 's': None}
 
     def get_EBV(self, l, b, reduce=True, inlayer=False, d=None):
-        """get E(B-V) from the dust map of Schlegel, Finkbeiner & Daivs, 1998,
-        ApJ, 500, 525. They constructed a full-sky map of the Galactic dust
+        """get *E(B-V)* from the dust map.
+        They constructed a full-sky map of the Galactic dust
         based on the observaions of IRAS and DIRBE on COBE.
 
         also read http://www.astro.princeton.edu/~Schlegel/dust/local/local.html
