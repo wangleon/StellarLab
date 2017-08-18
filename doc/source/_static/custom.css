@@ -12,3 +12,21 @@ sub, sup {
     position: relative;
     vertical-align: baseline;
 }
+
+
+/*********** footnote reference ****************/
+.footnote {
+    margin: 0 !important;
+    font-size: 12px;
+    background-color: #fff !important;
+}
+
+.footnote-reference {
+    text-decoration: none !important;
+    font-size: 60%;
+    height: 0;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+    bottom: 1ex;
+}

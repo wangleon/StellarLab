@@ -35,7 +35,7 @@ extensions = [
     'numpydoc',
 ]
 
-extlinks = {'ads': ('http://adsabs.harvard.edu/abs/%s','ADS: ')}
+extlinks = {'ads': ('http://adsabs.harvard.edu/abs/%s','ADScode: ')}
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

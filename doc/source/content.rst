@@ -10,4 +10,6 @@ Table of Contents
    parameter
    catalog
    catalog/*
+   kinetics
+   kinetics/*
    utilities
