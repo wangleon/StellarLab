@@ -5,16 +5,24 @@ kpc = pc*1e3
 varG = G*M_sun/kpc**2
 
 class Potential(object):
-
+    '''
+    General class for potential
+    '''
     def __init__(self):
         pass
 
 class PointPotential(Potential):
+    '''
+    Class for point potential
+    '''
 
     def __init__(self, M):
         self.M = M
 
     def acce_cartesian(self, x, y, z):
+        '''
+        Get acceleration in cartesian coordinates
+        '''
         r = math.sqrt(x**2 + y**2 + z**2)
         coeff = varG*self.M/r**2
         ax = -coeff*x/r*1e-3
@@ -23,16 +31,24 @@ class PointPotential(Potential):
         return (ax, ay, az)
 
     def v_circ(self, r):
+        '''
+        Get circular velocity
+        '''
         a_circ = varG*self.M/r**2
         return math.sqrt(a_circ*r*kpc)*1e-3
 
 class HernquistPotential(Potential):
-
+    '''
+    Class for spherically symmetric Herquist potential
+    '''
     def __init__(self, M, a):
         self.M = M
         self.a = a
 
     def acce_cartesian(self, x, y, z):
+        '''
+        Get acceleration in cartesian coordinates
+        '''
         r = math.sqrt(x**2 + y**2 + z**2)
         coeff = varG*self.M/(r + self.a)**2
         ax = -coeff*x/r*1e-3
@@ -41,17 +57,25 @@ class HernquistPotential(Potential):
         return (ax, ay, az)
 
     def v_circ(self, r):
+        '''
+        Get circular velocity
+        '''
         a_circ = varG*self.M/(r + self.a)**2
         return math.sqrt(a_circ*r*kpc)*1e-3
 
 class MiyamotoNagaiPotential(Potential):
-
+    '''
+    Class for Miyamoto & Nagai potential
+    '''
     def __init__(self, M, a, b):
         self.M = M
         self.a = a
         self.b = b
 
     def acce_cartesian(self, x, y, z):
+        '''
+        Get acceleration in cartesian coordinates
+        '''
         zb = math.sqrt(z**2 + self.b**2)
         azb = (self.a + zb)**2
         xyazb = (x**2 + y**2 + azb)**1.5
@@ -62,16 +86,25 @@ class MiyamotoNagaiPotential(Potential):
         return (ax, ay, az)
 
     def v_circ(self, r):
+        '''
+        Get circular velocity
+        '''
         a_circ = varG*self.M*r/(r**2 + (self.a + self.b)**2)**1.5
         return math.sqrt(a_circ*r*kpc)*1e-3
 
 class NFWPotential(Potential):
+    '''
+    Class for spherically symmetric Navarro-Frenk-White potential
+    '''
 
     def __init__(self, M, rs):
         self.M  = M
         self.rs = rs
 
     def acce_cartesian(self, x, y, z):
+        '''
+        Get acceleration in cartesian coordinates
+        '''
         r = math.sqrt(x**2 + y**2 + z**2)
         coeff1 = varG*self.M
         coeff2 = 1./r/(r + self.rs) - 1./r**2*math.log(1. + r/self.rs)
@@ -82,5 +115,8 @@ class NFWPotential(Potential):
         return (ax, ay, az)
 
     def v_circ(self, r):
+        '''
+        Get circular velocity
+        '''
         a_circ = -varG*self.M*(1./r/(r + self.rs) - 1./r**2*math.log(1. + r/self.rs))
         return math.sqrt(a_circ*r*kpc)*1e-3

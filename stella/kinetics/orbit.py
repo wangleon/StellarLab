@@ -19,18 +19,33 @@ def parse_value_err(arg):
     else:
         raise ValueError
 
-def compute_uvw(**kwargs):
+def compute_UVW(**kwargs):
     #        ra, dec, rv, parallax, pm_ra, pm_dec,
     #    rv_err=None, parallax_err=None, pm_ra_err=None, pm_dec_err=None,
     #    hand='left'):
-    '''compute Galactic UVW for stars
-    according to Johnson & Soderblom, 1987, AJ, 93, 864
+    '''Compute Galactic velocity components (*U*, *V*, *W*)
+
     Parameters
     -----------
-    ra, dec in degree
-    pm: proper motion in mas/yr
-    rv: radial velocity in km/s
-    parallax in mas
+    ra : *float*
+        Right Ascension in degree at epoch J2000.0
+    dec : *float*
+        Declination in degree at epoch J2000.0
+    eqcoord : *astropy.coordinates.SkyCoord* instance
+        Sky coordinate of object. Either (`ra`, `dec`) or `eqcoord` is necessary
+    pm : *list* or *tuple*
+        Proper motion in mas/yr
+    rv : *float*, *list* or *tuple*
+        Radial velocity in km/s
+    parallax : *float*, *list* or *tuple*
+        Parallax in mas
+    U_plus : *string*, ['*center*' | '*anticenter*']
+        Positive direction of *U* componenet. *"center"* means positive towards Galactic center
+
+    References
+    -----------
+    * `Johnson & Soderblom, 1987, AJ, 93, 864 <http://adsabs.harvard.edu/abs/1987AJ.....93..864J>`_
+
     '''
     from ..constant import ALPHA_NGP, DELTA_NGP, L_NCP, AU, tropical_year
 
@@ -131,7 +146,7 @@ def compute_uvw(**kwargs):
     U, V, W = np.array(B*x).flatten()
 
     if None in [pm_ra_err, pm_dec_err, rv_err, d_err]:
-        return UVW(U, V, W, U_plus=U_plus)
+        return (U, V, W)
     else:
         C = np.mat(np.array(B)**2)
 
@@ -150,9 +165,35 @@ def compute_uvw(**kwargs):
         W_err = math.sqrt(e[2,0] + e2c*B[2,1]*B[2,2])
         return ((U, U_err), (V, V_err), (W, W_err))
 
-def compute_Galxyz(**kwargs):
+def compute_GalXYZ(**kwargs):
     '''
-    comput Galactic position (X, Y, Z)
+    Compute Galactic position (*X*, *Y*, *Z*)
+
+    Parameters
+    ----------
+    ra : *float*
+        Right Ascension in degree at epoch J2000.0
+    dec : *float*
+        Declination in degree at epoch J2000.0
+    eqcoord : *astropy.coordinates.SkyCoord* instance
+        Sky coordinate of object
+    galactic : *list* or *tuple*
+        Galactic coordinate
+    l : *float*
+        Galactic longitude in degree
+    b : *float*
+        Galactic latitude in degree
+    distance : *float*, *list* or *tuple*
+        Distance in pc
+    parallax : *float*, *list* or *tuple*
+        Parallax in mas
+    R0 : *float*
+        Solar distance to the Galactic center
+
+    Returns
+    -------
+
+
     '''
     # parse RA and Dec
     if 'eqcoord' in kwargs:
