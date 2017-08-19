@@ -5,3 +5,24 @@
     <li><a href="{{ pathto('index') }}">Home</a> | </li>
     <li><a href="{{ pathto('content') }}">Contents</a> &raquo;</li>
 {% endblock %}
+
+{%- block extrahead %}
+    <script type="text/javascript">
+        window.onload = function change() {
+            var list = document.getElementsByTagName("sub");
+            for (var i=0; i<list.length; i++) {
+                var e1 = list[i];
+                var e0 = e1.previousSibling;
+                if (e0.tagName == "SUP") {
+                    var w0 = e0.offsetWidth;
+                    var w1 = e1.offsetWidth;
+                    e1.style.marginLeft = "-" + w0 + "px";
+                    e0.style.marginLeft = "3px";
+                    if (w0>w1) {
+                        e1.style.marginRight = w0 - w1 + "px";
+                    }
+                }
+            }
+        }
+    </script>
+{% endblock %}

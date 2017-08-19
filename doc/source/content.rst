@@ -7,9 +7,10 @@ Table of Contents
 
    index
    extinction
-   parameter
    catalog
    catalog/*
+   parameter
+   parameter/*
    kinetics
    kinetics/*
    utilities
