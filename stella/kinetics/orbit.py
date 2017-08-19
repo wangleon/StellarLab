@@ -34,17 +34,62 @@ def compute_UVW(**kwargs):
     eqcoord : *astropy.coordinates.SkyCoord* instance
         Sky coordinate of object. Either (`ra`, `dec`) or `eqcoord` is necessary
     pm : *list* or *tuple*
-        Proper motion in mas/yr
+        Proper motion in mas/yr. Either (`pm_RA`, `pm_Dec`) or ((`pm_RA`,
+        `pm_RA_err`), (`pm_Dec`, `pm_Dec_err`))
     rv : *float*, *list* or *tuple*
-        Radial velocity in km/s
+        Radial velocity in km/s. Either `rv` as a float or (`rv`, `rv_err`)
     parallax : *float*, *list* or *tuple*
-        Parallax in mas
-    U_plus : *string*, ['*center*' | '*anticenter*']
-        Positive direction of *U* componenet. *"center"* means positive towards Galactic center
+        Parallax in mas. Either `parallax` as a float or (`parallax`,
+        `parallax_err`)
+    U_plus : *string*, [`center`\ \|\ `anticenter`]
+        Positive direction (towards Galactic center or anti-center) of *U*
+        componenet. Default is `center`
+
+    Returns
+    --------
+    UVW : *tuple*
+        (*U*, *V*, *W*) velocities or ((*U*, *U_err*), (*V*, *V_err*),
+        (*W*, *W_err*)) if all the uncertainties to parallax, proper motion and
+        radial velocity are given.
+
+    Notes
+    -------
+    .. |kms| replace:: km s\ :sup:`−1`
+    Calculate the Galactic space velocity components (*U*, *V*, *W*) using the
+    formula given by `Johnson & Soderblom 1987
+    <http://adsabs.harvard.edu/abs/1987AJ.....93..864J>`_.
+    The coordinate, parallax, and proper motion are required. The resulting
+    velocities are relative to the Sun. The positive direction of *U* is defined
+    as towards Galactic center in right-handed system, and towards Galactic
+    anticenter in left-handed system. To correct to the local standard of rest
+    (LSR), the solar motion (*U*:sub:`LSR`, *V*:sub:`LSR`, *W*:sub:`LSR`) are
+    needed, e.g. (9.6 ± 3.9, 14.6 ± 5.0, 9.3 ± 1.0) |kms| (`Reid et al. 2014
+    <http://adsabs.harvard.edu/abs/2014ApJ...783..130R>`_).
+    
+
+    Examples
+    ---------
+    Calculate (*U*, *V*, *W*) velocities relative to the sun for HD 9562 (HIP
+    7276). The heliocentric radial velocity is −13.3 km/s (`Bensby et al. 2003
+    <http://adsabs.harvard.edu/abs/2003A&A...410..527B>`_, Table 2).
+
+    .. code-block:: python
+
+        from stella.catalog.find_catalog import find_HIP
+        from stella.kinetics.orbit import compute_UVW
+
+        hip = 7276
+        item = find_HIP(hip)
+        u, v, w = compute_UVW(ra=item['RAdeg'], dec=item['DEdeg'], parallax=item['Plx'],
+                              rv=-13.3, pm=(item['pmRA'], item['pmDE']))
+        print('%+6.2f %+6.2f %+6.2f'%(u, v, w))
+        # output: -8.86 -26.35 +12.39
 
     References
     -----------
+    * `Bensby et al., 2003, A&A, 410, 527 <http://adsabs.harvard.edu/abs/2003A&A...410..527B>`_
     * `Johnson & Soderblom, 1987, AJ, 93, 864 <http://adsabs.harvard.edu/abs/1987AJ.....93..864J>`_
+    * `Reid et al. 2014, ApJ, 783, 130 <http://adsabs.harvard.edu/abs/2014ApJ...783..130R>`_
 
     '''
     from ..constant import ALPHA_NGP, DELTA_NGP, L_NCP, AU, tropical_year
@@ -178,17 +223,19 @@ def compute_GalXYZ(**kwargs):
     eqcoord : *astropy.coordinates.SkyCoord* instance
         Sky coordinate of object
     galactic : *list* or *tuple*
-        Galactic coordinate
+        Galactic coordinate (`l`, `b`)
     l : *float*
         Galactic longitude in degree
     b : *float*
         Galactic latitude in degree
     distance : *float*, *list* or *tuple*
-        Distance in pc
+        Distance in pc. Either `distance` as a float or (`distance`,
+        `distance_err`)
     parallax : *float*, *list* or *tuple*
-        Parallax in mas
+        Parallax in mas. Either `parallax` as a float or (`parallax`,
+        `parallax_err`)
     R0 : *float*
-        Solar distance to the Galactic center
+        Solar distance to the Galactic center in kpc
 
     Returns
     -------
@@ -246,6 +293,65 @@ def compute_GalXYZ(**kwargs):
     return (x, y, z)
 
 def compute_Galorbit(**kwargs):
+    '''
+    Calculate the orbit in the Milky Way
+
+    Parameters
+    -----------
+    potential : *list*
+        List of Galactic potentials
+    xyz : *tuple* or *list*
+        Galactic positions
+    uvw : *tuple* or *list*
+        Galactic space velocity
+    solar_uvw : *tuple* or *list*
+        Solar space velocity
+    t : *list*
+        List of integration time
+
+    Returns
+    --------
+    x_lst : *numpy.array*
+    y_lst : *numpy.array*
+    z_lst : *numpy.array*
+
+    Examples
+    ---------
+    Calculate the orbit of the Sun
+
+    .. code-block:: python
+
+        solar_uvw = (9.6, 255.2, 9.3) # from Reid et al. 2014
+        t_lst = np.arange(0, 0.4, 0.0001) # in Gyr
+
+        x_lst, y_lst, z_lst = orbit.compute_Galorbit(
+                                potential = potential_lst,
+                                xyz=(R0,0.,0.),
+                                uvw=(0.,0.,0.),
+                                solar_uvw=solar_uvw,
+                                t=t_lst)
+
+    Calculate the orbit of `HD 122563
+    <http://simbad.u-strasbg.fr/simbad/sim-id?Ident=HD+122563>`_ (HIP 68594)
+
+    .. code-block:: python
+
+        from stella.catalog  import find_catalog
+        hip = 68594
+        item = find_catalog.find_HIP2(hip)
+        ra, dec = item['RAdeg'], item['DEdeg']
+        rv = (-26.58, 0.15) # from SIMBAD
+        parallax = (item['Plx'], item['e_Plx'])
+        pm = ((item['pmRA'], item['e_pmRA']),(item['pmDE'], item['e_pmDE']))
+        uvw = orbit.compute_UVW(ra=ra,dec=dec,rv=rv,parallax=parallax,pm=pm,U_plus='center')
+        xyz = orbit.compute_GalXYZ(ra=ra,dec=dec,parallax=parallax,R0=R0)
+        x1_lst, y1_lst, z1_lst = orbit.compute_Galorbit(
+                                    potential = potential_lst,
+                                    xyz=xyz,
+                                    uvw=uvw,
+                                    solar_uvw=solar_uvw,
+                                    t=t_lst)
+    '''
     from scipy.integrate import odeint
     from ..constant import pc
 

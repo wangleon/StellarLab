@@ -175,6 +175,7 @@ def find_HIP(names, epoch=2000.0, output='dict'):
 
     .. code-block:: python
 
+        import numpy as np
         from stella.catalog.find_catalog import find_HIP
 
         # find the parametres for tau Cet (HIP 8102)
