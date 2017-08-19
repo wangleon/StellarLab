@@ -19,7 +19,7 @@ potential_lst = [potential.PointPotential(M=4.3e6), # from Gillessen et al. 2009
                  potential.MiyamotoNagaiPotential(M=6e10, a=2.75, b=0.3),
                  potential.NFWPotential(M=1e12, rs=20),
                 ]
-vcirc_lst = list(map(lambda potential: potential.v_circ(R0), potential_lst))
+vcirc_lst = list(map(lambda potential: potential.get_vcirc(R0), potential_lst))
 v0 = np.sqrt((np.array(vcirc_lst)**2).sum())
 print(vcirc_lst, v0)
 

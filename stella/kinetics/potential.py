@@ -19,7 +19,7 @@ class PointPotential(Potential):
     def __init__(self, M):
         self.M = M
 
-    def acce_cartesian(self, x, y, z):
+    def get_acce_cartesian(self, x, y, z):
         '''
         Get acceleration in cartesian coordinates
         '''
@@ -30,7 +30,7 @@ class PointPotential(Potential):
         az = -coeff*z/r*1e-3
         return (ax, ay, az)
 
-    def v_circ(self, r):
+    def get_vcirc(self, r):
         '''
         Get circular velocity
         '''
@@ -45,7 +45,7 @@ class HernquistPotential(Potential):
         self.M = M
         self.a = a
 
-    def acce_cartesian(self, x, y, z):
+    def get_acce_cartesian(self, x, y, z):
         '''
         Get acceleration in cartesian coordinates
         '''
@@ -56,7 +56,7 @@ class HernquistPotential(Potential):
         az = -coeff*z/r*1e-3
         return (ax, ay, az)
 
-    def v_circ(self, r):
+    def get_vcirc(self, r):
         '''
         Get circular velocity
         '''
@@ -72,7 +72,7 @@ class MiyamotoNagaiPotential(Potential):
         self.a = a
         self.b = b
 
-    def acce_cartesian(self, x, y, z):
+    def get_acce_cartesian(self, x, y, z):
         '''
         Get acceleration in cartesian coordinates
         '''
@@ -85,7 +85,7 @@ class MiyamotoNagaiPotential(Potential):
         az = -coeff*z/zb*(self.a + zb)/xyazb*1e-3
         return (ax, ay, az)
 
-    def v_circ(self, r):
+    def get_vcirc(self, r):
         '''
         Get circular velocity
         '''
@@ -101,7 +101,7 @@ class NFWPotential(Potential):
         self.M  = M
         self.rs = rs
 
-    def acce_cartesian(self, x, y, z):
+    def get_acce_cartesian(self, x, y, z):
         '''
         Get acceleration in cartesian coordinates
         '''
@@ -114,7 +114,7 @@ class NFWPotential(Potential):
         az = coeff*z/r*1e-3
         return (ax, ay, az)
 
-    def v_circ(self, r):
+    def get_vcirc(self, r):
         '''
         Get circular velocity
         '''

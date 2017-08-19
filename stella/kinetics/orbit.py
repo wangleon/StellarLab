@@ -392,7 +392,7 @@ def compute_Galorbit(**kwargs):
 
     def derive(var, t, potential_lst):
         x, y, z, vx, vy, vz = var
-        acce_lst = np.array([potential.acce_cartesian(x, y, z)
+        acce_lst = np.array([potential.get_acce_cartesian(x, y, z)
                              for potential in potential_lst])
         ax = acce_lst[:,0].sum()
         ay = acce_lst[:,1].sum()

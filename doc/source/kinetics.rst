@@ -176,7 +176,7 @@ Fragione et al. 2017 [#Fragione2017]_ to match the circular rotation speed
 
     import numpy as np
     R0 = 8.34
-    vcirc_lst = list(map(lambda potential: potential.v_circ(R0), potential_lst))
+    vcirc_lst = list(map(lambda potential: potential.get_vcirc(R0), potential_lst))
     # vcirc_lst = [1.489, 43.52, 160.1, 167.3]
     v0 = np.sqrt((np.array(vcirc_lst)**2).sum())
     # v0 = 235.6
