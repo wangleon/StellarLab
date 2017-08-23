@@ -126,18 +126,10 @@ def find_HIP(names, epoch=2000.0, output='dict'):
 
     Notes
     ------
-    The Hipparcos Catalogue (I/239, Perryman et al. 1997) is the product of the
-    Hipparcos satellite of the European Space Agency (ESA). During its four
-    years of operation from Novermber 1989 to March 1993, the satellite measured
-    accurate triangular parallaxes and proper motions for a large number of
-    stars. The published astrometric solutions are given in International
-    Celestial Reference System (ICRS) at epoch J1991.25.
-
     This catalogue contains 118,218 records, with HIP numbers ranging from 1 to
-    120,416. The limiting magnitude is *V* ~ 12.4, and the *V* magnitude
-    completeness is 7.3 ~ 9.0, depending on the galactic latitude and spectral
-    type. The median error in parallax is 0.97 mas for stars with Hipparcos
-    magnitudes brighter than 9.
+    120,416.
+    
+    For more details, see :ref:`Hipparcos Catalogue<catalog_hip>`.
 
     .. csv-table:: Descriptions of returned parameters
         :header: "Key", "Type", "Unit", "Description"
@@ -185,10 +177,6 @@ def find_HIP(names, epoch=2000.0, output='dict'):
         hip_lst = np.arange(65000, 65400)
         res = find_HIP(hip_lst, output='ndarray')
 
-
-    References
-    ----------
-    * `Perryman et al., 1997, A&A, 323, L49 <http://adsabs.harvard.edu/abs/1997A&A...323L..49P>`_
     '''
 
     return _search_HIP_catalogue(names, 'HIP.fits', epoch, output)
@@ -220,14 +208,12 @@ def find_HIP2(names, epoch=2000.0, output='dict'):
 
     Notes
     ------
-    This catalogue is the results of the new reduction (`van Leeuwen, 2007
-    <http://adsabs.harvard.edu/abs/2007A&A...474..653V>`_) of the astrometric
-    data obtained by the Hipparcos satellite.
-
     This catalogue contains 117,955 records, with HIP numbers ranging from 1 to
     120,404. The astrometric solution are provided in ICRS at epoch J1991.25.
     However, parameters at any epoch can be returned with the `epoch` argument.
     Default is *epoch* = 2000.0.
+
+    For more details, see :ref:`Hipparcos Catalogue New Reduction <catalog_hip2>`
     
     .. csv-table:: Descriptions of returned parameters
         :header: "Key", "Type", "Unit", "Description"
@@ -264,12 +250,6 @@ def find_HIP2(names, epoch=2000.0, output='dict'):
         # output:
         # 26.021364586713265 -15.939555724635493
         # 26.017014215650022 -15.937479641367434
-
-
-
-    References
-    ----------
-    * `van Leeuwen, 2007, A&A, 474, 653 <http://adsabs.harvard.edu/abs/2007A&A...474..653V>`_
 
     '''
 
@@ -349,28 +329,14 @@ def find_KIC(names, output='dict'):
 
     Notes
     -----
-    The Kepler Input Catalog (V/133, Kepler Mission Team, 2009) contains
-    photometric and physical data of over 13 million objects in the Kepler field
-    of view. For details, see `Brown et al. 2011
-    <http://adsabs.harvard.edu/abs/2011AJ....142..112B>`_.
+    The data file used in this function is complied from the 10th version of
+    KIC. It contains 13,161,029 records with consecutive KIC numbers. Proper
+    motions are available for 12,944,973 objects, or 98% of the entire sample.
+    Parallaxes are provided for 958 objects, and physical parameters
+    (*T*:sub:`eff`, log\ *g*, log\ *Z* and *R*) are available for 2,106,821
+    objects, or 16% of the entire sample.
 
-    This catalogue is complied from the 10th version of KIC. It contains
-    13,161,029 records with consecutive KIC numbers. Proper motions are
-    available for 12,944,973 objects, or 98% of the entire sample. Parallaxes
-    are provided for 958 objects, and physical parameters (*T*:sub:`eff`,
-    log\ *g*, [Fe/H] and *R*) are available for 2,106,821 objects, or 16% of the
-    entire sample.
-
-    There are some known biases on the physical parameters of the Kepler Input
-    Catalog. We refer the readers to `Pinsonneault et al. 2012
-    <http://adsabs.harvard.edu/abs/2012ApJS..199...30P>`_ for an improved
-    temperature scale and `Dong et al. 2014
-    <http://adsabs.harvard.edu/abs/2014ApJ...789L...3D>`_ for an improved
-    metallicity scale. Besides, `Huber et al. 2014
-    <http://adsabs.harvard.edu/abs/2014ApJS..211....2H>`_ derived parameters for
-    196,468 stars using Kepler photometric data, including 11,532 unclassified
-    targes in this catalogue.
-
+    For more details, see :ref:`Kepler Input Catalog<catalog_kic>`.
 
     .. csv-table:: Descriptions of returned parameters
         :header: "Key", "Type", "Unit", "Description"
@@ -401,12 +367,6 @@ def find_KIC(names, output='dict'):
         "Av",     "float32",   "mag",    "Extinction in *V* magnitude"
         "R",      "float32",   "Rsun",   "Stellar radius"
 
-    References
-    -----------
-    * `Brown et al., 2011, AJ, 142, 112 <http://adsabs.harvard.edu/abs/2011AJ....142..112B>`_
-    * `Dong et al., 2014, ApJ, 789, L3 <http://adsabs.harvard.edu/abs/2014ApJ...789L...3D>`_
-    * `Huber et al., 2014, ApJS, 211, 2 <http://adsabs.harvard.edu/abs/2014ApJS..211....2H>`_
-    * `Pinsonneault et al., 2012, ApJS, 199, 30 <http://adsabs.harvard.edu/abs/2012ApJS..199...30P>`_
     '''
 
     filename = os.path.join(os.getenv('STELLA_DATA'), 'catalog/KIC.fits')
