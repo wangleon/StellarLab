@@ -1,5 +1,6 @@
 import struct
 import numpy as np
+from .memoize import memoized
 
 def tform_to_format(tform):
     '''
@@ -36,7 +37,7 @@ def tform_to_dtype(tform):
     if tform == 'Q': return '?' # 16 bytes, 64 bits array descriptor
     if tform[-1] == 'A': return 'S'+tform[0:-1] # 1 bytes, character
 
-
+@memoized
 def get_bintable_info(filename,extension=1):
     '''
     Return the information of the binary table in a given FITS file.
