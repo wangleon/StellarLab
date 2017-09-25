@@ -154,48 +154,6 @@ def get_regular_name(starname):
     else:
         return starname
 
-def _get_HIP_number(starname):
-    '''
-    Private function to convert star name to an integer HIP number.
-
-    The input starname can be either integer, string, or numpy.int_. If fail,
-    a `None` value is returned.
-    '''
-    if isinstance(starname, int):
-        return starname
-    elif isinstance(starname, np.int_):
-        return starname
-    elif isinstance(starname, str):
-        if starname[0:3] == 'HIP':
-            return int(starname[3:])
-        elif starname.isdigit():
-            return int(starname)
-        else:
-            return None
-    else:
-        return None
-
-def _get_KIC_number(starname):
-    '''
-    Private function to convert star name to an integer KIC number.
-
-    The input starname can be either an integer, string, or numpy.int_. If
-    fail, a `None` value is returned.
-    '''
-    if isinstance(starname, int):
-        return starname
-    elif isinstance(starname, np.int_):
-        return starname
-    elif isinstance(starname, str):
-        if starname[0:3] == 'KIC':
-            return int(starname[3:])
-        elif starname.isdigit():
-            return int(starname)
-        else:
-            return None
-    else:
-        return None
-
 def _get_regular_HIP_name(starname):
     '''
     Private function to convert an HIP name to its regular form.

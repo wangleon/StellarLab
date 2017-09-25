@@ -35,6 +35,8 @@ extensions = [
     'numpydoc',
 ]
 
+mathjax_path = '/share/js/mathjax/MathJax.js?config=default'
+
 extlinks = {'ads': ('http://adsabs.harvard.edu/abs/%s','ADScode: '),
             'arxiv': ('https://arxiv.org/abs/%s','arXiv: '),
             }

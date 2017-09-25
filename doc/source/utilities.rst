@@ -1,8 +1,8 @@
 Utilities
 =========
 
-Summary
---------
+Summaries
+-----------
 
 **Asciifile module (stella.utils.asciifile)**
 
@@ -37,27 +37,27 @@ Summary
     newton
     parabolic
 
-Useful functions for ascii file
+Functions in utils.asciifile
 --------------------------------
 
 .. automodule:: stella.utils.asciifile
     :members:
 
-Useful functions for ascii table
+Functions in utils.asciitable
 ---------------------------------
 
 .. automodule:: stella.utils.asciitable
     :members:
 
 
-Useful functions for FITS file
+Functions in utils.fitsio
 --------------------------------
 
 .. automodule:: stella.utils.fitsio
     :members:
 
 
-Useful functions for interpolation
+Functions in utils.interpolation
 ----------------------------------
 
 .. automodule:: stella.utils.interpolation

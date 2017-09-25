@@ -3,13 +3,17 @@ import os
 import numpy as np
 import astropy.io.fits as fits
 
+from .base import _get_HIP_number, _get_KIC_number
 from ..utils.asciifile import find_sortedfile, quickfind_sortedfile
 
 xindex_path = os.path.join(os.getenv('STELLA_DATA'),'catalog/xindex')
 
 def HIP_to_HD(starname):
-    if starname[0:3]=='HIP':
-        hip = int(starname[3:])
+    '''
+    Convert HIP name to HD name
+    '''
+
+    hip = _get_HIP_number(starname)
 
     fn = '%s/HIP-HD.csv'%xindex_path
     f1 = lambda row: int(row.split(',')[0])
@@ -25,8 +29,11 @@ def HIP_to_HD(starname):
         return [HDname]
 
 def HIP_to_BD(starname):
-    if starname[0:3]=='HIP':
-        hip = int(starname[3:])
+    '''
+    Convert HIP name to BD name
+    '''
+
+    hip = _get_HIP_number(starname)
 
     fn = '%s/HIP-BD.csv'%xindex_path
     f1 = lambda row: int(row.split(',')[0])
@@ -42,8 +49,11 @@ def HIP_to_BD(starname):
         return [HIPname]
 
 def HIP_to_CD(starname):
-    if starname[0:3]=='HIP':
-        hip = int(starname[3:])
+    '''
+    Convert HIP name to CD name
+    '''
+
+    hip = _get_HIP_number(starname)
 
     fn = '%s/HIP-CD.csv'%xindex_path
     f1 = lambda row: int(row.split(',')[0])
@@ -59,8 +69,11 @@ def HIP_to_CD(starname):
         return [CDname]
 
 def HIP_to_TYC(starname):
-    if starname[0:3]=='HIP':
-        hip = int(starname[3:])
+    '''
+    Convert HIP name to TYC name
+    '''
+
+    hip = _get_HIP_number(starname)
 
     fn = '%s/HIP-TYC.fits'%xindex_path
     f = fits.open(fn)
@@ -73,8 +86,11 @@ def HIP_to_TYC(starname):
         return ['TYC %d-%d-%d'%(rec['TYC1'],rec['TYC2'],rec['TYC3']) for rec in data[m]]
 
 def HIP_to_2MASS(starname,full=False):
-    if starname[0:3]=='HIP':
-        hip = int(starname[3:])
+    '''
+    Convert HIP name to 2MASS name
+    '''
+
+    hip = _get_HIP_number(starname)
 
     fn = '%s/HIP-2MASS.fits'%xindex_path
     f = fits.open(fn)
@@ -90,6 +106,9 @@ def HIP_to_2MASS(starname,full=False):
         return [des_2mass]
 
 def HD_to_HIP(starname):
+    '''
+    Convert HD name to HIP name
+    '''
     from .name import get_regular_name
     starname = get_regular_name(starname)
     hd = starname[2:].strip()
@@ -105,6 +124,9 @@ def HD_to_HIP(starname):
         return [HIPname]
 
 def HD_to_TYC(starname):
+    '''
+    Convert HD name to TYC name
+    '''
     from .name import get_regular_name
     starname = get_regular_name(starname)
     hd = starname[2:].strip()
@@ -120,6 +142,9 @@ def HD_to_TYC(starname):
         return [TYCname]
 
 def BD_to_HIP(starname):
+    '''
+    Convert BD name to HIP name
+    '''
     from .name import get_regular_name
     starname = get_regular_name(starname)
     bd = starname[2:].strip()
@@ -135,6 +160,9 @@ def BD_to_HIP(starname):
         return [HIPname]
 
 def CD_to_HIP(starname):
+    '''
+    Convert CD name to HIP name
+    '''
     from .name import get_regular_name
     starname = get_regular_name(starname)
     cd = starname[2:].strip()
@@ -150,6 +178,9 @@ def CD_to_HIP(starname):
         return [HIPname]
 
 def TYC_to_HIP(starname):
+    '''
+    Convert TYC name to HIP name
+    '''
     if starname[0:3]=='TYC':
         g = starname[3:].split('-')
         tyc1,tyc2,tyc3 = int(g[0]),int(g[1]),int(g[2])
@@ -167,6 +198,9 @@ def TYC_to_HIP(starname):
         return ['HIP %d'%rec['HIP'] for rec in data[m1][m2][m3]]
 
 def TYC_to_2MASS(starname,full=False):
+    '''
+    Convert TYC name to 2MASS name
+    '''
     if starname[0:3]=='TYC':
         g = starname[3:].split('-')
         tyc1,tyc2,tyc3 = int(g[0]),int(g[1]),int(g[2])
@@ -190,6 +224,9 @@ def TYC_to_2MASS(starname,full=False):
         return ['2MASS J%s'%row['2MASS'] for row in data[m1][m2][m3]]
 
 def G_to_TYC(starname):
+    '''
+    Convert G name to TYC name
+    '''
     if starname[0:2]=='G ':
         Gname = starname[2:].strip()
 
@@ -204,20 +241,29 @@ def G_to_TYC(starname):
         return [TYCname]
 
 def KIC_to_KOI(string):
+    '''
+    Convert KIC name to KOI name
+    '''
     fn = '%s/KIC-KOI.csv'%xindex_path
-    kic = int(string)
+    kic = _get_KIC_number(string)
     f1 = lambda row: int(row.split(',')[0])
     f2 = lambda row: int(row.split(',')[1])
     return quickfind_sortedfile(kic,fn,f1,f2)
 
 def KIC_to_Kepler(string):
+    '''
+    Convert KIC name to Kepler name
+    '''
     fn = '%s/KIC-Kepler.csv'%xindex_path
-    kic = int(string)
+    kic = _get_KIC_number(string)
     f1 = lambda row: int(row.split(',')[0])
     f2 = lambda row: int(row.split(',')[1])
     return quickfind_sortedfile(kic,fn,f1,f2)
 
 def KOI_to_KIC(string):
+    '''
+    Convert KOI name to KIC name
+    '''
     fn = '%s/KOI-KIC.csv'%xindex_path
     koi = int(string)
     f1 = lambda row: int(row.split(',')[0])
@@ -228,6 +274,9 @@ def KOI_to_KIC(string):
         return quickfind_sortedfile(koi,fn,f1,f2)
 
 def KOI_to_Kepler(string):
+    '''
+    Convert KOI name to Kepler name
+    '''
     fn = '%s/KOI-Kepler.csv'%xindex_path
     koi = int(string)
     f1 = lambda row: int(row.split(',')[0])
@@ -238,6 +287,9 @@ def KOI_to_Kepler(string):
         return quickfind_sortedfile(koi,fn,f1,f2)
 
 def Kepler_to_KIC(string):
+    '''
+    Convert Kepler name to KIC name
+    '''
     fn = '%s/Kepler-KIC.csv'%xindex_path
     kepler = int(string)
     f1 = lambda row: int(row.split(',')[0])
@@ -248,6 +300,9 @@ def Kepler_to_KIC(string):
         return quickfind_sortedfile(kepler,fn,f1,f2)
 
 def Kepler_to_KOI(string):
+    '''
+    Convert Kepler name to KOI name
+    '''
     fn = '%s/Kepler-KOI.csv'%xindex_path
     kepler = int(string)
     f1 = lambda row: int(row.split(',')[0])
@@ -258,6 +313,9 @@ def Kepler_to_KOI(string):
         return quickfind_sortedfile(kepler,fn,f1,f2)
 
 def HIP_to_Gaia(name):
+    '''
+    Convert HIP name to Gaia name
+    '''
     if isinstance(name, int):
         hip = name
     elif isinstance(name, str):

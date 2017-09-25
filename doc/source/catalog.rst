@@ -4,7 +4,7 @@ Catalogues
 
 Summaries
 ---------
-**Useful functions on searching stars in catalogues (find_catalog module)**
+**Catalogue searching functions (find_catalog module)**
 
 .. currentmodule:: stella.catalog.find_catalog
 
@@ -12,6 +12,20 @@ Summaries
     find_HIP
     find_HIP2
     find_KIC
+
+**Star name parsing functions (name module)**
+
+.. currentmodule:: stella.catalog.name
+
+.. autosummary::
+    get_catalog
+    get_regular_name
+
+**Cross index functions (xindex module)**
+
+.. currentmodule:: stella.catalog.xindex
+
+.. autosummary::
 
 .. _catalog_hip:
 
@@ -34,6 +48,7 @@ Reference System (ICRS) at epoch J1991.25.
 .. currentmodule:: stella.catalog
 .. autosummary::
     find_catalog.find_HIP
+    base._get_HIP_number
 
 .. _catalog_hip2:
 
@@ -46,6 +61,7 @@ This catalogue is the results of the new reduction (van Leeuwen 2007
 .. currentmodule:: stella.catalog
 .. autosummary::
     find_catalog.find_HIP2
+    base._get_HIP_number
 
 .. _catalog_kic:
 
@@ -100,6 +116,7 @@ catalogue.
 .. currentmodule:: stella.catalog
 .. autosummary::
     find_catalog.find_KIC
+    base._get_KIC_number
 
 References
 ------------

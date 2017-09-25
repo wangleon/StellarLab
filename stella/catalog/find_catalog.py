@@ -8,7 +8,7 @@ import astropy.io.fits as fits
 from ..utils.fitsio import get_bintable_info
 from ..utils.asciitable import structitem_to_dict
 from .errors import FileNotExist, ItemNotFound, UnrecognizedName
-from .name import _get_HIP_number, _get_KIC_number
+from .base import _get_HIP_number, _get_KIC_number
 
 
 def _search_HIP_catalogue(names, filename, epoch, output):
