@@ -11,7 +11,7 @@ from .errors import FileNotExist, ItemNotFound, UnrecognizedName
 from .base import _get_HIP_number, _get_KIC_number
 
 
-def _search_HIP_catalogue(names, filename, epoch, output):
+def _search_HIP_catalogue(name, filename, epoch, output):
     '''
     Search data in either HIP catalogue (`I/239
     <http://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=I/239>`_, Perryman+
@@ -21,8 +21,8 @@ def _search_HIP_catalogue(names, filename, epoch, output):
 
     Parameters
     -----------
-    names : *string*, *integer*, *list*, *tuple*, or *numpy.ndarray*
-        Names of stars
+    names : *string* or *integer*
+        Name of star
     filename : *string*
         Name of catalogue file. Either *"HIP.fits"* or *"HIP2.fits"*
     epoch : *float*
@@ -50,56 +50,27 @@ def _search_HIP_catalogue(names, filename, epoch, output):
         item['RAdeg'] += (epoch-1991.25)*pm_ra/math.cos(item['DEdeg']/180.*math.pi)
         item['DEdeg'] += (epoch-1991.25)*pm_de
 
-    if isinstance(names, list) or \
-       isinstance(names, tuple) or \
-       (isinstance(names, np.ndarray) and np.issubdtype(names.dtype, int)):
-
-        hip_lst = list(map(_get_HIP_number, names))
-
-        result_lst = []
-        for hip in hip_lst:
-            if hip is None:
-                # hip = 672 is the common null record in both HIP and HIP New
-                infile.seek(pos+(672-1)*nbyte,0)
-                item = fmtfunc(infile.read(nbyte))
-            else:
-                infile.seek(pos+(hip-1)*nbyte,0)
-                item = fmtfunc(infile.read(nbyte))
-                change_epoch(item, epoch)
-            result_lst.append(item)
-
-        infile.close()
-
-        if output == 'ndarray':
-            return np.array(result_lst, dtype=item.dtype)
-        elif output == 'dict':
-            return list(map(structitem_to_dict, result_lst))
-        else:
-            return None
-
+    hip = _get_HIP_number(name)
+    if hip is None:
+        # return a null result
+        # hip = 672 is the common null record in both HIP and HIP New
+        infile.seek(pos+(672-1)*nbyte,0)
+        item = fmtfunc(infile.read(nbyte))
     else:
-        # input is a single starname
+        infile.seek(pos+(hip-1)*nbyte,0)
+        item = fmtfunc(infile.read(nbyte))
+        change_epoch(item, epoch)
 
-        hip = _get_HIP_number(names)
-        if hip is None:
-            # hip = 672 is the common null record in both HIP and HIP New
-            infile.seek(pos+(672-1)*nbyte,0)
-            item = fmtfunc(infile.read(nbyte))
-        else:
-            infile.seek(pos+(hip-1)*nbyte,0)
-            item = fmtfunc(infile.read(nbyte))
-            change_epoch(item, epoch)
+    infile.close()
 
-        infile.close()
+    if output == 'ndarray':
+        return item
+    elif output == 'dict':
+        return structitem_to_dict(item)
+    else:
+        return None
 
-        if output == 'ndarray':
-            return item
-        elif output == 'dict':
-            return structitem_to_dict(item)
-        else:
-            return None
-
-def find_HIP(names, epoch=2000.0, output='dict'):
+def find_HIP(name, epoch=2000.0, output='dict'):
     '''
     Find records in Hipparcos Catalogue (`I/239
     <http://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=I/239>`_, Perryman+
@@ -107,8 +78,8 @@ def find_HIP(names, epoch=2000.0, output='dict'):
 
     Parameters
     -----------
-    names : *string*, *integer*, *list*, *tuple*, or *numpy.ndarray*
-        Names of stars
+    names : *string* or *integer*
+        Name of star
     epoch : *float*
         Epoch of astrometric parameters. Default is 2000.0
     output : *'dict'* (default) or *'ndarray'*
@@ -164,6 +135,7 @@ def find_HIP(names, epoch=2000.0, output='dict'):
 
     Examples
     --------
+    Find record for τ Ceti (HIP 8102)
 
     .. code-block:: python
 
@@ -173,15 +145,11 @@ def find_HIP(names, epoch=2000.0, output='dict'):
         # find the parametres for tau Cet (HIP 8102)
         item = find_HIP(8102, epoch=1991.25)
 
-        # find the parameters for HIP 65000 ~ HIP 65399
-        hip_lst = np.arange(65000, 65400)
-        res = find_HIP(hip_lst, output='ndarray')
-
     '''
 
-    return _search_HIP_catalogue(names, 'HIP.fits', epoch, output)
+    return _search_HIP_catalogue(name, 'HIP.fits', epoch, output)
 
-def find_HIP2(names, epoch=2000.0, output='dict'):
+def find_HIP2(name, epoch=2000.0, output='dict'):
     '''
     Find record in Hipparcos New Reduction (`I/311
     <http://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=I/311>`_, van Leeuwen
@@ -189,8 +157,8 @@ def find_HIP2(names, epoch=2000.0, output='dict'):
 
     Parameters
     -----------
-    names : *string*, *integer*, *list*, *tuple*, or *numpy.ndarray*
-        Names of stars
+    names : *string* or *integer*
+        Name of star
     epoch : *float*
         Epoch of astrometric parameters. Default is 2000.0
     output : *'dict'* (default) or *'ndarray'*
@@ -253,7 +221,7 @@ def find_HIP2(names, epoch=2000.0, output='dict'):
 
     '''
 
-    return _search_HIP_catalogue(names, 'HIP2.fits', epoch, output)
+    return _search_HIP_catalogue(name, 'HIP2.fits', epoch, output)
 
 def find_TYC(starname):
 
@@ -302,7 +270,7 @@ def find_TYC(starname):
     infile.close()
     return row
 
-def find_KIC(names, output='dict'):
+def find_KIC(name, output='dict'):
     '''
     Find records in Kepler Input Catalog (`V/133
     <http://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=V/133>`_, Kepler
@@ -310,8 +278,8 @@ def find_KIC(names, output='dict'):
 
     Parameters
     -----------
-    names : *string*, *integer*, *list*, *tuple*, or *numpy.ndarray*
-        Names of stars
+    names : *string* or *integer*
+        Name of stars
     output : *'dict'* (default) or *'ndarray'*
         Data type of output. Default is *'dict'*
         
@@ -376,41 +344,18 @@ def find_KIC(names, output='dict'):
     nbyte, nrow, ncol, pos, dtype, fmtfunc = get_bintable_info(filename)
     infile = open(filename,'rb')
 
-    if isinstance(names, list) or \
-       isinstance(names, tuple) or \
-       (isinstance(names, np.ndarray) and np.issubdtype(names.dtype, int)):
-
-        kic_lst = list(map(_get_KIC_number, names))
-
-        result_lst = []
-        for kic in kic_lst:
-            if kic>0 and kic<=nrow:
-                infile.seek(pos+(kic-1)*nbyte,0)
-                item = fmtfunc(infile.read(nbyte))
-                result_lst.append(item)
-            else:
-                pass
-
-        if output == 'ndarray':
-            return np.array(result_lst, dtype=item.dtype)
-        elif output == 'dict':
-            return list(map(structitem_to_dict, result_lst))
-        else:
-            return None
-
+    kic = _get_KIC_number(name)
+    if kic>0 and kic<=nrow:
+        infile.seek(pos+(kic-1)*nbyte,0)
+        item = fmtfunc(infile.read(nbyte))
     else:
-        # input is a single starname
+        pass
 
-        kic = _get_KIC_number(names)
-        if kic>0 and kic<=nrow:
-            infile.seek(pos+(kic-1)*nbyte,0)
-            item = fmtfunc(infile.read(nbyte))
-        else:
-            pass
+    infile.close()
 
-        if output == 'ndarray':
-            return item
-        elif output == 'dict':
-            return structitem_to_dict(item)
-        else:
-            return None
+    if output == 'ndarray':
+        return item
+    elif output == 'dict':
+        return structitem_to_dict(item)
+    else:
+        return None
