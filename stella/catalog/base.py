@@ -41,3 +41,18 @@ def _get_KIC_number(starname):
     Private function to convert star name to an integer KIC number.
     '''
     return _get_star_number1(starname, 'KIC')
+
+def _get_TYC_number(starname):
+    '''
+    Private function to convert star name to TYC number (TYC1, TYC2, TYC3).
+    '''
+    if starname[0:3]=='TYC':
+        g = starname[3:].split('-')
+        tyc1, tyc2, tyc3 = int(g[0]), int(g[1]), int(g[2])
+        return (tyc1, tyc2, tyc3)
+    elif len(starname.split('-'))==3:
+        g = starname.split('-')
+        tyc1, tyc2, tyc3 = int(g[0]), int(g[1]), int(g[2])
+        return (tyc1, tyc2, tyc3)
+    else:
+        return None

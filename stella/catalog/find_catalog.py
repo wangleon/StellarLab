@@ -8,7 +8,7 @@ import astropy.io.fits as fits
 from ..utils.fitsio import get_bintable_info
 from ..utils.asciitable import structitem_to_dict
 from .errors import FileNotExist, ItemNotFound, UnrecognizedName
-from .base import _get_HIP_number, _get_KIC_number
+from .base import _get_HIP_number, _get_KIC_number, _get_TYC_number
 
 
 def _search_HIP_catalogue(name, filename, epoch, output):
@@ -21,7 +21,7 @@ def _search_HIP_catalogue(name, filename, epoch, output):
 
     Parameters
     -----------
-    names : *string* or *integer*
+    name : *string* or *integer*
         Name of star
     filename : *string*
         Name of catalogue file. Either *"HIP.fits"* or *"HIP2.fits"*
@@ -78,7 +78,7 @@ def find_HIP(name, epoch=2000.0, output='dict'):
 
     Parameters
     -----------
-    names : *string* or *integer*
+    name : *string* or *integer*
         Name of star
     epoch : *float*
         Epoch of astrometric parameters. Default is 2000.0
@@ -119,7 +119,7 @@ def find_HIP(name, epoch=2000.0, output='dict'):
         "BTmag",    "float32",   "mag",    "Mean *B*:sub:`T` magnitude"
         "e_BTmag",  "float32",   "mag",    "Error in *B*:sub:`T` magnitude"
         "VTmag",    "float32",   "mag",    "Mean *V*:sub:`T` magnitude"
-        "e_VTmag",  "float32",   "mag",    "Error *V*:sub:`T` magnitude"
+        "e_VTmag",  "float32",   "mag",    "Error in *V*:sub:`T` magnitude"
         "B-V",      "float32",   "mag",    "*B* − *V* color in Johnson system"
         "e_B-V",    "float32",   "mag",    "Error in *B* − *V* color"
         "r_B-V",    "character", "",       "Source of *B* − *V* color"
@@ -151,13 +151,13 @@ def find_HIP(name, epoch=2000.0, output='dict'):
 
 def find_HIP2(name, epoch=2000.0, output='dict'):
     '''
-    Find record in Hipparcos New Reduction (`I/311
+    Find records in Hipparcos New Reduction (`I/311
     <http://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=I/311>`_, van Leeuwen
     2007).
 
     Parameters
     -----------
-    names : *string* or *integer*
+    name : *string* or *integer*
         Name of star
     epoch : *float*
         Epoch of astrometric parameters. Default is 2000.0
@@ -223,25 +223,85 @@ def find_HIP2(name, epoch=2000.0, output='dict'):
 
     return _search_HIP_catalogue(name, 'HIP2.fits', epoch, output)
 
-def find_TYC(starname):
+def find_TYC2(name, epoch=2000.0, output='dict'):
+    '''
+    Find records in Tycho-2 Catalogue (`I/259
+    <http://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=I/259>`_, Høg+ 2000).
 
-    filename = os.path.join(os.getenv('STELLA_DATA'), 'catalog/TYC.fits')
+    Parameters
+    ----------
+    name : *string* or *tuple*
+        Name of star
+    epoch : *float*
+        Epoch of astrometric parameters. Default is 2000.0
+    output : *'dict'* (default) or *'ndarray'*
+        Data type of output. Default is *'dict'*
+
+    Returns
+    -------
+    row : *numpy.ndarray* or *dict*
+        Record array or dictionary
+
+    Notes
+    ------
+    The Tycho-2 Catalogue contains 2,539,913 records, and additonal 17,588
+    records in Supplement-1, and 1,146 records in Supplement-2.
+
+    For more details, see :ref:`Tycho-2 Catalogue<catalog_tyc2>`.
+
+    .. csv-table:: Descriptions of returned parameters
+        :header: "Key", "Type", "Unit", "Description"
+        :widths: 30, 30, 30, 150
+
+        "TYC",      "integer32", "",       "HYC number"
+        "RAdeg",    "float64",   "deg",    "Right ascension (*α*) in ICRS at given epoch"
+        "DEdeg",    "float64",   "deg",    "Declination (*δ*) in ICRS at at given epoch"
+        "pmRA",     "float32",   "mas/yr", "Proper motion in Right ascension with cos(*δ*) factor"
+        "pmDE",     "float32",   "mas/yr", "Proper motion in Declination"
+        "e_RA",     "integer16", "mas",    "Error in RA with cos(*δ*) factor at mean epoch. −1 if blank"
+        "e_DE",     "integer16", "mas",    "Error in Dec at mean epoch. −1 if blank"
+        "e_pmRA",   "float32",   "mas/yr", "Error in proper motion in RA"
+        "e_pmDE",   "float32",   "mas/yr", "Error in proper motion in Dec"
+        "epoch_RA", "float32",   "yr",     "mean epoch of RA in Julian year"
+        "epoch_DE", "float32",   "yr",     "mean epoch of Dec in Julian year"
+        "num",      "integer16", "",       "Number of positions used. −1 if blank"
+        "q_RA",     "float32",   "",       "Goodness of fit for mean RA. truncated to 9.9 if >9.9"
+        "q_DE",     "float32",   "",       "Goodness of fit for mean Dec. truncated to 9.9 if >9.9"
+        "q_pmRA",   "float32",   "",       "Goodness of fit for pmRA. truncated to 9.9 if >9.9"
+        "q_pmDE",   "float32",   "",       "Goodness of fit for pmDE. truncated to 9.9 if >9.9"
+        "BTmag",    "float32",   "mag",    "Mean *B*:sub:`T` magnitude"
+        "e_BTmag",  "float32",   "mag",    "Error in *B*:sub:`T` magnitude"
+        "VTmag",    "float32",   "mag",    "Mean *V*:sub:`T` magnitude"
+        "e_VTmag",  "float32",   "mag",    "Error in *V*:sub:`T` magnitude"
+        "prox",     "float32",   "arcsec", "Proximity. distance to the nearest entry. truncated to 99.9 if >99.9"
+
+    Examples
+    ---------
+    Find the proper motion of Barnard's star (TYC 425-2502-1)
+
+    .. code-block:: python
+    
+        from stella.catalog.find_catalog import find_TYC2
+
+        res = find_TYC2('TYC 425-2502-1')
+        print(res['pmRA'], res['pmDE'])
+        # output:
+        # -798.7999877929688 10277.2998046875
+    
+    '''
+
+    filename = os.path.join(os.getenv('STELLA_DATA'), 'catalog/TYC2.fits')
     if not os.path.exists(filename):
         raise FileNotExist(filename)
 
-    # get tyc1, tyc2, and tyc3
-    if starname[0:3]=='TYC':
-        g = starname[3:].split('-')
-        tyc1 = int(g[0])
-        tyc2 = int(g[1])
-        tyc3 = int(g[2])
+    tyc1, tyc2, tyc3 = _get_TYC_number(name)
 
     # get information of FITS table
     nbyte, nrow, ncol, pos, dtype, fmtfunc = get_bintable_info(filename)
 
     target = np.int32((tyc1<<18) + (tyc2<<4) + (tyc3<<1))
 
-    infile = open(filename)
+    infile = open(filename, 'rb')
     i1, i2 = 0, nrow-1
     while(i2-i1 > 1):
         i3 = int((i1+i2)/2)
@@ -254,21 +314,28 @@ def find_TYC(starname):
         else:
             break
     infile.seek(-4,1)
-    row = fmtfunc(infile.read(nbyte))
+    item = fmtfunc(infile.read(nbyte))
     
     # looking for possible companion
     if i3 != nrow - 1:
         key2 = struct.unpack('>i',infile.read(4))[0]
         if key2 == key + 1:
             infile.seek(-4,1)
-            row2 = fmtfunc(infile.read(nbyte))
+            item2 = fmtfunc(infile.read(nbyte))
             print('Warning: There are more than 1 star matched')
             t1 = (key2 & 0b11111111111111000000000000000000)/2**18
             t2 = (key2 & 0b00000000000000111111111111110000)/2**4
             t3 = (key2 & 0b00000000000000000000000000001110)/2
-            print(t1,t2,t3,row2)
+            print(t1, t2, t3, item2)
+
     infile.close()
-    return row
+
+    if output == 'ndarray':
+        return item
+    elif output == 'dict':
+        return structitem_to_dict(item)
+    else:
+        return None
 
 def find_KIC(name, output='dict'):
     '''
@@ -278,8 +345,8 @@ def find_KIC(name, output='dict'):
 
     Parameters
     -----------
-    names : *string* or *integer*
-        Name of stars
+    name : *string* or *integer*
+        Name of star
     output : *'dict'* (default) or *'ndarray'*
         Data type of output. Default is *'dict'*
         
@@ -334,6 +401,19 @@ def find_KIC(name, output='dict'):
         "EBV",    "float32",   "mag",    "Color excess in *B* − *V*"
         "Av",     "float32",   "mag",    "Extinction in *V* magnitude"
         "R",      "float32",   "Rsun",   "Stellar radius"
+
+    Examples
+    ---------
+    Find *K*:sub:`p` magnitude of Kepler-13 (KOI-13, KIC 9941662)
+
+    .. code-block:: python
+    
+        from stella.catalog.find_catalog import find_KIC
+
+        res = find_KIC('KIC 9941662')
+        print(res['kepmag'])
+        # output:
+        # 9.958000183105469
 
     '''
 

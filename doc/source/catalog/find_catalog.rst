@@ -9,6 +9,7 @@ Summary
     find_HIP
     find_HIP2
     find_KIC
+    find_TYC2
 
 Functions in stella.catalog.find_catalog module
 -------------------------------------------------
