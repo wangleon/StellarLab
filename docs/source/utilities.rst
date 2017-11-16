@@ -62,3 +62,25 @@ Functions in utils.interpolation
 
 .. automodule:: stella.utils.interpolation
     :members:
+
+Visualization
+--------------
+
+Temperature to RGB color
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+.. currentmodule:: stella.utils.vision
+
+.. autosummary::
+    temp_to_rgb
+
+The above function converts black-body temperature to RGB color using piecewise
+polynomials.
+The coefficients of the polynomials are obtained by fitting the CIE 1964 10-deg
+color matching functions given in `bbr_color.txt
+<http://www.vendian.org/mncharity/dir3/blackbody/UnstableURLs/bbr_color.html>`_
+on `Mitchell Charity's website <http://www.vendian.org/mncharity/dir3/blackbody/>`_.
+
+
+.. plot:: plot/temp_to_rgb.py
