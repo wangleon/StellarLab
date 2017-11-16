@@ -8,9 +8,8 @@ Table of Contents
    index
    extinction
    catalog
-   catalog/*
    parameter
-   parameter/*
    kinetics
-   kinetics/*
-   utilities
+   modules/catalog/*
+   modules/kinetics/*
+   modules/parameter/*

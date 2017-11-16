@@ -37,7 +37,7 @@ The Galactic potenial can be approximated with the sum of three components
 
    \Phi = \Phi_\mathrm{bluge} + \Phi_\mathrm{disk} + \Phi_\mathrm{halo}
 
-or four components (including the central black hole, e.g., Kenyon et al. 2008
+or four components, including the central black hole (e.g., Kenyon et al. 2008
 [#Kenyon2008]_).
 
 .. math::
@@ -67,7 +67,8 @@ measured in various studies, e.g.,
 
 Bulge Potential
 ^^^^^^^^^^^^^^^^
-The bulge potential can be described with the spherically symmetric Hernquist model (Hernquist 1990 [#Hernquist1990]_):
+The bulge potential can be described with the spherically symmetric Hernquist
+model (Hernquist 1990 [#Hernquist1990]_):
 
 .. math::
 
@@ -197,11 +198,11 @@ Calculate the orbit of the Sun
     t_lst = np.arange(0, 0.4, 0.0001) # in Gyr
 
     x_lst, y_lst, z_lst = orbit.compute_Galorbit(
-                            potential = potential_lst,
-                            xyz=(R0,0.,0.),
-                            uvw=(0.,0.,0.),
-                            solar_uvw=solar_uvw,
-                            t=t_lst)
+                              potential = potential_lst,
+                              xyz       = (R0,0.,0.),
+                              uvw       = (0.,0.,0.),
+                              solar_uvw = solar_uvw,
+                              t         = t_lst)
 
 .. figure:: images/orbit_sun.png
    :alt: Orbit of Sun

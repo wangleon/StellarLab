@@ -1,4 +1,6 @@
 
+.. |Teff| replace:: *T*:sub:`eff`
+
 Catalogues
 ==========
 
@@ -231,7 +233,7 @@ The magnitudes in SDSS bands were calibrated using 284 standard stars in common
 with SDSS DR1.
 The *Kepler* magnitudes as defined by the *Kepler* response curve centered at
 665 nm were computed by linear combinations of *g*, *r*, *i* magnitudes.
-The stellar physical parameters (*T*:sub:`eff`, log\ *g*, log\ *Z* and
+The stellar physical parameters (|Teff|, log\ *g*, log\ *Z* and
 *E*:sub:`B−V`) were estimated using Bayesian method to match the observed colors
 to the Castelli & Kurucz 2004 [#Castelli2004]_ stellar atmosphere models.
 For details, see Brown et al. 2011 [#Brown2011]_.
@@ -239,8 +241,8 @@ For details, see Brown et al. 2011 [#Brown2011]_.
 There are some known biases on the physical parameters in the Kepler Input
 Catalog.
 We refer the readers to Pinsonneault et al. 2012 [#Pinsonneault2012]_ for an
-improved temperature scale and Dong et al. 2014 [#Dong2014]_ for an improved
-metallicity scale.
+improved |Teff| scale and Dong et al. 2014 [#Dong2014]_ for an improved
+[Fe/H] scale.
 Besides, Huber et al. 2014 [#Huber2014]_ derived parameters for 196,468 stars
 using Kepler photometric data, including 11,532 unclassified targes in this
 catalogue.
