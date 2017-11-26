@@ -204,7 +204,7 @@ Calculate the orbit of the Sun
                               solar_uvw = solar_uvw,
                               t         = t_lst)
 
-.. figure:: images/orbit_sun.png
+.. figure:: examples/galactic_orbit/orbit_sun.png
    :alt: Orbit of Sun
    :align: center
    :width: 1200px
@@ -233,7 +233,7 @@ Calculate the orbit of `HD 122563
                                 solar_uvw=solar_uvw,
                                 t=t_lst)
 
-.. figure:: images/orbit_HD122563.png
+.. figure:: examples/galactic_orbit/orbit_HD122563.png
    :alt: Orbit of HD 122563
    :align: center
    :width: 1200px

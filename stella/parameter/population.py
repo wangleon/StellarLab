@@ -24,8 +24,9 @@ def get_pop_prob(U, V, W, norm=False):
     Notes
     ------
     Calculate the relative probability of stellar population (thin disk/thick
-    disk/halo) using the Bayesian method proposed by Bensby et al. 2003. These
-    authors assumed that the Galactic space velocities (*U*:sub:`LSR`,
+    disk/halo) using the Bayesian method proposed by `Bensby et al. 2003
+    <http://adsabs.harvard.edu/abs/2003A&A...410..527B>`_.
+    These authors assumed that the Galactic space velocities (*U*:sub:`LSR`,
     *V*:sub:`LSR` and *W*:sub:`LSR`) of different popolutaions have Gaussian
     distributions with different characteristic velocity dispersions.
     The probabilities can be calculated as:

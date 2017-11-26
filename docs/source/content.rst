@@ -20,3 +20,11 @@ Modules
    modules/catalog/*
    modules/kinetics/*
    modules/parameter/*
+
+Examples
+
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   examples/*/*
