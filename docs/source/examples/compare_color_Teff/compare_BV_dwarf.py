@@ -36,7 +36,7 @@ def main():
         ax.text(0.9*x1+0.1*x2, 0.9*y1+0.1*y2, '[Fe/H] = %3.1f'%feh)
         ax.grid(True)
 
-    fig.savefig('compare_BV.png')
+    fig.savefig('compare_BV_dwarf.png')
     plt.show()
 
 if __name__=='__main__':
