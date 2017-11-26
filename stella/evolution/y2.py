@@ -93,7 +93,7 @@ class Y2Track(object):
             if self.z == None:
                 raise ValueError
         else:
-            self.z = feh_to_z(feh=self.feh, alpha=self.alpha)
+            self.z = feh_to_z(FeH=self.feh, alpha=self.alpha)
         self.npoints = kwargs.pop('npoints',0)
 
         if None in [self.mass,self.z]:
