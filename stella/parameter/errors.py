@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 
 class ColorIndexError(Exception):
     def __init__(self, index, ref):

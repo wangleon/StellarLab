@@ -262,7 +262,7 @@ catalogue.
     :width: 900px
     :figwidth: 900px
     
-    Histogram of *K*:sub:`p` magnitudes (*left*) and *T*:sub:`eff` - log\ *g*
+    Histogram of *K*:sub:`p` magnitudes (*left*) and |Teff| - log\ *g*
     diagram (*right*)
 
 .. currentmodule:: stella.catalog

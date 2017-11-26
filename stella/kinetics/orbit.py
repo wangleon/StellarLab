@@ -70,7 +70,7 @@ def compute_UVW(**kwargs):
     Examples
     ---------
     Calculate (*U*, *V*, *W*) velocities relative to the sun for HD 9562 (HIP
-    7276). The heliocentric radial velocity is −13.3 km/s (`Bensby et al. 2003
+    7276). The heliocentric radial velocity is −13.3 |kms| (`Bensby et al. 2003
     <http://adsabs.harvard.edu/abs/2003A&A...410..527B>`_, Table 2).
 
     .. code-block:: python
@@ -212,34 +212,24 @@ def compute_UVW(**kwargs):
 
 def compute_GalXYZ(**kwargs):
     '''
-    Compute Galactic position (*X*, *Y*, *Z*)
+    Compute Galactic position (*X*, *Y*, *Z*) in unit of kpc.
 
-    Parameters
-    ----------
-    ra : *float*
-        Right Ascension in degree at epoch J2000.0
-    dec : *float*
-        Declination in degree at epoch J2000.0
-    eqcoord : *astropy.coordinates.SkyCoord* instance
-        Sky coordinate of object
-    galactic : *list* or *tuple*
-        Galactic coordinate (`l`, `b`)
-    l : *float*
-        Galactic longitude in degree
-    b : *float*
-        Galactic latitude in degree
-    distance : *float*, *list* or *tuple*
-        Distance in pc. Either `distance` as a float or (`distance`,
-        `distance_err`)
-    parallax : *float*, *list* or *tuple*
-        Parallax in mas. Either `parallax` as a float or (`parallax`,
-        `parallax_err`)
-    R0 : *float*
-        Solar distance to the Galactic center in kpc
+    Args:
+        ra (float): Right Ascension in degree at epoch J2000.0
+        dec (float): Declination in degree at epoch J2000.0
+        eqcoord (:py:class:`astropy.coordinates.SkyCoord`, optional): Sky
+            coordinate of object
+        galactic (list or tuple, optional): Galactic coordinate (`l`, `b`)
+        l (float, optional): Galactic longitude in degree
+        b (float, optional): Galactic latitude in degree
+        distance (float, list, or tuple): Distance in pc. Either `distance` as a
+            float or (`distance`, `distance_err`)
+        parallax (float, list, or tuple): Parallax in mas. Either `parallax` as
+            a float or (`parallax`, `parallax_err`)
+        R0 (float):  Solar distance to the Galactic center in kpc
 
-    Returns
-    -------
-
+    Returns:
+        tuple: Galactic position (*x*, *y*, *z*) in unit of kpc
 
     '''
     # parse RA and Dec
@@ -294,7 +284,7 @@ def compute_GalXYZ(**kwargs):
 
 def compute_Galorbit(**kwargs):
     '''
-    Calculate the orbit in the Milky Way
+    Calculate the stellar orbit in the Milky Way.
 
     Parameters
     -----------

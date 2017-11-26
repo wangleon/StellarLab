@@ -34,7 +34,8 @@ extensions = [
     'sphinx.ext.viewcode',
     'sphinx.ext.autosummary',
     'sphinx.ext.extlinks',
-    'numpydoc',
+    'sphinx.ext.napoleon',
+    #'numpydoc',
 ]
 
 mathjax_path = '/share/js/mathjax/MathJax.js?config=default'
