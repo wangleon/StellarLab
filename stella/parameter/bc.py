@@ -132,14 +132,20 @@ def _get_giant_BC_Alonso1999(**kwargs):
     '''Get BC for giants using the calibrations relations given by `Alonso+ 1999
     <http://adsabs.harvard.edu/abs/1999A&AS..140..261A>`_.
 
-    References
-    ----------
-    * `Alonso et al., 1999, A&AS, 140, 261 <http://adsabs.harvard.edu/abs/1999A&AS..140..261A>`_
+    Args:
+        Teff (float or int): *T*:sub:`eff` of the star
+        FeH (float): [Fe/H] abundance ratio
+        extrapolation (bool): use extrapolation of True
+    Returns:
+        float: *BC*:sub:`V` for the star
+
+    References:
+        * `Alonso et al., 1999, A&AS, 140, 261 <http://adsabs.harvard.edu/abs/1999A&AS..140..261A>`_
     '''
 
-    teff = kwargs.pop('teff',None)
-    FeH  = kwargs.pop('FeH',0.0)
-    extrapolation = kwargs.pop('extrapolation',False)
+    teff          = kwargs.pop('Teff', None)
+    FeH           = kwargs.pop('FeH', 0.0)
+    extrapolation = kwargs.pop('extrapolation', False)
 
     logt = math.log10(teff)
 
