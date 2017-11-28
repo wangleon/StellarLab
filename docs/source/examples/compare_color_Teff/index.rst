@@ -1,3 +1,5 @@
+.. _example_color_Teff:
+
 Comparison of Color - *T*:sub:`eff` Calibration Relations
 =========================================================
 

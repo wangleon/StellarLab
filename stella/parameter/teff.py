@@ -119,86 +119,76 @@ def _get_dwarf_Teff_Alonso1996(index, color, **kwargs):
     the calibration relations given by `Alonso+ 1996
     <http://adsabs.harvard.edu/abs/1996A&A...313..873A>`_.
 
-    .. |B-V| replace:: (*B* − *V*)
-    .. |R-I| replace:: (*R* − *I*)
-    .. |V-R| replace:: (*V* − *R*)
-    .. |V-I| replace:: (*V* − *I*)
-    .. |V-K| replace:: (*V* − *K*)
-    .. |b-y| replace:: (*b* − *y*)
-    .. |J-K| replace:: (*J* − *K*)
-    .. |J-H| replace:: (*J* − *H*)
-    .. |Teff| replace:: *T*:sub:`eff`
-    .. |br| raw:: html
+    `Alonso+ 1996 <http://adsabs.harvard.edu/abs/1996A&A...313..873A>`_ provides
+    calibration relations of |Teff| versus different color indices and
+    metallicities for low main sequence stars (F0-K5).
+    The color indices include |B-V|, |R-I|, |V-R|, |V-I|, |V-K|, |b-y| and
+    *c*:sub:`1`, *β*, |J-K|, and |J-H|.
+    The *VRI* magnitudes are in Johnson system, and *JHK* magnitudes are in
+    *TCS* system.
+    The relations of |Teff| v.s. |V-K| have the smallest standard deviations on
+    |Teff|, and the relations of |Teff| v.s. |J-K|\ :sub:`TCS` are free of
+    [Fe/H].
 
-       <br />
+    The applicable ranges of color indices and metallicities, as well as the
+    standard deviations of |Teff| are:
 
-    Notes:
-        `Alonso+ 1996 <http://adsabs.harvard.edu/abs/1996A&A...313..873A>`_
-        provides calibration relations of |Teff| versus different color
-        indices and metallicities for low main sequence stars (F0-K5).
-        The color indices include |B-V|, |R-I|, |V-R|, |V-I|, |V-K|, |b-y| and
-        *c*:sub:`1`, *β*, |J-K|, and |J-H|.
-        The *VRI* magnitudes are in Johnson system, and *JHK* magnitudes are in
-        *TCS* system.
-        The relations of |Teff| v.s. |V-K| have the smallest standard deviations
-        on |Teff|, and the relations of |Teff| v.s. |J-K|\ :sub:`TCS` are free
-        of [Fe/H].
+    .. list-table::
+       :widths: 10, 20, 20, 10
+       :header-rows: 1
 
-        The applicable ranges of color indices and metallicities, as well as the
-        standard deviations of |Teff| are:
+       * - color index
+         - color
+         - [Fe/H]
+         - *σ*\ (|Teff|) (K)
+       * - |B-V|
+         - 0.20 ≤ |B-V| ≤ 1.5   |br| 0.30 ≤ |B-V| ≤ 1.0   |br| 0.35 ≤ |B-V| ≤ 0.9   |br| 0.30 ≤ |B-V| ≤ 0.8
+         - −0.5 < [Fe/H] ≤ +0.5 |br| −1.5 < [Fe/H] ≤ −0.5 |br| −2.5 < [Fe/H] ≤ −1.5 |br| −3.5 < [Fe/H] ≤ −2.5
+         - 130
+       * - |R-I|
+         - 0.10 ≤ |R-I| ≤ 1.00  |br| 0.20 ≤ |R-I| ≤ 0.65  |br| 0.25 ≤ |R-I| ≤ 0.55  |br| 0.25 ≤ |R-I| ≤ 0.50
+         - −0.5 < [Fe/H] ≤ +0.5 |br| −1.5 < [Fe/H] ≤ −0.5 |br| −2.5 < [Fe/H] ≤ −1.5 |br| −3.5 < [Fe/H] ≤ −2.5
+         - 135
+       * - |V-R|
+         - 0.25 ≤ |V-R| ≤ 0.6   |br| 0.30 ≤ |V-R| ≤ 0.6   |br| 0.40 ≤ |V-R| ≤ 0.6   |br| 0.40 ≤ |V-R| ≤ 0.6
+         - −0.5 < [Fe/H] ≤ +0.5 |br| −1.5 < [Fe/H] ≤ −0.5 |br| −2.5 < [Fe/H] ≤ −1.5 |br| −3.5 < [Fe/H] ≤ −2.5
+         - 95
+       * - |V-R|
+         - 0.6 ≤ |V-R| ≤ 1.40   |br| 0.6 ≤ |V-R| ≤ 0.75   |br| 0.6 ≤ |V-R| ≤ 0.75   |br| 0.6 ≤ |V-R| ≤ 0.70
+         - −0.5 < [Fe/H] ≤ +0.5 |br| −1.5 < [Fe/H] ≤ −0.5 |br| −2.5 < [Fe/H] ≤ −1.5 |br| −3.5 < [Fe/H] ≤ −2.5
+         - 115
+       * - |V-I|
+         - 0.50 ≤ |V-I| ≤ 2.50  |br| 0.60 ≤ |V-I| ≤ 1.30  |br| 0.70 ≤ |V-I| ≤ 1.30  |br| 0.65 ≤ |V-I| ≤ 1.20
+         - −0.5 < [Fe/H] ≤ +0.5 |br| −1.5 < [Fe/H] ≤ −0.5 |br| −2.5 < [Fe/H] ≤ −1.5 |br| −3.5 < [Fe/H] ≤ −2.5
+         - 113
+       * - |V-K|
+         - 0.4 ≤ |V-K| ≤ 1.6    |br| 0.8 ≤ |V-K| ≤ 1.6    |br| 1.1 ≤ |V-K| ≤ 1.6    |br| 1.1 ≤ |V-K| ≤ 1.6
+         - −0.5 < [Fe/H] ≤ +0.5 |br| −1.5 < [Fe/H] ≤ −0.5 |br| −2.5 < [Fe/H] ≤ −1.5 |br| −3.5 < [Fe/H] ≤ −2.5
+         - 23
+       * - |V-K|
+         - 1.6 ≤ |V-K| ≤ 4.1    |br| 1.6 ≤ |V-K| ≤ 3.0    |br| 1.6 ≤ |V-K| ≤ 2.4    |br| 1.6 ≤ |V-K| ≤ 2.2
+         - −0.5 < [Fe/H] ≤ +0.5 |br| −1.5 < [Fe/H] ≤ −0.5 |br| −2.5 < [Fe/H] ≤ −1.5 |br| −3.5 < [Fe/H] ≤ −2.5
+         - 37
+       * - |b-y|, *c*:sub:`1`
+         - 0.2 ≤ |b-y| ≤ 0.7
+         - −3.5 < [Fe/H] ≤ +0.5
+         - 110
+       * - *β*
+         - 2.44 ≤ *β* ≤ 2.74    |br| 2.50 ≤ *β* ≤ 2.70    |br| 2.50 ≤ *β* ≤ 2.63    |br| 2.51 ≤ *β* ≤ 2.62
+         - −0.5 < [Fe/H] ≤ +0.5 |br| −1.5 < [Fe/H] ≤ −0.5 |br| −2.5 < [Fe/H] ≤ −1.5 |br| −3.5 < [Fe/H] ≤ −2.5
+         - 141
+       * - |J-K|\ :sub:`TCS`
+         - 0.05 ≤ |J-K| ≤ 0.85  |br| 0.15 ≤ |J-K| ≤ 0.65  |br| 0.25 ≤ |J-K| ≤ 0.75  |br| 0.20 ≤ |J-K| ≤ 0.60
+         - −0.5 < [Fe/H] ≤ +0.5 |br| −1.5 < [Fe/H] ≤ −0.5 |br| −2.5 < [Fe/H] ≤ −1.5 |br| −3.5 < [Fe/H] ≤ −2.5
+         - 144
+       * - |J-H|\ :sub:`TCS`
+         - 0.00 ≤ |J-H| ≤ 0.65  |br| 0.15 ≤ |J-H| ≤ 0.55  |br| 0.20 ≤ |J-H| ≤ 0.60  |br| 0.15 ≤ |J-H| ≤ 0.45
+         - −0.5 < [Fe/H] ≤ +0.5 |br| −1.5 < [Fe/H] ≤ −0.5 |br| −2.5 < [Fe/H] ≤ −1.5 |br| −3.5 < [Fe/H] ≤ −2.5
+         - 154
 
-        .. list-table::
-           :widths: 10, 20, 20, 10
-           :header-rows: 1
-
-           * - color index
-             - color
-             - [Fe/H]
-             - *σ*\ (|Teff|) (K)
-           * - |B-V|
-             - 0.20 ≤ |B-V| ≤ 1.5   |br| 0.30 ≤ |B-V| ≤ 1.0   |br| 0.35 ≤ |B-V| ≤ 0.9   |br| 0.30 ≤ |B-V| ≤ 0.8
-             - −0.5 < [Fe/H] ≤ +0.5 |br| −1.5 < [Fe/H] ≤ −0.5 |br| −2.5 < [Fe/H] ≤ −1.5 |br| −3.5 < [Fe/H] ≤ −2.5
-             - 130
-           * - |R-I|
-             - 0.10 ≤ |R-I| ≤ 1.00  |br| 0.20 ≤ |R-I| ≤ 0.65  |br| 0.25 ≤ |R-I| ≤ 0.55  |br| 0.25 ≤ |R-I| ≤ 0.50
-             - −0.5 < [Fe/H] ≤ +0.5 |br| −1.5 < [Fe/H] ≤ −0.5 |br| −2.5 < [Fe/H] ≤ −1.5 |br| −3.5 < [Fe/H] ≤ −2.5
-             - 135
-           * - |V-R|
-             - 0.25 ≤ |V-R| ≤ 0.6   |br| 0.30 ≤ |V-R| ≤ 0.6   |br| 0.40 ≤ |V-R| ≤ 0.6   |br| 0.40 ≤ |V-R| ≤ 0.6
-             - −0.5 < [Fe/H] ≤ +0.5 |br| −1.5 < [Fe/H] ≤ −0.5 |br| −2.5 < [Fe/H] ≤ −1.5 |br| −3.5 < [Fe/H] ≤ −2.5
-             - 95
-           * - |V-R|
-             - 0.6 ≤ |V-R| ≤ 1.40   |br| 0.6 ≤ |V-R| ≤ 0.75   |br| 0.6 ≤ |V-R| ≤ 0.75   |br| 0.6 ≤ |V-R| ≤ 0.70
-             - −0.5 < [Fe/H] ≤ +0.5 |br| −1.5 < [Fe/H] ≤ −0.5 |br| −2.5 < [Fe/H] ≤ −1.5 |br| −3.5 < [Fe/H] ≤ −2.5
-             - 115
-           * - |V-I|
-             - 0.50 ≤ |V-I| ≤ 2.50  |br| 0.60 ≤ |V-I| ≤ 1.30  |br| 0.70 ≤ |V-I| ≤ 1.30  |br| 0.65 ≤ |V-I| ≤ 1.20
-             - −0.5 < [Fe/H] ≤ +0.5 |br| −1.5 < [Fe/H] ≤ −0.5 |br| −2.5 < [Fe/H] ≤ −1.5 |br| −3.5 < [Fe/H] ≤ −2.5
-             - 113
-           * - |V-K|
-             - 0.4 ≤ |V-K| ≤ 1.6    |br| 0.8 ≤ |V-K| ≤ 1.6    |br| 1.1 ≤ |V-K| ≤ 1.6    |br| 1.1 ≤ |V-K| ≤ 1.6
-             - −0.5 < [Fe/H] ≤ +0.5 |br| −1.5 < [Fe/H] ≤ −0.5 |br| −2.5 < [Fe/H] ≤ −1.5 |br| −3.5 < [Fe/H] ≤ −2.5
-             - 23
-           * - |V-K|
-             - 1.6 ≤ |V-K| ≤ 4.1    |br| 1.6 ≤ |V-K| ≤ 3.0    |br| 1.6 ≤ |V-K| ≤ 2.4    |br| 1.6 ≤ |V-K| ≤ 2.2
-             - −0.5 < [Fe/H] ≤ +0.5 |br| −1.5 < [Fe/H] ≤ −0.5 |br| −2.5 < [Fe/H] ≤ −1.5 |br| −3.5 < [Fe/H] ≤ −2.5
-             - 37
-           * - |b-y|, *c*:sub:`1`
-             - 0.2 ≤ |b-y| ≤ 0.7
-             - −3.5 < [Fe/H] ≤ +0.5
-             - 110
-           * - *β*
-             - 2.44 ≤ *β* ≤ 2.74    |br| 2.50 ≤ *β* ≤ 2.70    |br| 2.50 ≤ *β* ≤ 2.63    |br| 2.51 ≤ *β* ≤ 2.62
-             - −0.5 < [Fe/H] ≤ +0.5 |br| −1.5 < [Fe/H] ≤ −0.5 |br| −2.5 < [Fe/H] ≤ −1.5 |br| −3.5 < [Fe/H] ≤ −2.5
-             - 141
-           * - |J-K|\ :sub:`TCS`
-             - 0.05 ≤ |J-K| ≤ 0.85  |br| 0.15 ≤ |J-K| ≤ 0.65  |br| 0.25 ≤ |J-K| ≤ 0.75  |br| 0.20 ≤ |J-K| ≤ 0.60
-             - −0.5 < [Fe/H] ≤ +0.5 |br| −1.5 < [Fe/H] ≤ −0.5 |br| −2.5 < [Fe/H] ≤ −1.5 |br| −3.5 < [Fe/H] ≤ −2.5
-             - 144
-           * - |J-H|\ :sub:`TCS`
-             - 0.00 ≤ |J-H| ≤ 0.65  |br| 0.15 ≤ |J-H| ≤ 0.55  |br| 0.20 ≤ |J-H| ≤ 0.60  |br| 0.15 ≤ |J-H| ≤ 0.45
-             - −0.5 < [Fe/H] ≤ +0.5 |br| −1.5 < [Fe/H] ≤ −0.5 |br| −2.5 < [Fe/H] ≤ −1.5 |br| −3.5 < [Fe/H] ≤ −2.5
-             - 154
+    See Also:
+        * :func:`_get_giant_Teff_Alonso1999`
+        * :ref:`example_color_Teff`
 
     References:
         * `Alonso et al., 1996, A&A, 313, 873 <http://adsabs.harvard.edu/abs/1996A&A...313..873A>`_
@@ -346,10 +336,102 @@ def _get_giant_Teff_Alonso1999(index, color, **kwargs):
     calibration relations given by `Alonso+ 1999
     <http://adsabs.harvard.edu/abs/1999A&AS..140..261A>`_.
 
-    References
-    ----------
-    * `Alonso et al., 1999, A&AS, 140, 261 <http://adsabs.harvard.edu/abs/1999A&AS..140..261A>`_
-    * `Alonso et al., 2001, A&A, 376, 1039 <http://adsabs.harvard.edu/abs/2001A&A...376.1039A>`_
+    `Alonso+ 1999 <http://adsabs.harvard.edu/abs/1999A&AS..140..261A>`_ provides
+    calibration relations of |Teff| versus different color indices and
+    metallicities for giant stars with spectral types from F0 to K5.
+    Their |Teff| are derived with the infrared flux method (IRFM).
+    The color indices include |B-V|, |B-V|, |V-R|, |V-I|, |R-I|, |V-K|, |J-H|,
+    |J-K|, |V-L'|, |I-K|, |b-y|, and |u-b|.
+    The *UBVRI* magnitudes are in Johnson system, and *JHKL'* magnitudes are in
+    TCS system.
+    The most precise calibration relation is that of |Teff| v.s. |V-K|, with the
+    standard deviations on |Teff| of only 25 K (for |V-K| > 2.0), or 40 K (for
+    |V-K| < 2.5).
+    The relations of |Teff| v.s. |V-I| and |V-L'| are free of [Fe/H].
+
+    The applicable ranges of color indices and metallicities, as well as the
+    standard deviations of |Teff| are:
+
+    .. list-table::
+       :widths: 10, 20, 20, 10
+       :header-rows: 1
+
+       * - color index
+         - color
+         - [Fe/H]
+         - *σ*\ (|Teff|) (K)
+       * - |U-V|
+         - 0.40 ≤ |U-V| ≤ 1.20  |br| 0.35 ≤ |U-V| ≤ 1.20  |br| 0.40 ≤ |U-V| ≤ 1.20  |br| 0.50 ≤ |U-V| ≤ 1.20
+         - −0.5 < [Fe/H] ≤ +0.2 |br| −1.5 < [Fe/H] ≤ −0.5 |br| −2.5 < [Fe/H] ≤ −1.5 |br| −3.0 < [Fe/H] ≤ −2.5
+         - 164
+       * - |U-V|
+         - 1.50 ≤ |U-V| ≤ 3.50  |br| 1.50 ≤ |U-V| ≤ 3.50  |br| 1.50 ≤ |U-V| ≤ 3.25
+         - −0.5 < [Fe/H] ≤ +0.2 |br| −1.5 < [Fe/H] ≤ −0.5 |br| −2.5 < [Fe/H] ≤ −1.5
+         - 80
+       * - |B-V|
+         - 0.20 ≤ |B-V| ≤ 0.80  |br| 0.35 ≤ |B-V| ≤ 0.80  |br| 0.35 ≤ |B-V| ≤ 0.80  |br| 0.50 ≤ |B-V| ≤ 0.80
+         - −0.5 < [Fe/H] ≤ +0.2 |br| −1.5 < [Fe/H] ≤ −0.5 |br| −2.5 < [Fe/H] ≤ −1.5 |br| −3.0 < [Fe/H] ≤ −2.5
+         - 167
+       * - |B-V|
+         - 0.70 ≤ |B-V| ≤ 1.90  |br| 0.70 ≤ |B-V| ≤ 1.80  |br| 0.70 ≤ |B-V| ≤ 1.35  |br| 0.70 ≤ |B-V| ≤ 1.00
+         - −0.5 < [Fe/H] ≤ +0.2 |br| −1.5 < [Fe/H] ≤ −0.5 |br| −2.5 < [Fe/H] ≤ −1.5 |br| −3.0 < [Fe/H] ≤ −2.5
+         - 96
+       * - |V-R|
+         - 0.15 ≤ |V-R| ≤ 1.70  |br| 0.45 ≤ |V-R| ≤ 1.50  |br| 0.50 ≤ |V-R| ≤ 1.00  |br| 0.55 ≤ |V-R| ≤ 0.85
+         - −0.5 < [Fe/H] ≤ +0.2 |br| −1.5 < [Fe/H] ≤ −0.5 |br| −2.5 < [Fe/H] ≤ −1.5 |br| −3.0 < [Fe/H] ≤ −2.5
+         - 150
+       * - |V-I|
+         - 0.20 ≤ |V-I| ≤ 2.90  |br| 0.80 ≤ |V-I| ≤ 2.00  |br| 0.85 ≤ |V-I| ≤ 2.20  |br| 1.00 ≤ |V-I| ≤ 1.70
+         - −0.5 < [Fe/H] ≤ +0.2 |br| −1.5 < [Fe/H] ≤ −0.5 |br| −2.5 < [Fe/H] ≤ −1.5 |br| −3.0 < [Fe/H] ≤ −2.5
+         - 125
+       * - |R-I|
+         - 0.15 ≤ |R-I| ≤ 1.40  |br| 0.25 ≤ |R-I| ≤ 0.80  |br| 0.35 ≤ |R-I| ≤ 0.70  |br| 0.40 ≤ |R-I| ≤ 0.65
+         - −0.5 < [Fe/H] ≤ +0.2 |br| −1.5 < [Fe/H] ≤ −0.5 |br| −2.5 < [Fe/H] ≤ −1.5 |br| −3.0 < [Fe/H] ≤ −2.5
+         - 150
+       * - |V-K|
+         - 0.20 ≤ |V-K| ≤ 2.50  |br| 1.00 ≤ |V-K| ≤ 2.50  |br| 1.20 ≤ |V-K| ≤ 2.50  |br| 1.70 ≤ |V-K| ≤ 2.50
+         - −0.5 < [Fe/H] ≤ +0.2 |br| −1.5 < [Fe/H] ≤ −0.5 |br| −2.5 < [Fe/H] ≤ −1.5 |br| −3.0 < [Fe/H] ≤ −2.5
+         - 40
+       * - |V-K|
+         - 2.00 ≤ |V-K| ≤ 4.90  |br| 2.00 ≤ |V-K| ≤ 4.60  |br| 2.00 ≤ |V-K| ≤ 3.40  |br| 2.00 ≤ |V-K| ≤ 2.80
+         - −0.5 < [Fe/H] ≤ +0.2 |br| −1.5 < [Fe/H] ≤ −0.5 |br| −2.5 < [Fe/H] ≤ −1.5 |br| −3.0 < [Fe/H] ≤ −2.5
+         - 25
+       * - |J-H|
+         - 0.00 ≤ |J-H| ≤ 0.90  |br| 0.20 ≤ |J-H| ≤ 0.80  |br| 0.30 ≤ |J-H| ≤ 0.70  |br| 0.35 ≤ |J-H| ≤ 0.65
+         - −0.5 < [Fe/H] ≤ +0.2 |br| −1.5 < [Fe/H] ≤ −0.5 |br| −2.5 < [Fe/H] ≤ −1.5 |br| −3.0 < [Fe/H] ≤ −2.5
+         - 170
+       * - |J-K|
+         - 0.00 ≤ |J-K| ≤ 1.10  |br| 0.20 ≤ |J-K| ≤ 1.00  |br| 0.30 ≤ |J-K| ≤ 0.90  |br| 0.40 ≤ |J-K| ≤ 0.80
+         - −0.5 < [Fe/H] ≤ +0.2 |br| −1.5 < [Fe/H] ≤ −0.5 |br| −2.5 < [Fe/H] ≤ −1.5 |br| −3.0 < [Fe/H] ≤ −2.5
+         - 125
+       * - |V-L'|
+         - 0.40 ≤ |V-L'| ≤ 5.00
+         - −0.5 < [Fe/H] ≤ +0.2
+         - 65
+       * - |I-K|
+         - 0.00 ≤ |I-K| ≤ 1.90  |br| 0.50 ≤ |I-K| ≤ 1.60  |br| 0.70 ≤ |I-K| ≤ 1.50  |br| 0.80 ≤ |I-K| ≤ 1.20
+         - −0.5 < [Fe/H] ≤ +0.2 |br| −1.5 < [Fe/H] ≤ −0.5 |br| −2.5 < [Fe/H] ≤ −1.5 |br| −3.0 < [Fe/H] ≤ −2.5
+         - 130
+       * - |b-y|
+         - 0.00 ≤ |b-y| ≤ 0.55  |br| 0.30 ≤ |b-y| ≤ 0.55  |br| 0.35 ≤ |b-y| ≤ 0.55  |br| 0.40 ≤ |b-y| ≤ 0.55
+         - −0.5 < [Fe/H] ≤ +0.2 |br| −1.5 < [Fe/H] ≤ −0.5 |br| −2.5 < [Fe/H] ≤ −1.5 |br| −3.0 < [Fe/H] ≤ −2.5
+         - 110
+       * - |b-y|
+         - 0.50 ≤ |b-y| ≤ 1.00  |br| 0.50 ≤ |b-y| ≤ 0.90  |br| 0.50 ≤ |b-y| ≤ 0.80  |br| 0.50 ≤ |b-y| ≤ 0.70
+         - −0.5 < [Fe/H] ≤ +0.2 |br| −1.5 < [Fe/H] ≤ −0.5 |br| −2.5 < [Fe/H] ≤ −1.5 |br| −3.0 < [Fe/H] ≤ −2.5
+         - 70
+       * - |u-b|
+         - 1.60 ≤ |u-b| ≤ 4.00  |br| 1.60 ≤ |u-b| ≤ 3.70  |br| 1.60 ≤ |u-b| ≤ 3.40  |br| 1.60 ≤ |u-b| ≤ 2.60
+         - −0.5 < [Fe/H] ≤ +0.2 |br| −1.5 < [Fe/H] ≤ −0.5 |br| −2.5 < [Fe/H] ≤ −1.5 |br| −3.0 < [Fe/H] ≤ −2.5
+         - 110
+
+    See Also:
+        * :func:`_get_dwarf_Teff_Alonso1996`
+        * :ref:`example_color_Teff`
+
+    References:
+        * `Alonso et al., 1999, A&AS, 140, 261 <http://adsabs.harvard.edu/abs/1999A&AS..140..261A>`_
+        * `Alonso et al., 2001, A&A, 376, 1039 <http://adsabs.harvard.edu/abs/2001A&A...376.1039A>`_
 
     '''
 
