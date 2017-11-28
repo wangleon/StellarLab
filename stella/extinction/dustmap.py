@@ -51,7 +51,7 @@ class DustMap(object):
         else:
             key = 's'
 
-        if self.data[key] == None:
+        if self.data[key] is None:
             filename = os.path.join(os.getenv('STELLA_DATA'),
                        'extinction/SFD_dust_4096_%sgp.fits'%key)
             self.data[key], self.head[key] = fits.getdata(filename,header=True)
