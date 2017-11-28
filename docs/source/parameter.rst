@@ -34,7 +34,7 @@ For example, for *V* band:
 
 .. currentmodule:: stella.parameter.bc
 .. autosummary::
-   color_to_BC
+   get_BC
    _get_dwarf_BC_Alonso1995
    _get_giant_BC_Alonso1999
    _get_dwarf_BC_Masana2006

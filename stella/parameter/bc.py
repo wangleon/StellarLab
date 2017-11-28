@@ -1,19 +1,23 @@
 import math
+import numpy as np
+import numpy.polynomial as poly
 
 from .errors import ColorIndexError, ParamRangeError, MissingParamError
 
-def color_to_BC(ref, **kwargs):
-    '''Get BC using a varietyof calibration relations.
+def get_BC(**kwargs):
+    '''Get *B*C using a variety of calibration relations.
 
     Notes
     -----
     Available calibration relations:
 
-    * Alonso1995
-    * Alonso1999
-    * Masana2006
+    * `Alonso1995`: returns *BC* in *V* and *K* bands using (*V* − *K*) and
+        [Fe/H] for dwarfs.
+    * `Alonso1999`: returns *BC* using *T*:sub:`eff` and [Fe/H] for giants.
+    * `Masana2006`:
     '''
 
+    ref = kwargs.pop('ref', None)
     if ref == 'Alonso1995':
         bc = _get_dwarf_BC_Alonso1995(**kwargs)
     elif ref == 'Alonso1999':
@@ -23,24 +27,48 @@ def color_to_BC(ref, **kwargs):
     return bc
 
 def _get_dwarf_BC_Alonso1995(**kwargs):
-    '''Get BC for dwarfs using the calibration relations given by `Alonso+ 1995
-    <http://adsabs.harvard.edu/abs/1995A&A...297..197A>`_.
+    '''Get *BC* in *V* or *K* for dwarfs using the calibration relations given
+    by `Alonso+ 1995 <http://adsabs.harvard.edu/abs/1995A&A...297..197A>`_.
     
-    Notes
-    -----
-    V-K is in Johnson system
+    Parameters:
+        V_K (float): (*V* − *K*) color
+        FeH (float): [Fe/H] ratio
+        band (string, optional): Either "V" or "K"
 
-    References
-    ----------
-    * `Alonso et al., 1995, A&A, 297, 197 <http://adsabs.harvard.edu/abs/1995A&A...297..197A>`_
+    Returns:
+        float or dict: *BC*:sub:`V` or *BC*:sub:`K`, if `band` is given; or
+        (*BC*:sub:`V`, *BC*:sub:`K`), if `band` is not given
+
+    Notes:
+        The empirical zero points of the Sun are adopted in Johnson system:
+
+        * (*V* −  *K*)\ :sub:`⊙` = 1.486
+        * *BC*:sub:`⊙`\ (*V*) = −0.12
+        * *BC*:sub:`⊙`\ (*K*) = 1.366
+
+    Examples:
+
+    .. code-block:: python
+
+        from stella.parameter.bc import get_BC
+        # find BC in V band
+        bc_v, bc_k = get_BC(V_K=1.733, FeH=-0.22, ref='Alonso1995')
+        # or
+        bc_v, bc_k = get_BC(index='V-K', color=1.733, FeH=-0.22, ref='Alonso1995')
+
+    References:
+        * `Alonso et al., 1995, A&A, 297, 197 <http://adsabs.harvard.edu/abs/1995A&A...297..197A>`_
     '''
     reference = 'Alonso, 1995, A&A, 297, 197'
 
-    teff  = kwargs.pop('teff', None)
-    index = kwargs.pop('index', None)
-    color = kwargs.pop('color', None)
-    FeH   = kwargs.pop('FeH', None)
-    band  = kwargs.pop('band', None)
+    V_K           = kwargs.pop('V_K', None)
+    if V_K is None:
+        index = kwargs.pop('index', None)
+        if index is not None and index == 'V-K':
+            V_K  = kwargs.pop('color', None)
+
+    FeH           = kwargs.pop('FeH', None)
+    band          = kwargs.pop('band', None)
     extrapolation = kwargs.pop('extrapolation',False)
 
     if FeH == None:
@@ -48,46 +76,56 @@ def _get_dwarf_BC_Alonso1995(**kwargs):
     if not extrapolation:
         if FeH < -3.0 or FeH > +0.2:
             raise ParamRangeError('[Fe/H]', FeH, reference)
-        elif (-0.5 < FeH <= +0.2 and 0.8 < color < 3.0) or \
-             (-1.5 < FeH <= -0.5 and 0.9 < color < 2.6) or \
-             (-2.5 < FeH <= -1.5 and 1.1 < color < 2.3) or \
-             (-3.0 <=FeH <= -2.5 and 1.2 < color < 2.0):
+        elif (-0.5 < FeH <= +0.2 and 0.8 < V_K < 3.0) or \
+             (-1.5 < FeH <= -0.5 and 0.9 < V_K < 2.6) or \
+             (-2.5 < FeH <= -1.5 and 1.1 < V_K < 2.3) or \
+             (-3.0 <=FeH <= -2.5 and 1.2 < V_K < 2.0):
             pass
         else:
-            raise ParamRangeError('V-K', color, reference)
+            raise ParamRangeError('V-K', V_K, reference)
 
-    coeff1 = [+2.38619e-4, -1.93659e-4, +6.52621e-5, -7.95862e-6,
-              -1.01449e-5, +8.17345e-6, -2.87876e-6, +5.40944e-7]
-    coeff2 = [+2.23403e-4, -1.71897e-4, +5.51085e-5, -6.41071e-6,
-              -3.71945e-5, +4.99847e-5, -2.41517e-5, +4.10655e-6]
+    # coefficients coming from equation 9
+    coeff1 = np.array([+2.38619e-4, -1.93659e-4, +6.52621e-5, -7.95862e-6,
+                       -1.01449e-5, +8.17345e-6, -2.87876e-6, +5.40944e-7])
+    # coefficients coming from equation 10
+    coeff2 = np.array([+2.23403e-4, -1.71897e-4, +5.51085e-5, -6.41071e-6,
+                       -3.71945e-5, +4.99847e-5, -2.41517e-5, +4.10655e-6])
 
-    phi = lambda coeff,color,FeH: \
-            coeff[0] + coeff[1]*color + coeff[2]*color**2 + coeff[3]*color**3 +\
-            coeff[4]*FeH + coeff[5]*color*FeH + coeff[6]*color**2*FeH +\
-            coeff[7]*color**3*FeH
+    # coefficients coming from equation 9
+    coeff1 = np.array([[+2.38619e-4, -1.93659e-4, +6.52621e-5, -7.95862e-6],
+                       [-1.01449e-5, +8.17345e-6, -2.87876e-6, +5.40944e-7]])
+    # coefficients coming from equation 10
+    coeff2 = np.array([[+2.23403e-4, -1.71897e-4, +5.51085e-5, -6.41071e-6],
+                       [-3.71945e-5, +4.99847e-5, -2.41517e-5, +4.10655e-6]])
 
-    vk_sun = 1.486
-    phi_sun = phi(coeff1,vk_sun,0.0)
+    phi = lambda coeff: poly.polynomial.polyval2d(FeH, V_K, coeff)
+
+    VK_sun = 1.486
+    phi_sun = poly.polynomial.polyval(VK_sun, coeff1[0])
 
     if extrapolation:
-        if color <= 1.7:
-            bc_v = -2.5*math.log10(phi(coeff1,color,FeH)/phi_sun) - 0.12
-            bc_k = -2.5*math.log10(phi(coeff1,color,FeH)/phi_sun) + 1.366
+        if V_K <= 1.7:
+            bc_v = -2.5*math.log10(phi(coeff1)/phi_sun) - 0.12
+            bc_k = -2.5*math.log10(phi(coeff1)/phi_sun) + 1.366
         else:
-            bc_v = -2.5*math.log10(phi(coeff2,color,FeH)/phi_sun) - 0.12
-            bc_k = -2.5*math.log10(phi(coeff2,color,FeH)/phi_sun) + 1.366
+            bc_v = -2.5*math.log10(phi(coeff2)/phi_sun) - 0.12
+            bc_k = -2.5*math.log10(phi(coeff2)/phi_sun) + 1.366
     else:
-        if 0.9 < color <= 1.7:
-            bc_v = -2.5*math.log10(phi(coeff1,color,FeH)/phi_sun) - 0.12
-            bc_k = -2.5*math.log10(phi(coeff1,color,FeH)/phi_sun) + 1.366
-        elif 1.7 < color <= 2.9:
-            bc_v = -2.5*math.log10(phi(coeff2,color,FeH)/phi_sun) - 0.12
-            bc_k = -2.5*math.log10(phi(coeff2,color,FeH)/phi_sun) + 1.366
+        if 0.9 < V_K <= 1.7:
+            bc_v = -2.5*math.log10(phi(coeff1)/phi_sun) - 0.12
+            bc_k = -2.5*math.log10(phi(coeff1)/phi_sun) + 1.366
+        elif 1.7 < V_K <= 2.9:
+            bc_v = -2.5*math.log10(phi(coeff2)/phi_sun) - 0.12
+            bc_k = -2.5*math.log10(phi(coeff2)/phi_sun) + 1.366
 
-    if band == 'V':
+    if band is None:
+        return (bc_v, bc_k)
+    elif band == 'V':
         return bc_v
     elif band == 'K':
         return bc_k
+    else:
+        return None
 
 
 def _get_giant_BC_Alonso1999(**kwargs):

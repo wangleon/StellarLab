@@ -1,33 +1,34 @@
 import numpy.polynomial as poly
 from .error import ColorIndexError, ParamRangeError, MissingParamError
 
+def get_Teff():
+    pass
+
 def color_to_Teff(index, color, ref, **kwargs):
     '''Convert color to *T*:sub:`eff` using a variety of calibration relations.
 
-    Notes
-    -----
-    Available calibration ralitions:
+    Notes:
+        Available calibration ralitions:
 
-    * Flower1996
-    * Alonso1996
-    * Alonso1999
-    * Ramirez2005
-    * Masana2006
-    * Gonzalez2009
-    * Onehag2009
-    * Casagrande2010
+        * `Flower1996`
+        * `Alonso1996`
+        * `Alonso1999`
+        * `Ramirez2005`
+        * `Masana2006`
+        * `Gonzalez2009`
+        * `Onehag2009`
+        * `Casagrande2010`
 
-    References
-    ----------
-    * `Alonso et al., 1996, A&A, 313, 873 <http://adsabs.harvard.edu/abs/1996A&A...313..873A>`_
-    * `Alonso et al., 1999, A&AS, 140, 261 <http://adsabs.harvard.edu/abs/1999A&AS..140..261A>`_
-    * `Alonso et al., 2001, A&A, 376, 1039 <http://adsabs.harvard.edu/abs/2001A&A...376.1039A>`_
-    * `Casagrande et al., 2010, A&A, 512, 54 <http://adsabs.harvard.edu/abs/2010A&A...512A..54C>`_
-    * `Flower, 1996, ApJ, 469, 355 <http://adsabs.harvard.edu/abs/1996ApJ...469..355F>`_
-    * `González Hernández & Bonifacio, 2009, A&A, 497, 497 <http://adsabs.harvard.edu/abs/2009A&A...497..497G>`_
-    * `Masana et al. 2006, A&A, 450, 735 <http://adsabs.harvard.edu/abs/2006A&A...450..735M>`_
-    * `Önehag et al., 2009, A&A, 498, 527 <http://adsabs.harvard.edu/abs/2009A&A...498..527O>`_
-    * `Ramírez & Meléndez, 2005, ApJ, 626, 465 <http://adsabs.harvard.edu/abs/2005ApJ...626..465R>`_
+    References:
+        * `Alonso et al., 1996, A&A, 313, 873 <http://adsabs.harvard.edu/abs/1996A&A...313..873A>`_
+        * `Alonso et al., 1999, A&AS, 140, 261 <http://adsabs.harvard.edu/abs/1999A&AS..140..261A>`_
+        * `Alonso et al., 2001, A&A, 376, 1039 <http://adsabs.harvard.edu/abs/2001A&A...376.1039A>`_
+        * `Casagrande et al., 2010, A&A, 512, 54 <http://adsabs.harvard.edu/abs/2010A&A...512A..54C>`_
+        * `Flower, 1996, ApJ, 469, 355 <http://adsabs.harvard.edu/abs/1996ApJ...469..355F>`_
+        * `González Hernández & Bonifacio, 2009, A&A, 497, 497 <http://adsabs.harvard.edu/abs/2009A&A...497..497G>`_
+        * `Masana et al. 2006, A&A, 450, 735 <http://adsabs.harvard.edu/abs/2006A&A...450..735M>`_
+        * `Önehag et al., 2009, A&A, 498, 527 <http://adsabs.harvard.edu/abs/2009A&A...498..527O>`_
+        * `Ramírez & Meléndez, 2005, ApJ, 626, 465 <http://adsabs.harvard.edu/abs/2005ApJ...626..465R>`_
     '''
     if ref == 'Flower1996':
         is_supergiant = kwargs.pop('is_supergiant', False)
