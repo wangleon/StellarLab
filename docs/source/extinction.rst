@@ -1,9 +1,6 @@
 Extinction
 ==========
 
-
-
-
 Get extinction from dust map
 -----------------------------
 
