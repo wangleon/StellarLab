@@ -22,8 +22,8 @@ _missing_nodes = [
     ]
 
 def get_param_grid():
-    '''
-    Args:
+    '''Return a paramer grid that is available in the database.
+
     Returns:
         tuple: grid of parameter space (*Z*, *M*:sub:`0`) of Geneva tracks.
     '''
@@ -35,6 +35,7 @@ def get_param_grid():
 
 def read_track(mass0, z):
     '''Read an evolution track in Geneva database.
+
     Args:
         mass0 (float): Initial mass
         z (float): Metal content
@@ -58,7 +59,8 @@ def read_track(mass0, z):
 
 
 def interpolate_track(track, n, k=1):
-    '''Interpolate the evolution track
+    '''Interpolate the evolution track.
+
     Args:
         track (tuple): Input track (log\ *T*:sub:`eff`, log\ *L*, age, *M*)
         n (int): Number of interpolated points
@@ -74,6 +76,7 @@ def interpolate_track(track, n, k=1):
 def get_track(mass0, z, n=None):
     '''Get an evolution track for given (*M*:sub:`0`, *Z*) by interpolating
     the Geneva evolution track database.
+
     Args:
         mass0 (float): Initial mass
         z (float): Metal content
@@ -150,7 +153,8 @@ def _get_inodes(nodes, value):
     return i
 
 def interpolate_param(track_lst, param_lst, param):
-    '''Interpolate the tracks over a certain parameter space
+    '''Interpolate the tracks over a certain parameter space.
+
     Args:
         track_lst (list): List of track tuples.
         param_lst (list): List of node parameters in grid.

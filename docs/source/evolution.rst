@@ -9,7 +9,8 @@ The Geneva evluion tracks and isochrones (Lejeune & Schaerer 2001
 [#Lejeune2001]_) covers mass range of 0.4 ~ 150 |Msun| and metallicity range of
 *Z* = 0.0004 ~ 0.1.
 
-Input parameters:
+Input parameters
+^^^^^^^^^^^^^^^^
 
 * Opacities: OPAL (high temperature), Kurucz 1991 [#Kurucz1991]_ or Alexander &
   Ferguson 1994 [#Alexander1994]_ (low temperature);
@@ -23,7 +24,8 @@ Input parameters:
   Tracks with and without overshooting are provided for stars with *M* = 1.25
   |Msun|.
 
-Evolutionary stages:
+Evolutionary stages
+^^^^^^^^^^^^^^^^^^^
 
 * To the end of carbon burning for stars with *M* ≥ 7 |Msun|;
 * To the end of early asymptotic gaint branch (EAGB) for stars with 2 |Msun| ≤
@@ -34,7 +36,8 @@ Evolutionary stages:
 * Pre-main sequence (PMS), thermally pulsing AGB, post-AGB, or white dwarfs
   (WDs) are not included in this grid.
 
-
+Grid parameters
+^^^^^^^^^^^^^^^
 
 .. list-table:: Grid of stellar evolution tracks
    :widths: 10 10 10 40
@@ -68,6 +71,13 @@ Evolutionary stages:
      - 0.420
      - 0.480
      - 0.80 ~ 85.0 |Msun|
+
+Module Summary
+^^^^^^^^^^^^^^
+.. currentmodule:: stella.evolution.geneva
+.. autosummary::
+    get_track
+    read_track
 
 References
 ----------

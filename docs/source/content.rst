@@ -19,8 +19,9 @@ Modules
    :glob:
    
    modules/catalog/*
-   modules/kinetics/*
+   modules/evolution/*
    modules/parameter/*
+   modules/kinetics/*
 
 Examples
 
