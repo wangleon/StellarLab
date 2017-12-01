@@ -18,11 +18,11 @@ def newton(ax,ay,x):
     n = len(ax)
     y = [v for v in ay]
 
-    for k in xrange(n-1):
-        for l in xrange(n-k-1):
+    for k in range(n-1):
+        for l in range(n-k-1):
             y[l] = (y[l+1]-y[l])/(ax[l+k+1]-ax[l])
 
     ybar = y[0]
-    for m in xrange(1,n):
+    for m in range(1,n):
         ybar = ybar*(x-ax[m])+y[m]
     return ybar
