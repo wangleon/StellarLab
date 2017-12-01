@@ -79,67 +79,57 @@ def get_track(mass0, z, n=None):
         z (float): Metal content
         n (int, optional): number of interpolated points
     Returns:
-        tuple: lists of (*M*, log\ *T*:sub:`eff`, log\ *L*, age)
+        tuple: lists of (log\ *T*:sub:`eff`, log\ *L*, age, *M*)
     '''
     ngrid = 51
     param_grid = get_param_grid()
 
-    iz = _get_inodes(_z_nodes, z)
-
-    inter3 = np.zeros((ngrid, 4))
-    inter2 = np.zeros((ngrid, 4, 4))
-    for jz in range(iz, iz+4):
-        z_node = _z_nodes[jz]
-
-        if mass0 in param_grid[z_node]:
-            # if mass0 is a mass node
-            track = read_track(mass0=mass0, z=z_node)
+    if z in param_grid:
+        # input z in parameter grid
+        if mass0 in param_grid[z]:
+            # input mass0 in parameter grid
+            track = read_track(mass0=mass0, z=z)
             if track[0].size != ngrid:
                 track = interpolate_track(track, n=ngrid)
-            # copy the parameters to inter2
-            for k in range(4):
-                inter2[:, k, jz-iz] = track[k]
-                # k = 0, 1, 2, 3, which are the 4 parameters of track
-                # jz - iz = 0, 1, 2, 3, which are the 4 data nodes
         else:
-            # if mass0 is not a mass node
-            # interpolate mass
-            inter1 = np.zeros((ngrid, 4, 4))
-            im = _get_inodes(param_grid[z_node], mass0)
-
-            for jm in range(im, im+4):
-                mass_node = param_grid[z_node][jm]
-
-                track = read_track(mass0=mass_node, z=z_node)
+            # input mass0 NOT in parameter grid. Interpolate over mass0 space
+            im = _get_inodes(param_grid[z], mass0)
+            mass0_lst = param_grid[z][im:im+4]
+            track_lst = []
+            for _mass0 in mass0_lst:
+                track = read_track(mass0=_mass0, z=z)
                 if track[0].size != ngrid:
                     track = interpolate_track(track, n=ngrid)
-                for k in range(4):
-                    inter1[:, k, jm-im] = track[k]
-                    # k = 0, 1, 2, 3, which are the 4 parameters of track
-                    # jm - im = 0, 1, 2, 3, which are the 4 data nodes
-
-            for k1 in range(ngrid):
-                for k2 in range(4):
-                    # prepare for interpolation
-                    vectx = param_grid[z_node][im:im+4]
-                    vecty = inter1[k1, k2, :]
-                    inter2[k1, k2, jz-iz] = newton(vectx, vecty, mass0)
-
-    for k1 in range(ngrid):
-        for k2 in range(4):
-            # prepare for interpolation
-            vectx = np.log10(_z_nodes[iz:iz+4])
-            vecty = inter2[k1, k2, :]
-            inter3[k1, k2] = newton(vectx, vecty, math.log10(z))
-
-    logTeff_lst = inter3[:,0]
-    logL_lst    = inter3[:,1]
-    age_lst     = inter3[:,2]
-    mass_lst    = inter3[:,3]
-
-    track = (logTeff_lst, logL_lst, age_lst, mass_lst)
+                track_lst.append(track)
+            track = interpolate_param(track_lst, mass0_lst, mass0)
+    else:
+        # input z Not in parameter grid. Interpolate over log10(z) space
+        iz = _get_inodes(_z_nodes, z)
+        z_lst = _z_nodes[iz:iz+4]
+        trackz_lst = []
+        for _z in z_lst:
+            if mass0 in param_grid[_z]:
+                # input mass0 in parameter grid
+                track = read_track(mass0=mass0, z=_z)
+                if track[0].size != ngrid:
+                    track = interpolate_track(track, n=ngrid)
+            else:
+                # input mass0 NOT in parameter grid. Interpolate over mass0
+                # space
+                im = _get_inodes(param_grid[_z], mass0)
+                mass0_lst = param_grid[_z][im:im+4]
+                trackm_lst = []
+                for _mass0 in mass0_lst:
+                    track = read_track(mass0=_mass0, z=_z)
+                    if track[0].size != ngrid:
+                        track = interpolate_track(track, n=ngrid)
+                    trackm_lst.append(track)
+                track = interpolate_param(trackm_lst, mass0_lst, mass0)
+            trackz_lst.append(track)
+        track = interpolate_param(trackz_lst, np.log10(z_lst), math.log10(z))
 
     if n is not None and n != ngrid:
+        # interpolate for given number of points
         return interpolate_track(track, n=n)
     else:
         return track
@@ -158,3 +148,33 @@ def _get_inodes(nodes, value):
     i = max(i, 0)
     i = min(i, len(nodes)-4)
     return i
+
+def interpolate_param(track_lst, param_lst, param):
+    '''Interpolate the tracks over a certain parameter space
+    Args:
+        track_lst (list): List of track tuples.
+        param_lst (list): List of node parameters in grid.
+        param (int or float): Input parameter
+    Returns:
+        tuple: lists of (log\ *T*:sub:`eff`, log\ *L*, age, *M*)
+    '''
+
+    ntrack = len(track_lst)
+    nparam = len(track_lst[0])
+    ngrid  = track_lst[0][0].size
+
+    inter1 = np.zeros((ngrid, nparam, ntrack))
+    inter2 = np.zeros((ngrid, nparam))
+
+    for it, track in enumerate(track_lst):
+        for ip, v_lst in enumerate(track):
+            inter1[:, ip, it] = v_lst
+
+    for k1 in range(ngrid):
+        for k2 in range(nparam):
+            inter2[k1, k2] = newton(param_lst, inter1[k1, k2, :], param)
+
+    newtrack = tuple(inter2[:,k] for k in range(nparam))
+
+    return newtrack
+

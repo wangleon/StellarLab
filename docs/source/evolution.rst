@@ -6,8 +6,8 @@ Stellar Evolution
 Geneva
 ------
 The Geneva evluion tracks and isochrones (Lejeune & Schaerer 2001
-[#Lejeune2001]_) covers mass range of 0.4 - 150 |Msun| and metallicity range of
-*Z* = 0.0004 - 0.1.
+[#Lejeune2001]_) covers mass range of 0.4 ~ 150 |Msun| and metallicity range of
+*Z* = 0.0004 ~ 0.1.
 
 Input parameters:
 
@@ -33,6 +33,41 @@ Evolutionary stages:
   (HB) and EAGB for *Z* = 0.020 and 0.001.
 * Pre-main sequence (PMS), thermally pulsing AGB, post-AGB, or white dwarfs
   (WDs) are not included in this grid.
+
+
+
+.. list-table:: Grid of stellar evolution tracks
+   :widths: 10 10 10 40
+   :header-rows: 1
+
+   * - *Z*
+     - *X*
+     - *Y*
+     - *M*:sub:`0` range
+   * - 0.001
+     - 0.756
+     - 0.243
+     - 0.80 ~ 120.0 |Msun|
+   * - 0.004
+     - 0.744
+     - 0.252
+     - 0.80 ~ 120.0 |Msun|
+   * - 0.008
+     - 0.728
+     - 0.264
+     - 0.80 ~ 120.0 |Msun|
+   * - 0.020
+     - 0.680
+     - 0.300
+     - 0.80 ~ 120.0 |Msun|
+   * - 0.040
+     - 0.620
+     - 0.340
+     - 0.80 ~ 120.0 |Msun|
+   * - 0.100
+     - 0.420
+     - 0.480
+     - 0.80 ~ 85.0 |Msun|
 
 References
 ----------
