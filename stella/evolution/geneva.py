@@ -7,76 +7,130 @@ from scipy.interpolate import splprep, splev
 from ..parameter.metal import feh_to_z
 from ..utils.interpolation import newton
 
-_data_path  = '%s/evolution/Geneva_tracks.fits'%os.getenv('STELLA_DATA')
-_z_nodes    = [0.001, 0.004, 0.008, 0.02, 0.04, 0.1]
-_mass_nodes = [0.8, 0.9,  1.0, 1.25,  1.5,  1.7,  2.0,  2.5,  3.0,  4.0,  5.0,
-               7.0, 9.0, 10.0, 12.0, 15.0, 20.0, 25.0, 40.0, 60.0, 85.0,120.0
-              ]
-_missing_nodes = [
-    (0.001, 10.0),
-    (0.004, 10.0),
-    (0.008,  9.0),
-    (0.02,  10.0),
-    (0.04,  10.0),
-    (0.1,   10.0), (0.1,   85.0), (0.1,  120.0),
-    ]
+class Geneva(object):
+    _data_path  = '%s/evolution/Geneva_tracks.fits'%os.getenv('STELLA_DATA')
+    _z_nodes    = [0.001, 0.004, 0.008, 0.02, 0.04, 0.1]
+    _mass_nodes = [0.8,  0.9,  1.0, 1.25,  1.5,  1.7,  2.0,  2.5,  3.0,  4.0,
+                   5.0,  7.0,  9.0, 10.0, 12.0, 15.0, 20.0, 25.0, 40.0, 60.0,
+                   85.0, 120.0
+                  ]
+    _missing_nodes = [
+        (0.001, 10.0),
+        (0.004, 10.0),
+        (0.008,  9.0),
+        (0.02,  10.0),
+        (0.04,  10.0),
+        (0.1,   10.0), (0.1,   85.0), (0.1,  120.0),
+        ]
 
-def get_param_grid():
-    '''Return a paramer grid that is available in the database.
+    def __init__(self):
+        self._get_param_grid()
+        self._load_data()
 
-    Returns:
-        tuple: grid of parameter space (*Z*, *M*:sub:`0`) of Geneva tracks.
-    '''
-    param_grid = {}
-    for z in _z_nodes:
-        mass_lst = [m for m in _mass_nodes if (z,m) not in _missing_nodes]
-        param_grid[z] = mass_lst
-    return param_grid
+    def _get_param_grid(self):
+        '''Return a paramer grid that is available in the database.
+        '''
+        param_grid = {}
+        for z in self._z_nodes:
+            param_grid[z] = [m for m in self._mass_nodes
+                             if (z, m) not in self._missing_nodes]
+        self.param_grid = param_grid
 
-def read_track(mass0, z):
-    '''Read an evolution track in Geneva database.
+    def _load_data(self):
+        '''Read the whole Geneva track data file.
+        '''
+        data = {}
+        table = fits.getdata(self._data_path)
+        for row in table:
+            z = row['z']
+            m0 = row['m0']
+            n = row['n']
+            logTeff_lst = row['logTeff'][0:n]
+            logL_lst    = row['logL'][0:n]
+            age_lst     = row['age'][0:n]
+            mass_lst    = row['mass'][0:n]
+            trackid = self._get_trackid(z, m0)
+            data[trackid] = (logTeff_lst, logL_lst, age_lst, mass_lst)
+        self._data = data
 
-    Args:
-        mass0 (float): Initial mass
-        z (float): Metal content
-    Returns:
-        tuple: lists of (log\ *T*:sub:`eff`, log\ *L*, age, *M*)
-    '''
-    f = fits.open(_data_path)
-    data = f[1].data
-    f.close()
-    mask1 = (data['m0']==mass0)
-    mask2 = (data['z']==z)
-    mask = mask1*mask2
-    row = data[mask][0]
-    n = row['n']
-    logTeff_lst = row['logTeff'][0:n]
-    logL_lst    = row['logL'][0:n]
-    age_lst     = row['age'][0:n]
-    mass_lst    = row['mass'][0:n]
-    return (logTeff_lst, logL_lst, age_lst, mass_lst)
+    def _get_trackid(self, z, mass0):
+        '''Get Track ID.
 
-def read_track_database():
-    '''Read the whole Geneva track database.
+        Args:
+            mass0 (float): Initial mass
+            z (float): Metal content
+        Returns:
+            tuple: Track ID
+        '''
+        return (int(round(z*1000)), int(round(mass0*100)))
 
-    Args:
-    Returns:
-        tuple: grid of tracks with (*Z*, *M*:sub:`0`) and evolution tracks
-    '''
-    alldata = {}
-    data = fits.getdata(_data_path)
-    for row in data:
-        z = row['z']
-        m0 = row['m0']
-        n = row['n']
-        logTeff_lst = row['logTeff'][0:n]
-        logL_lst    = row['logL'][0:n]
-        age_lst     = row['age'][0:n]
-        mass_lst    = row['mass'][0:n]
-        track = (logTeff_lst, logL_lst, age_lst, mass_lst)
-        trackid = (int(round(z*1000)), int(round(m0*100)))
-        alldata[trackid] = track
-    return alldata
+    def get_track(self, mass0, z, n=None):
+        '''Get an evolution track for given (*M*:sub:`0`, *Z*) by interpolating
+        the Geneva evolution track database.
+    
+        Args:
+            mass0 (float): Initial mass
+            z (float): Metal content
+            n (int, optional): number of interpolated points
+        Returns:
+            tuple: lists of (log\ *T*:sub:`eff`, log\ *L*, age, *M*)
+        '''
+        ngrid = 51
+    
+        if z in self.param_grid:
+            # input z in parameter grid
+            if mass0 in self.param_grid[z]:
+                # input mass0 in parameter grid
+                trackid = self._get_trackid(z, mass0)
+                track = self._data[trackid]
+                if track[0].size != ngrid:
+                    track = interpolate_track(track, n=ngrid)
+            else:
+                # input mass0 NOT in parameter grid. Interpolate over mass0 space
+                im = _get_inodes(self.param_grid[z], mass0)
+                mass0_lst = self.param_grid[z][im:im+4]
+                track_lst = []
+                for _mass0 in mass0_lst:
+                    trackid = self._get_trackid(z, _mass0)
+                    track = self._data[trackid]
+                    if track[0].size != ngrid:
+                        track = interpolate_track(track, n=ngrid)
+                    track_lst.append(track)
+                track = interpolate_param(track_lst, mass0_lst, mass0)
+        else:
+            # input z Not in parameter grid. Interpolate over log10(z) space
+            iz = _get_inodes(self._z_nodes, z)
+            z_lst = self._z_nodes[iz:iz+4]
+            trackz_lst = []
+            for _z in z_lst:
+                if mass0 in self.param_grid[_z]:
+                    # input mass0 in parameter grid
+                    trackid = self._get_trackid(_z, mass0)
+                    track = self._data[trackid]
+                    if track[0].size != ngrid:
+                        track = interpolate_track(track, n=ngrid)
+                else:
+                    # input mass0 NOT in parameter grid. Interpolate over mass0
+                    # space
+                    im = _get_inodes(self.param_grid[_z], mass0)
+                    mass0_lst = self.param_grid[_z][im:im+4]
+                    trackm_lst = []
+                    for _mass0 in mass0_lst:
+                        trackid = self._get_trackid(_z, _mass0)
+                        track = self._data[trackid]
+                        if track[0].size != ngrid:
+                            track = interpolate_track(track, n=ngrid)
+                        trackm_lst.append(track)
+                    track = interpolate_param(trackm_lst, mass0_lst, mass0)
+                trackz_lst.append(track)
+            track = interpolate_param(trackz_lst, np.log10(z_lst), math.log10(z))
+    
+        if n is not None and n != ngrid:
+            # interpolate for given number of points
+            return interpolate_track(track, n=n)
+        else:
+            return track
+
 
 def interpolate_track(track, n, k=1):
     '''Interpolate the evolution track.
@@ -93,80 +147,6 @@ def interpolate_track(track, n, k=1):
     newt    = splev(newx, tck)
     return (newt[0], newt[1], newt[2], newt[3])
 
-def get_track(mass0, z, n=None, database=None):
-    '''Get an evolution track for given (*M*:sub:`0`, *Z*) by interpolating
-    the Geneva evolution track database.
-
-    Args:
-        mass0 (float): Initial mass
-        z (float): Metal content
-        n (int, optional): number of interpolated points
-    Returns:
-        tuple: lists of (log\ *T*:sub:`eff`, log\ *L*, age, *M*)
-    '''
-    ngrid = 51
-    param_grid = get_param_grid()
-
-    if database is None:
-        database = read_track_database()
-
-    if z in param_grid:
-        # input z in parameter grid
-        if mass0 in param_grid[z]:
-            # input mass0 in parameter grid
-            #track = read_track(mass0=mass0, z=z)
-            trackid = (int(round(z*1000)), int(round(mass0*100)))
-            track = database[trackid]
-            if track[0].size != ngrid:
-                track = interpolate_track(track, n=ngrid)
-        else:
-            # input mass0 NOT in parameter grid. Interpolate over mass0 space
-            im = _get_inodes(param_grid[z], mass0)
-            mass0_lst = param_grid[z][im:im+4]
-            track_lst = []
-            for _mass0 in mass0_lst:
-                #track = read_track(mass0=_mass0, z=z)
-                trackid = (int(round(z*1000)), int(round(_mass0*100)))
-                track = database[trackid]
-                if track[0].size != ngrid:
-                    track = interpolate_track(track, n=ngrid)
-                track_lst.append(track)
-            track = interpolate_param(track_lst, mass0_lst, mass0)
-    else:
-        # input z Not in parameter grid. Interpolate over log10(z) space
-        iz = _get_inodes(_z_nodes, z)
-        z_lst = _z_nodes[iz:iz+4]
-        trackz_lst = []
-        for _z in z_lst:
-            if mass0 in param_grid[_z]:
-                # input mass0 in parameter grid
-                #track = read_track(mass0=mass0, z=_z)
-                trackid = (int(round(_z*1000)), int(round(mass0*100)))
-                track = database[trackid]
-                if track[0].size != ngrid:
-                    track = interpolate_track(track, n=ngrid)
-            else:
-                # input mass0 NOT in parameter grid. Interpolate over mass0
-                # space
-                im = _get_inodes(param_grid[_z], mass0)
-                mass0_lst = param_grid[_z][im:im+4]
-                trackm_lst = []
-                for _mass0 in mass0_lst:
-                    #track = read_track(mass0=_mass0, z=_z)
-                    trackid = (int(round(_z*1000)), int(round(_mass0*100)))
-                    track = database[trackid]
-                    if track[0].size != ngrid:
-                        track = interpolate_track(track, n=ngrid)
-                    trackm_lst.append(track)
-                track = interpolate_param(trackm_lst, mass0_lst, mass0)
-            trackz_lst.append(track)
-        track = interpolate_param(trackz_lst, np.log10(z_lst), math.log10(z))
-
-    if n is not None and n != ngrid:
-        # interpolate for given number of points
-        return interpolate_track(track, n=n)
-    else:
-        return track
 
 def _get_inodes(nodes, value):
     '''Get the begining index of the 4-points interpolation.

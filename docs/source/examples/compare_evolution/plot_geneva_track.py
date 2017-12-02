@@ -6,9 +6,11 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as colors
 import matplotlib.ticker as tck
 import matplotlib.cm as cmap
-from stella.evolution.geneva import read_track
+from stella.evolution.geneva import Geneva
 
 def main():
+    
+    geneva = Geneva()
 
     feh1, feh2 = -3, 0.5
     cnorm = colors.Normalize(vmin=feh1, vmax=feh2)
@@ -22,7 +24,7 @@ def main():
         M_H = math.log10(z/0.0134)
         color = scalarmap.to_rgba(M_H)
         for im,m0 in enumerate([1.0, 2.0, 5.0]):
-            track = read_track(mass0=m0, z=z)
+            track = geneva.get_track(mass0=m0, z=z)
             logTeff_lst = track[0]
             logL_lst    = track[1]
             if im == 0:
