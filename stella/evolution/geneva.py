@@ -54,7 +54,6 @@ def read_track(mass0, z):
     logL_lst    = row['logL'][0:n]
     age_lst     = row['age'][0:n]
     mass_lst    = row['mass'][0:n]
-    print(z, mass0)
     return (logTeff_lst, logL_lst, age_lst, mass_lst)
 
 
@@ -66,7 +65,7 @@ def interpolate_track(track, n, k=1):
         n (int): Number of interpolated points
         k (int, optinal): Degree of interpolated polynomial. Default is 1
     Returns:
-        tuple: lists of (*M*, log\ *T*:sub:`eff`, log\ *L*, age)
+        tuple: lists of (log\ *T*:sub:`eff`, log\ *L*, age, *M*)
     '''
     tck, u = splprep([track[0], track[1], track[2], track[3]], s=0, k=1)
     newx   = np.linspace(0, 1, n)
