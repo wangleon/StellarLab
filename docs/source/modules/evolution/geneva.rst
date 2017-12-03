@@ -1,19 +1,17 @@
-Geneva Stellar Evolution Track
-==============================
+Geneva Stellar Evolution Track and Isochrones
+=============================================
 
 Summary
 -------
 .. currentmodule:: stella.evolution.geneva
 .. autosummary::
-    get_track
-    interpolate_track
+    Geneva
     interpolate_param
     read_track
     _get_inodes
-    get_param_grid
 
-Functions
----------
+Classes and Functions
+---------------------
 .. automodule:: stella.evolution.geneva
     :members:
     :private-members:
