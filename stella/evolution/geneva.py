@@ -112,7 +112,7 @@ class Geneva(object):
             z (float): Metal content
             n (int, optional): number of interpolated points
         Returns:
-            tuple: lists of (log\ *T*:sub:`eff`, log\ *L*, age, *M*)
+            tuple: A tuple containing (log\ *T*:sub:`eff`, log\ *L*, age, *M*)
         '''
         if self._track_data is None:
             self._load_tracks()
@@ -196,7 +196,7 @@ class Geneva(object):
             logage (float): log\ :sub:`10`\ (age)
             n (int, optional): number of interpolated points
         Returns:
-            tuple: lists of parameters
+            tuple: A tuple containing (*M*:sub:`0`, *M*, log\ *T*:sub:`eff`, log\ *L*)
         '''
 
         ngrid = 600
@@ -259,9 +259,6 @@ class Geneva(object):
 
         return isochrone
 
-
-
-
 def interpolate_data(track, n, k=1):
     '''Interpolate the evolution track.
 
@@ -270,7 +267,7 @@ def interpolate_data(track, n, k=1):
         n (int): Number of interpolated points
         k (int, optinal): Degree of interpolated polynomial. Default is 1
     Returns:
-        tuple: lists of (log\ *T*:sub:`eff`, log\ *L*, age, *M*)
+        tuple: A tuple containing (log\ *T*:sub:`eff`, log\ *L*, age, *M*)
     '''
     tck, u = splprep([track[0], track[1], track[2], track[3]], s=0, k=1)
     newx   = np.linspace(0, 1, n)
@@ -297,11 +294,11 @@ def interpolate_param(track_lst, param_lst, param):
     '''Interpolate the tracks over a certain parameter space.
 
     Args:
-        track_lst (list): List of track tuples.
-        param_lst (list): List of node parameters in grid.
+        track_lst (list): List of track tuples
+        param_lst (list): List of node parameters in grid
         param (int or float): Input parameter
     Returns:
-        tuple: lists of (log\ *T*:sub:`eff`, log\ *L*, age, *M*)
+        tuple: A tuple containing (log\ *T*:sub:`eff`, log\ *L*, age, *M*)
     '''
 
     ntrack = len(track_lst)

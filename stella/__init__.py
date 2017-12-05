@@ -4,5 +4,5 @@ from . import evolution
 from . import extinction
 from . import parameter
 from . import kinetics
-from . import spectroscopy
+from . import spectrum
 from . import utils
