@@ -76,7 +76,7 @@ def color_to_Teff(index, color, ref, **kwargs):
 
     return Teff
 
-def _BV_to_Teff_Flower1996(BV, is_supergiant=True):
+def _BV_to_Teff_Flower1996(BV, is_supergiant=False):
     '''Convert *B* − *V* to *T*:sub:`eff` using the calibration relations given
     by `Flower 1996 <http://adsabs.harvard.edu/abs/1996ApJ...469..355F>`_.
 
@@ -85,6 +85,13 @@ def _BV_to_Teff_Flower1996(BV, is_supergiant=True):
     However, the formula and coefficiens were printed incorrectly.
     `Torres 2010 <http://adsabs.harvard.edu/abs/2010AJ....140.1158T>`_ gave the
     correct version in their Table 2.
+
+    Args:
+        BV (float): Value of |B-V|.
+        is_supergiant (bool): Whether the star is a super giant. Default is
+            *False*.
+    Returns:
+        float: Effective temperature (|Teff|) in K.
 
     References:
         * `Flower, 1996, ApJ, 469, 355 <http://adsabs.harvard.edu/abs/1996ApJ...469..355F>`_
@@ -182,6 +189,15 @@ def _get_dwarf_Teff_Alonso1996(index, color, **kwargs):
          - 0.00 ≤ |J-H| ≤ 0.65  |br| 0.15 ≤ |J-H| ≤ 0.55  |br| 0.20 ≤ |J-H| ≤ 0.60  |br| 0.15 ≤ |J-H| ≤ 0.45
          - −0.5 < [Fe/H] ≤ +0.5 |br| −1.5 < [Fe/H] ≤ −0.5 |br| −2.5 < [Fe/H] ≤ −1.5 |br| −3.5 < [Fe/H] ≤ −2.5
          - 154
+
+    Args:
+        index (str): Name of color index.
+        color (float): Value of color index.
+        FeH (float): Metallicity [Fe/H].
+        extrapolation (bool): Extend the applicable ranges if *True*. Default is
+            *False*.
+    Returns:
+        float: Effective temperature (|Teff|) in K.
 
     See Also:
         * :func:`_get_giant_Teff_Alonso1999`
@@ -421,6 +437,15 @@ def _get_giant_Teff_Alonso1999(index, color, **kwargs):
          - 1.60 ≤ |u-b| ≤ 4.00  |br| 1.60 ≤ |u-b| ≤ 3.70  |br| 1.60 ≤ |u-b| ≤ 3.40  |br| 1.60 ≤ |u-b| ≤ 2.60
          - −0.5 < [Fe/H] ≤ +0.2 |br| −1.5 < [Fe/H] ≤ −0.5 |br| −2.5 < [Fe/H] ≤ −1.5 |br| −3.0 < [Fe/H] ≤ −2.5
          - 110
+
+    Args:
+        index (str): Name of color index.
+        color (float): Value of color index.
+        FeH (float): Metallicity [Fe/H].
+        extrapolation (bool): Extend the applicable ranges if *True*. Default is
+            *False*.
+    Returns:
+        float: Effective temperature (|Teff|) in K.
 
     See Also:
         * :func:`_get_dwarf_Teff_Alonso1996`
@@ -723,6 +748,14 @@ def _get_dwarf_Teff_Ramirez2005(index, color, **kwargs):
          - −0.5 < [Fe/H] < +0.5  |br| −1.5 < [Fe/H] < −0.5  |br| −2.5 < [Fe/H] < −1.5  |br| −4.0 < [Fe/H] < −2.5
          - 39
 
+    Args:
+        index (str): Name of color index.
+        color (float): Value of color index.
+        FeH (float): Metallicity [Fe/H].
+        extrapolation (bool): Extend the applicable ranges if *True*. Default is
+            *False*.
+    Returns:
+        float: Effective temperature (|Teff|) in K.
 
     References:
         * `Ramírez & Meléndez, 2005, ApJ, 626, 465 <http://adsabs.harvard.edu/abs/2005ApJ...626..465R>`_
