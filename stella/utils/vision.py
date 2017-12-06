@@ -2,11 +2,30 @@ import numpy.polynomial as poly
 
 def temp_to_rgb(temp):
     '''
-    Convert black-body temperature to RGB color
-    Parameters
-    -----------
-    temp
+    Convert black-body temperature to RGB color.
 
+    The colors are computed with piecewise polynomials. The coefficients are
+    computed by fitting the CIE 1964 10-deg color matching functions given in
+    `bbr_color.txt
+    <http://www.vendian.org/mncharity/dir3/blackbody/UnstableURLs/bbr_color.html>`_
+    on `Mitchell Charity's website
+    <http://www.vendian.org/mncharity/dir3/blackbody/>`_.
+
+    .. figure:: ../examples/true_colors/temp_rgb.png
+       :alt: Blackbody temperature and real color
+       :align: center
+       :width: 600px
+       :figwidth: 600px
+
+       Relation of black-body temperatures v.s. RGB colors.
+
+    Args:
+        temp (float): Temperature in unit of K.
+    Returns:
+        tuple: A tuple cotaining (R, G, B) colors in range of [0.0, 1.0]
+    See also:
+        * :ref:`example_temp_color`
+        
 
     '''
     # calculate red
