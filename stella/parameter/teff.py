@@ -80,18 +80,15 @@ def _BV_to_Teff_Flower1996(BV, is_supergiant=True):
     '''Convert *B* − *V* to *T*:sub:`eff` using the calibration relations given
     by `Flower 1996 <http://adsabs.harvard.edu/abs/1996ApJ...469..355F>`_.
 
-    Notes
-    -----
     The coefficients are given in Table 5 of `Flower 1996
     <http://adsabs.harvard.edu/abs/1996ApJ...469..355F>`_.
     However, the formula and coefficiens were printed incorrectly.
     `Torres 2010 <http://adsabs.harvard.edu/abs/2010AJ....140.1158T>`_ gave the
     correct version in their Table 2.
 
-    References
-    ----------
-    * `Flower, 1996, ApJ, 469, 355 <http://adsabs.harvard.edu/abs/1996ApJ...469..355F>`_
-    * `Torres, 2010, AJ, 140, 1158 <http://adsabs.harvard.edu/abs/2010AJ....140.1158T>`_
+    References:
+        * `Flower, 1996, ApJ, 469, 355 <http://adsabs.harvard.edu/abs/1996ApJ...469..355F>`_
+        * `Torres, 2010, AJ, 140, 1158 <http://adsabs.harvard.edu/abs/2010AJ....140.1158T>`_
 
     '''
     if is_supergiant:
@@ -628,9 +625,107 @@ def _get_dwarf_Teff_Ramirez2005(index, color, **kwargs):
     calibration relations given by `Ramirez+ 2005
     <http://adsabs.harvard.edu/abs/2005ApJ...626..465R>`_.
 
-    References
-    ----------
-    * `Ramírez & Meléndez, 2005, ApJ, 626, 465 <http://adsabs.harvard.edu/abs/2005ApJ...626..465R>`_
+    `Ramirez+ 2005 <http://adsabs.harvard.edu/abs/2005ApJ...626..465R>`_
+    presents calibration relatiions of |Teff| versus 17 color indices and
+    metallicities for main-sequence and giant stars.
+    The |Teff| are derived with the infrared flux method (IRFM).
+    The spectral types range from F0 to K5, or |Teff| range between 4000 K and
+    7000 K. Some relations extend to below 4000 K or above 8000 K.
+    The color indices include
+    |B-V| in Johnson system,
+    |BT-VT| in Tycho system,
+    |b-y| in Strömgren system,
+    (*Y* − *V*) and (*V* − *S*) in Vilnius system,
+    (*B*:sub:`2` − *V*:sub:`1`), (*B*:sub:`2` − *G*), and *t* in Geneva system,
+    (*V* − *R*:sub:`c`), (*V* − *I*:sub:`c`), and (*R*:sub:`c` − *I*:sub:`c`) in
+    Johnson-Cousins system,
+    *C*\ (42 − 45) and *C*\ (42 − 48) in DDO system,
+    |V-J|, |V-H|, and |V-K| in Johnson-2MASS system,
+    and (*V*:sub:`T` − *K*) in Tycho-2MASS system.
+
+    The applicable range of color indices and metallicities for dwarfs are
+    summarized as below (Table 4 in Ramirez et al. 2005):
+
+    .. list-table::
+       :widths: 10, 20, 20, 10
+       :header-rows: 1
+
+       * - color index
+         - color
+         - [Fe/H]
+         - *σ*\ (|Teff|) (K)
+       * - |B-V|
+         - 0.310 < |B-V| < 1.507 |br| 0.307 < |B-V| < 1.202 |br| 0.335 < |B-V| < 1.030 |br| 0.343 < |B-V| < 0.976
+         - −0.5 < [Fe/H] < +0.5  |br| −1.5 < [Fe/H] < −0.5  |br| −2.5 < [Fe/H] < −1.5  |br| −4.0 < [Fe/H] < −2.5
+         - 51
+       * - |b-y|
+         - 0.248 < |b-y| < 0.824 |br| 0.234 < |b-y| < 0.692 |br| 0.290 < |b-y| < 0.672 |br| 0.270 < |b-y| < 0.479
+         - −0.5 < [Fe/H] < +0.5  |br| −1.5 < [Fe/H] < −0.5  |br| −2.5 < [Fe/H] < −1.5  |br| −4.0 < [Fe/H] < −2.5
+         - 68
+       * - (*Y* − *V*)
+         - 0.420 < (*Y* − *V*) < 0.940 |br| 0.452 < (*Y* − *V*) < 0.660 |br| 0.455 < (*Y* − *V*) < 0.720 |br| 0.446 < (*Y* − *V*) < 0.643
+         - −0.5 < [Fe/H] < +0.5  |br| −1.5 < [Fe/H] < −0.5  |br| −2.5 < [Fe/H] < −1.5  |br| −4.0 < [Fe/H] < −2.5
+         - 78
+       * - (*V* − *S*)
+         - 0.370 < (*V* − *S*) < 1.130 |br| 0.410 < (*V* − *S*) < 0.690 |br| 0.441 < (*V* − *S*) < 0.810 |br| 0.438 < (*V* − *S*) < 0.584
+         - −0.5 < [Fe/H] < +0.5  |br| −1.5 < [Fe/H] < −0.5  |br| −2.5 < [Fe/H] < −1.5  |br| −4.0 < [Fe/H] < −2.5
+         - 69
+       * - (*B*:sub:`2` − *V*:sub:`1`)
+         - 0.119 < (*B*:sub:`2` − *V*:sub:`1`) < 0.936 |br| 0.132 < (*B*:sub:`2` − *V*:sub:`1`) < 0.593 |br| 0.178 < (*B*:sub:`2` − *V*:sub:`1`) < 0.621 |br| 0.185 < (*B*:sub:`2` − *V*:sub:`1`) < 0.435
+         - −0.5 < [Fe/H] < +0.5  |br| −1.5 < [Fe/H] < −0.5  |br| −2.5 < [Fe/H] < −1.5  |br| −4.0 < [Fe/H] < −2.5
+         - 45
+       * - (*B*:sub:`2` − *G*)
+         - −0.271 < (*B*:sub:`2` − *G*) < 1.110 |br| −0.262 < (*B*:sub:`2` − *G*) < 0.502 |br| −0.200 < (*B*:sub:`2` − *G*) < 0.544 |br| −0.179 < (*B*:sub:`2` − *G*) < 0.150
+         - −0.5 < [Fe/H] < +0.5  |br| −1.5 < [Fe/H] < −0.5  |br| −2.5 < [Fe/H] < −1.5  |br| −4.0 < [Fe/H] < −2.5
+         - 39
+       * - *t*
+         - −0.119 < *t* < 0.450  |br| −0.066 < *t* < 0.373  |br| −0.006 < *t* < 0.333  |br| 0.020 < *t* < 0.295
+         - −0.5 < [Fe/H] < +0.5  |br| −1.5 < [Fe/H] < −0.5  |br| −2.5 < [Fe/H] < −1.5  |br| −4.0 < [Fe/H] < −2.5
+         - 44
+       * - (*V* − *R*:sub:`c`)
+         - 0.204 < (*V* − *R*:sub:`c`) < 0.880 |br| 0.284 < (*V* − *R*:sub:`c`) < 0.546 |br| 0.264 < (*V* − *R*:sub:`c`) < 0.532 |br| 0.240 < (*V* − *R*:sub:`c`) < 0.336
+         - −0.5 < [Fe/H] < +0.5  |br| −1.5 < [Fe/H] < −0.5  |br| −2.5 < [Fe/H] < −1.5  |br| −4.0 < [Fe/H] < −2.5
+         - 41
+       * - (*V* − *I*:sub:`c`)
+         - 0.491 < (*V* − *I*:sub:`c`) < 1.721 |br| 0.597 < (*V* − *I*:sub:`c`) < 1.052 |br| 0.547 < (*V* − *I*:sub:`c`) < 1.026
+         - −0.5 < [Fe/H] < +0.5  |br| −1.5 < [Fe/H] < −0.5  |br| −2.5 < [Fe/H] < −1.5
+         - 40
+       * - (*R*:sub:`c` − *I*:sub:`c`)
+         - 0.242 < (*R*:sub:`c` − *I*:sub:`c`) < 0.838 |br| 0.300 < (*R*:sub:`c` − *I*:sub:`c`) < 0.718 |br| 0.283 < (*R*:sub:`c` − *I*:sub:`c`) < 0.551 |br| 0.290 < (*R*:sub:`c` − *I*:sub:`c`) < 0.364
+         - −0.5 < [Fe/H] < +0.5  |br| −1.5 < [Fe/H] < −0.5  |br| −2.5 < [Fe/H] < −1.5  |br| −4.0 < [Fe/H] < −2.5
+         - 62
+       * - *C*\ (42 − 45)
+         - 0.461 < *C*\ (42 − 45) < 1.428 |br| 0.480 < *C*\ (42 − 45) < 0.812
+         - −0.5 < [Fe/H] < +0.5  |br| −1.5 < [Fe/H] < −0.5
+         - 57
+       * - *C*\ (42 − 48)
+         - 1.286 < *C*\ (42 − 48) < 2.711 |br| 1.465 < *C*\ (42 − 48) < 1.957 |br| 1.399 < *C*\ (42 − 48) < 1.509
+         - −0.5 < [Fe/H] < +0.5  |br| −1.5 < [Fe/H] < −0.5  |br| −2.5 < [Fe/H] < −1.5
+         - 49
+       * - |BT-VT|
+         - 0.344 < |BT-VT| < 1.715 |br| 0.391 < |BT-VT| < 1.556 |br| 0.380 < |BT-VT| < 0.922 |br| 0.367 < |BT-VT| < 0.504
+         - −0.5 < [Fe/H] < +0.5    |br| −1.5 < [Fe/H] < −0.5    |br| −2.5 < [Fe/H] < −1.5    |br| −4.0 < [Fe/H] < −2.5
+         - 82
+       * - |V-J|
+         - 0.815 < |V-J| < 2.608 |br| 0.860 < |V-J| < 2.087 |br| 0.927 < |V-J| < 1.983 |br| 0.891 < |V-J| < 1.932
+         - −0.5 < [Fe/H] < +0.5  |br| −1.5 < [Fe/H] < −0.5  |br| −2.5 < [Fe/H] < −1.5  |br| −4.0 < [Fe/H] < −2.5
+         - 38
+       * - |V-H|
+         - 0.839 < |V-H| < 3.215 |br| 1.032 < |V-H| < 2.532 |br| 1.070 < |V-H| < 2.535 |br| 1.093 < |V-H| < 2.388
+         - −0.5 < [Fe/H] < +0.5  |br| −1.5 < [Fe/H] < −0.5  |br| −2.5 < [Fe/H] < −1.5  |br| −4.0 < [Fe/H] < −2.5
+         - 32
+       * - |V-K|
+         - 0.896 < |V-K| < 3.360 |br| 1.060 < |V-K| < 2.665 |br| 1.101 < |V-K| < 2.670 |br| 1.126 < |V-K| < 2.596
+         - −0.5 < [Fe/H] < +0.5  |br| −1.5 < [Fe/H] < −0.5  |br| −2.5 < [Fe/H] < −1.5  |br| −4.0 < [Fe/H] < −2.5
+         - 28
+       * - (*V*:sub:`T` − *K*)
+         - 0.942 < (*V*:sub:`T` − *K*) < 3.284 |br| 1.078 < (*V*:sub:`T` − *K*) < 2.561 |br| 1.237 < (*V*:sub:`T` − *K*) < 2.406 |br| 1.170 < (*V*:sub:`T` − *K*) < 1.668
+         - −0.5 < [Fe/H] < +0.5  |br| −1.5 < [Fe/H] < −0.5  |br| −2.5 < [Fe/H] < −1.5  |br| −4.0 < [Fe/H] < −2.5
+         - 39
+
+
+    References:
+        * `Ramírez & Meléndez, 2005, ApJ, 626, 465 <http://adsabs.harvard.edu/abs/2005ApJ...626..465R>`_
 
     '''
     reference = 'Ramirez et al., 2005, ApJ, 626, 465'

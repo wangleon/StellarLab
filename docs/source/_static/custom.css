@@ -1,3 +1,8 @@
+/*********** table ***************/
+table.docutils {
+    background-color: #eee;
+}
+
 /*********** sub & sup ****************/
 sub {
     top: 0.7ex;
@@ -12,7 +17,6 @@ sub, sup {
     position: relative;
     vertical-align: baseline;
 }
-
 
 /*********** footnote reference ****************/
 .footnote {
