@@ -11,11 +11,14 @@ def structitem_to_dict(item):
         result[key] = value
     return result
 
-
-
 def load_txt(filename):
     '''
     Load structured array from an ascii file.
+
+    Args:
+        filename (str): Name of the file to be read.
+    Returns:
+        :class:`numpy.array`: A numpy structured array.
     '''
 
     # open file
@@ -120,7 +123,14 @@ def load_txt(filename):
 
 def save_txt(filename, data, format_dict=None):
     '''
-    Save numpy structured array to an ascii file
+    Save a numpy structured array to an ASCII file.
+
+    Args:
+        filename (str): Name of the file to be written.
+        data (:class:`numpy.array`): Numpy structured array to be saved.
+        format_dict (dict): Dict containing customized format for each column.
+    Returns:
+        No returns.
     '''
 
     file1 = open(filename, 'w')

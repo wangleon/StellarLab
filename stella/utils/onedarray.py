@@ -36,7 +36,7 @@ def get_local_minima(x, window=None):
     
     Args:
         x (:class:`numpy.array`): A list or Numpy 1d array.
-        window (int): An odd integer as the length of seaching window.
+        window (int): An odd integer as the length of searching window.
     Returns:
         tuple: A tuple containing:
 
