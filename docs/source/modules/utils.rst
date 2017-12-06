@@ -3,39 +3,21 @@ Utilities
 
 Summaries
 -----------
-
-**Asciifile module (stella.utils.asciifile)**
-
-.. currentmodule:: stella.utils.asciifile
-
+.. currentmodule:: stella.utils
 .. autosummary::
-    find_sortedfile
-    quickfind_sortedfile
-
-**Asciitable module (stella.utils.asciitable)**
-
-.. currentmodule:: stella.utils.asciitable
-
-.. autosummary::
-    load_txt
-    save_txt
-
-**FITS module (stella.utils.fitsio)**
-
-.. currentmodule:: stella.utils.fitsio
-
-.. autosummary::
-    get_bintable_info
-    tform_to_dtype
-    tform_to_format
-
-**Interpolation module (stella.utils.interpolation)**
-
-.. currentmodule:: stella.utils.interpolation
-
-.. autosummary::
-    newton
-    parabolic
+    asciifile.find_sortedfile
+    asciifile.quickfind_sortedfile
+    asciitable.load_txt
+    asciitable.save_txt
+    fitsio.get_bintable_info
+    fitsio.tform_to_dtype
+    fitsio.tform_to_format
+    interpolation.newton
+    interpolation.parabolic
+    onedarray.get_edge_bin
+    onedarray.get_local_minima
+    onedarray.pairwise
+    vision.temp_to_rgb
 
 Functions in utils.asciifile
 --------------------------------
@@ -49,38 +31,24 @@ Functions in utils.asciitable
 .. automodule:: stella.utils.asciitable
     :members:
 
-
-Functions in utils.fitsio
---------------------------------
+FITS Input/Output
+-----------------
 
 .. automodule:: stella.utils.fitsio
     :members:
 
 
-Functions in utils.interpolation
-----------------------------------
-
+Interpolation
+-------------
 .. automodule:: stella.utils.interpolation
+    :members:
+
+One-dimensional Array
+---------------------
+.. automodule:: stella.utils.onedarray
     :members:
 
 Visualization
 --------------
-
-Temperature to RGB color
-^^^^^^^^^^^^^^^^^^^^^^^^^
-
-
-.. currentmodule:: stella.utils.vision
-
-.. autosummary::
-    temp_to_rgb
-
-The above function converts black-body temperature to RGB color using piecewise
-polynomials.
-The coefficients of the polynomials are obtained by fitting the CIE 1964 10-deg
-color matching functions given in `bbr_color.txt
-<http://www.vendian.org/mncharity/dir3/blackbody/UnstableURLs/bbr_color.html>`_
-on `Mitchell Charity's website <http://www.vendian.org/mncharity/dir3/blackbody/>`_.
-
-
-.. plot:: plot/temp_to_rgb.py
+.. automodule:: stella.utils.vision
+    :members:

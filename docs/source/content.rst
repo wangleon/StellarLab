@@ -22,6 +22,7 @@ Modules
    modules/evolution/*
    modules/parameter/*
    modules/kinetics/*
+   modules/utils
 
 Examples
 
