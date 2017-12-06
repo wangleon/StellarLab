@@ -4,7 +4,13 @@ from .memoize import memoized
 
 def tform_to_format(tform):
     '''
-    Convert TFORM string in FITS binary table to fmt in Python struct.
+    Convert `TFORM` string in FITS binary table to format string in Python
+    `struct` module.
+
+    Args:
+        tfrom (str): `TFORM` string in FITS binary table.
+    Returns:
+        str: A format string used in Python `struct` module.
     '''
     if tform == 'L': return 'b' # 1 byte, boolean
     if tform == 'B': return 'B' # 1 byte, unsigned byte
@@ -22,7 +28,13 @@ def tform_to_format(tform):
 
 def tform_to_dtype(tform):
     '''
-    Convert TFORM string in FITS binary table to format Python array.
+    Convert `TFORM` string in FITS binary table to Numpy dtype.
+
+    Args:
+        tfrom (str): `TFORM` string in FITS binary table.
+    Returns:
+        :class:`numpy.dtype`: Numpy dtype object.
+
     '''
     if tform == 'L': return np.bool # 1 byte, boolean
     #if tform == 'B': return 'B' # 1 byte, unsigned byte
@@ -38,39 +50,28 @@ def tform_to_dtype(tform):
     if tform[-1] == 'A': return 'S'+tform[0:-1] # 1 bytes, character
 
 @memoized
-def get_bintable_info(filename,extension=1):
+def get_bintable_info(filename ,extension=1):
     '''
     Return the information of the binary table in a given FITS file.
 
-    Parameters
-    ----------
-    filename : *string*
-        Name of the FITS file
-    extension : *integer* (optional)
-        The extension of binary table
+    Args:
+        filename (string): Name of the input FITS file.
+        extension (integer): Extension of the binary table to be read.
+    Returns:
+        tuple: A tuple containing:
 
-    Returns
-    -------
-    naxis1 : *integer*
-        Length of bytes for every record
-    naxis2 : *integer*
-        Number of records of the whole table
-    tfields : *integer*
-        Number of columns in this table
-    position : *integer*
-        The position that binary table starts
-    dtype : numpy.dtype instance
-        The dtype of the catalog record
-    fmtfunc : *function*
-        A function to format the record
+            * **naxis1** (*integer*): Length of row in bytes.
+            * **naxis2** (*integer*): Number of rows in the table.
+            * **tfields** (*integer*): Number of columns in the table.
+            * **position** (*integer*): The staring position of the table.
+            * **dtype** (:class:`numpy.dtype`): Numpy dtype of the row.
+            * **fmtfunc** (*function*): Function to format the rows.
+    Examples:
 
-    Examples
-    --------
-
-    .. code-block:: python
-
-        from stella.utils.fitsio import get_bintable_info
-        nbyte, nrow, ncol, pos, dtype, fmtfunc = get_bintable_info(filename)
+        .. code-block:: python
+    
+            from stella.utils.fitsio import get_bintable_info
+            nbyte, nrow, ncol, pos, dtype, fmtfunc = get_bintable_info(filename)
 
     '''
     infile = open(filename,'rb')
@@ -119,5 +120,5 @@ def get_bintable_info(filename,extension=1):
 
     fmt = '>'+(''.join([tform_to_format(v) for v in tform_lst]))
     fmtfunc = lambda string: np.array(struct.unpack(fmt, string),dtype=record)
-    return naxis1,naxis2,tfields,position,record,fmtfunc
+    return naxis1, naxis2, tfields, position, record, fmtfunc
 

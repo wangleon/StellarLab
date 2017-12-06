@@ -1,4 +1,3 @@
-
 .. |Teff| replace:: *T*:sub:`eff`
 
 Catalogues
@@ -9,7 +8,6 @@ Summaries
 **Catalogue searching functions (find_catalog module)**
 
 .. currentmodule:: stella.catalog.find_catalog
-
 .. autosummary::
     find_HIP
     find_HIP2

@@ -5,27 +5,21 @@ def get_edge_bin(array):
     '''
     Detect the edge indcies of a binary 1-D array.
 
-    Parameters
-    -----------
-    array : *list* or * Numpy 1-d array*
-        a list or Numpy 1d array, with binary (0/1) or boolean (True/False)
-        elements
+    Args:
+        array (:class:`numpy.array`): A list or Numpy 1d array, with binary
+            (0/1) or boolean (True/False) values.
+    Returns:
+        list: A list containing starting and ending indices of the non-zero
+            blocks.
+    Examples:
+        .. code-block:: python
 
-    Returns
-    --------
-    *list*
-        containing starting and ending indices of the non-zero blocks
-
-    Examples
-    ---------
-    .. code-block:: python
-
-        >>> a = [0,1,1,0,0,0,1,0,1]
-        >>> get_edge_bin(a)
-        [(1, 3), (6, 7), (8, 9)]
-        >>> b = [True, False, True, True, False, False]
-        >>> get_edge_bin(b)
-        [(0, 1), (2, 4)]
+            >>> a = [0,1,1,0,0,0,1,0,1]
+            >>> get_edge_bin(a)
+            [(1, 3), (6, 7), (8, 9)]
+            >>> b = [True, False, True, True, False, False]
+            >>> get_edge_bin(b)
+            [(0, 1), (2, 4)]
 
     '''
     array1 = np.int64(array)
@@ -38,19 +32,16 @@ def get_edge_bin(array):
 
 def get_local_minima(x, window=None):
     '''
-    Get the local minima of a 1d array.
+    Get the local minima of a 1-d array in a window.
     
-    Parameters
-    ----------
-    x : *list* or *Numpy 1d array*
-        a list or Numpy 1d array
-	
-    Returns
-    -------
-    index : *Numpy 1d array*
-	    a Numpy 1d array containing the indices of all local minima
-    x[index] : *Numpy 1d array*
-	    a Numpy 1d array containing the values of all local minima
+    Args:
+        x (:class:`numpy.array`): A list or Numpy 1d array.
+        window (int): An odd integer as the length of seaching window.
+    Returns:
+        tuple: A tuple containing:
+
+            * **index** (:class:`numpy.array`): a numpy 1d array containing the indices of all local minima.
+            * **x[index]** (:class:`numpy.array`): a numpy 1d array containing the values of all local minima.
 
     '''
     x = np.array(x)

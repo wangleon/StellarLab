@@ -1,10 +1,20 @@
 def parabolic(ax,ay,x):
     '''
-    parabolic interpolation
-    if x = ax[1], f and h stays, but parab becomes
-    parab = ay[0]+(ax[1]-ax[0])*f
-          = ay[0]+(ay[1]-ay[0])
-          = ay[1]
+    Parabolic interpolation.
+
+    If x = ax[1], f and h stays, but parab becomes::
+
+        parab = ay[0]+(ax[1]-ax[0])*f
+              = ay[0]+(ay[1]-ay[0])
+              = ay[1]
+
+    Args:
+        ax (list or :class:`numpy.array`): Input *x* values.
+        ay (list or :class:`numpy.array`): Input *y* values.
+        x (float): *x* value to be interpolated.
+    Returns:
+        float: Interpolated *y* value.
+
     '''
     f = (ay[1]-ay[0])/(ax[1]-ax[0])
     h = ((ay[2]-ay[0])/(ax[2]-ax[0])-f)/(ax[2]-ax[1])
@@ -13,7 +23,14 @@ def parabolic(ax,ay,x):
 
 def newton(ax,ay,x):
     '''
-    newton interpolation
+    Newton interpolation
+
+    Args:
+        ax (list or :class:`numpy.array`): Input *x* values.
+        ay (list or :class:`numpy.array`): Input *y* values.
+        x (float): *x* value to be interpolated.
+    Returns:
+        float: Interpolated *y* value.
     '''
     n = len(ax)
     y = [v for v in ay]
