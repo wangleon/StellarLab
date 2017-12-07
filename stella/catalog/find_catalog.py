@@ -11,7 +11,7 @@ from .errors import FileNotExist, ItemNotFound, UnrecognizedName
 from .base import _get_HIP_number, _get_KIC_number, _get_TYC_number
 
 
-def _search_HIP_catalogue(name, filename, epoch, output):
+def _search_HIP_catalogue(name, filename, epoch=2000.0, output='dict'):
     '''
     Search data in either HIP catalogue (`I/239
     <http://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=I/239>`_, Perryman+
@@ -19,21 +19,15 @@ def _search_HIP_catalogue(name, filename, epoch, output):
     <http://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=I/311>`_, van Leeuwen
     2007).
 
-    Parameters
-    -----------
-    name : *string* or *integer*
-        Name of star
-    filename : *string*
-        Name of catalogue file. Either *"HIP.fits"* or *"HIP2.fits"*
-    epoch : *float*
-        Epoch of astrometric parameters. Default is 2000.0
-    output : *'dict'* (default) or *'ndarray'*
-        Data type of output. Default is *'dict'*
-
-    Returns
-    --------
-    row : *numpy.ndarray* or *dict*
-        Record array or dictionary
+    Args:
+        name (string or integer): Name or number of star.
+        filename (string): Name of catalogue file. Either *"HIP.fits"* or
+            *"HIP2.fits"*.
+        epoch (float): Epoch of the output astrometric parameters.
+        output (string): Type of output results. Either *"dict"* or *"dtype"*
+            (:class:`numpy.dtype`).
+    Returns:
+        dict or :class:`numpy.dtype`: Record in catalogue.
     '''
 
     # check table file
@@ -63,7 +57,7 @@ def _search_HIP_catalogue(name, filename, epoch, output):
 
     infile.close()
 
-    if output == 'ndarray':
+    if output == 'dtype':
         return item
     elif output == 'dict':
         return structitem_to_dict(item)
@@ -76,29 +70,8 @@ def find_HIP(name, epoch=2000.0, output='dict'):
     <http://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=I/239>`_, Perryman+
     1997).
 
-    Parameters
-    -----------
-    name : *string* or *integer*
-        Name of star
-    epoch : *float*
-        Epoch of astrometric parameters. Default is 2000.0
-    output : *'dict'* (default) or *'ndarray'*
-        Data type of output. Default is *'dict'*
-
-    Returns
-    --------
-    row : *numpy.ndarray* or *dict*
-        Record array or dictionary
-    
-    Raises
-    -------
-    FileNotExist
-        Catalogue file does not exist
-
-    Notes
-    ------
-    This catalogue contains 118,218 records, with HIP numbers ranging from 1 to
-    120,416.
+    The HIP catalogue contains 118,218 records, with HIP numbers ranging from 1
+    to 120,416.
     
     For more details, see :ref:`Hipparcos Catalogue<catalog_hip>`.
 
@@ -133,17 +106,25 @@ def find_HIP(name, epoch=2000.0, output='dict'):
         "SpType",   "string",    "mag",    "Spectral type"
         "r_SpType", "character", "",       "Source of Spectral type"
 
-    Examples
-    --------
-    Find record for τ Ceti (HIP 8102)
+    Args:
+        name (string or integer): Name or number of star.
+        epoch (float): Epoch of output astrometric parameters.
+        output (string): Type of output results. Either *"dict"* or *"dtype"*
+            (:class:`numpy.dtype`).
+    Returns:
+        dict or :class:`numpy.dtype`: Record in catalogue.
+    Raises: 
+        FileNotExist: Catalogue file does not exist
+    Examples:
+        Find record for τ Ceti (HIP 8102)
 
-    .. code-block:: python
+        .. code-block:: python
 
-        import numpy as np
-        from stella.catalog.find_catalog import find_HIP
+            import numpy as np
+            from stella.catalog.find_catalog import find_HIP
 
-        # find the parametres for tau Cet (HIP 8102)
-        item = find_HIP(8102, epoch=1991.25)
+            # find the parametres for tau Cet (HIP 8102)
+            item = find_HIP(8102, epoch=1991.25)
 
     '''
 
@@ -155,29 +136,9 @@ def find_HIP2(name, epoch=2000.0, output='dict'):
     <http://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=I/311>`_, van Leeuwen
     2007).
 
-    Parameters
-    -----------
-    name : *string* or *integer*
-        Name of star
-    epoch : *float*
-        Epoch of astrometric parameters. Default is 2000.0
-    output : *'dict'* (default) or *'ndarray'*
-        Data type of output. Default is *'dict'*
-
-    Returns
-    --------
-    row : *numpy.ndarray* or *dict*
-        Record array or dictionary
-
-    Raises
-    -------
-    FileNotExist
-        Catalogue file does not exist
-
-    Notes
-    ------
-    This catalogue contains 117,955 records, with HIP numbers ranging from 1 to
-    120,404. The astrometric solution are provided in ICRS at epoch J1991.25.
+    The Hipparcos Catalogue New Reduction contains 117,955 records, with HIP
+    numbers ranging from 1 to 120,404.
+    The astrometric solution are provided in ICRS at epoch J1991.25.
     However, parameters at any epoch can be returned with the `epoch` argument.
     Default is *epoch* = 2000.0.
 
@@ -203,21 +164,29 @@ def find_HIP2(name, epoch=2000.0, output='dict'):
         "e_Hpmag",  "float32",   "mag",    "Error in *Hp* magnitude"
         "Hpscat",   "float32",   "mag",    "Scatter on *Hp* magnitude"
 
-    Examples
-    ---------
-    Find the ICRS coordinate of τ Ceti (HIP 8102)
+    Args:
+        name (string or integer): Name or number of star.
+        epoch (float): Epoch of output astrometric parameters.
+        output (string): Type of output results. Either *"dict"* or *"dtype"*
+            (:class:`numpy.dtype`).
+    Returns:
+        dict or :class:`numpy.dtype`: Record in catalogue.
+    Raises:
+        FileNotExist: Catalogue file does not exist
+    Examples:
+        Find the ICRS coordinate of τ Ceti (HIP 8102)
 
-    .. code-block:: python
+        .. code-block:: python
+        
+            from stella.catalog.find_catalog import find_HIP2
     
-        from stella.catalog.find_catalog import find_HIP2
-
-        res1 = find_HIP2(8102, epoch=1991.25)
-        res2 = find_HIP2(8102)
-        print(res1['RAdeg'], res1['DEdeg'])
-        print(res2['RAdeg'], res2['DEdeg'])
-        # output:
-        # 26.021364586713265 -15.939555724635493
-        # 26.017014215650022 -15.937479641367434
+            res1 = find_HIP2(8102, epoch=1991.25)
+            res2 = find_HIP2(8102)
+            print(res1['RAdeg'], res1['DEdeg'])
+            print(res2['RAdeg'], res2['DEdeg'])
+            # output:
+            # 26.021364586713265 -15.939555724635493
+            # 26.017014215650022 -15.937479641367434
 
     '''
 
@@ -228,22 +197,6 @@ def find_TYC2(name, epoch=2000.0, output='dict'):
     Find records in Tycho-2 Catalogue (`I/259
     <http://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=I/259>`_, Høg+ 2000).
 
-    Parameters
-    ----------
-    name : *string* or *tuple*
-        Name of star
-    epoch : *float*
-        Epoch of astrometric parameters. Default is 2000.0
-    output : *'dict'* (default) or *'ndarray'*
-        Data type of output. Default is *'dict'*
-
-    Returns
-    -------
-    row : *numpy.ndarray* or *dict*
-        Record array or dictionary
-
-    Notes
-    ------
     The Tycho-2 Catalogue contains 2,539,913 records, and additonal 17,588
     records in Supplement-1, and 1,146 records in Supplement-2.
 
@@ -275,18 +228,24 @@ def find_TYC2(name, epoch=2000.0, output='dict'):
         "e_VTmag",  "float32",   "mag",    "Error in *V*:sub:`T` magnitude"
         "prox",     "float32",   "arcsec", "Proximity, or distance to the nearest entry (truncated to 99.9 if >99.9)"
 
-    Examples
-    ---------
-    Find the proper motion of Barnard's star (TYC 425-2502-1)
+    Args:
+        name (string or tuple): Name or nunmber tuple of star.
+        epoch (float): Epoch of output astrometric parameters.
+        output (string): Type of output results. Either *"dict"* or *"dtype"*
+            (:class:`numpy.dtype`).
+    Returns:
+        dict or :class:`numpy.dtype`: Record in catalogue.
+    Examples:
+        Find the proper motion of Barnard's star (TYC 425-2502-1)
 
-    .. code-block:: python
+        .. code-block:: python
+        
+            from stella.catalog.find_catalog import find_TYC2
     
-        from stella.catalog.find_catalog import find_TYC2
-
-        res = find_TYC2('TYC 425-2502-1')
-        print(res['pmRA'], res['pmDE'])
-        # output:
-        # -798.7999877929688 10277.2998046875
+            res = find_TYC2('TYC 425-2502-1')
+            print(res['pmRA'], res['pmDE'])
+            # output:
+            # -798.7999877929688 10277.2998046875
     
     '''
 
@@ -343,27 +302,6 @@ def find_KIC(name, output='dict'):
     <http://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=V/133>`_, Kepler
     Mission Team, 2009).
 
-    Parameters
-    -----------
-    name : *string* or *integer*
-        Name of star
-    output : *'dict'* (default) or *'ndarray'*
-        Data type of output. Default is *'dict'*
-        
-    Returns
-    --------
-    row : *numpy.ndarray* or *dict*
-        Record array or dictionary
-
-    Raises
-    -------
-    FileNotExist
-        Catalogue file does not exist
-    UnrecognizedName
-        Input name can not be recognized
-
-    Notes
-    -----
     The data file used in this function is complied from the 10th version of
     KIC. It contains 13,161,029 records with consecutive KIC numbers. Proper
     motions are available for 12,944,973 objects, or 98% of the entire sample.
@@ -402,18 +340,26 @@ def find_KIC(name, output='dict'):
         "Av",     "float32",   "mag",    "Extinction in *V* magnitude"
         "R",      "float32",   "Rsun",   "Stellar radius"
 
-    Examples
-    ---------
-    Find *K*:sub:`p` magnitude of Kepler-13 (KOI-13, KIC 9941662)
+    Args:
+        name (string or integer): Name or number of star.
+        output (string): Type of output results. Either *"dict"* or *"dtype"*
+            (:class:`numpy.dtype`).
+    Returns:
+        dict or :class:`numpy.dtype`: Record in catalogue.
+    Raises:
+        FileNotExist: Catalogue file does not exist
+        UnrecognizedName: Input name can not be recognized
+    Examples:
+        Find *K*:sub:`p` magnitude of Kepler-13 (KOI-13, KIC 9941662)
 
-    .. code-block:: python
+        .. code-block:: python
+        
+            from stella.catalog.find_catalog import find_KIC
     
-        from stella.catalog.find_catalog import find_KIC
-
-        res = find_KIC('KIC 9941662')
-        print(res['kepmag'])
-        # output:
-        # 9.958000183105469
+            res = find_KIC('KIC 9941662')
+            print(res['kepmag'])
+            # output:
+            # 9.958000183105469
 
     '''
 
