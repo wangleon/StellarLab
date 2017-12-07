@@ -847,7 +847,7 @@ def _get_dwarf_Teff_Ramirez2005(index, color, **kwargs):
 
     The applicable range of color indices and metallicities for dwarfs, numbers
     of sample stars, and standard deviations of |Teff| are summarized as below
-    (Table 2 & 4 in Ramirez et al. 2005):
+    (Table 2 & 4 of Ramirez et al. 2005):
 
     .. list-table::
        :widths: 10, 20, 20, 10, 10
@@ -1384,9 +1384,8 @@ def _get_giant_Teff_Ramirez2005(index, color, **kwargs):
     calibration relations given by `Ramirez+ 2005
     <http://adsabs.harvard.edu/abs/2005ApJ...626..465R>`_.
 
-    `Ramirez+ 2005 <http://adsabs.harvard.edu/abs/2005ApJ...626..465R>`_
-    presents calibration relatiions of |Teff| versus 17 color indices and
-    metallicities for main-sequence and giant stars.
+    Ramirez et al. 2005 presents calibration relations of |Teff| versus 17 color
+    indices and metallicities for main-sequence and giant stars.
     The |Teff| are derived with the infrared flux method (IRFM).
     The spectral types range from F0 to K5, or |Teff| range between 4000 K and
     7000 K. Some relations extend to below 4000 K or above 8000 K.
@@ -1404,7 +1403,7 @@ def _get_giant_Teff_Ramirez2005(index, color, **kwargs):
 
     The applicable range of color indices and metallicities for dwarfs, numbers
     of sample stars, and standard deviations of |Teff| are summarized as below
-    (Table 3 & 5 in Ramirez et al. 2005):
+    (Table 3 & 5 of Ramirez et al. 2005):
 
     .. list-table::
        :widths: 10, 20, 20, 10, 10
@@ -2211,9 +2210,103 @@ def _get_dwarf_Teff_Casagrande2010(index, color, **kwargs):
     calibration relations given by `Casagrande+ 2010
     <http://adsabs.harvard.edu/abs/2010A&A...512A..54C>`_.
 
-    References
-    ----------
-    * `Casagrande et al., 2010, A&A, 512, 54 <http://adsabs.harvard.edu/abs/2010A&A...512A..54C>`_
+    Casagrande et al. 2010 presents calibration relations of |Teff| versus 13
+    color indices and metallicities for dwarfs and subgiants.
+    The |Teff| are derived with the infrared flux method (IRFM).
+    The photometric data include *BV* in Johnson system, *by* in Strömgren
+    system, *B*:sub:`T`\ *V*:sub:`T` in Tycho system, *RI* in Cousins system, and
+    *JHK* in 2MASS catalogue.
+
+    The applicable range of color indices and metallicities for dwarfs, numbers
+    of sample stars, and standard deviations of |Teff| are summarized as below
+    (Table 4 of Casagrande et al. 2010):
+
+    .. list-table::
+       :widths: 10, 20, 20, 10, 10
+       :header-rows: 1
+
+       * - color index
+         - color
+         - [Fe/H]
+         - *N*:sub:`star`
+         - *σ*\ (|Teff|) (K)
+       * - |B-V|
+         - 0.18 ≤ |B-V| ≤ 1.29
+         - −5.0 ≤ [Fe/H] ≤ 0.4
+         - 400
+         - 73
+       * - (*V* − *R*:sub:`c`)
+         - 0.24 ≤ (*V* − *R*:sub:`c`) ≤ 0.80
+         - −5.0 ≤ [Fe/H] ≤ 0.3
+         - 201
+         - 62
+       * - |R-I|
+         - 0.23 ≤ |R-I| ≤ 0.68
+         - −5.0 ≤ [Fe/H] ≤ 0.3
+         - 211
+         - 82
+       * - (*V* − *I*:sub:`c`)
+         - 0.46 ≤ (*V* − *I*:sub:`c`) ≤ 1.47
+         - −5.0 ≤ [Fe/H] ≤ 0.3
+         - 208
+         - 59
+       * - |V-J|
+         - 0.61 ≤ |V-J| ≤ 2.44
+         - −5.0 ≤ [Fe/H] ≤ 0.4
+         - 401
+         - 42
+       * - |V-H|
+         - 0.67 ≤ |V-H| ≤ 3.01
+         - −5.0 ≤ [Fe/H] ≤ 0.4
+         - 401
+         - 33
+       * - |V-K|
+         - 0.78 ≤ |V-K| ≤ 3.15
+         - −5.0 ≤ [Fe/H] ≤ 0.4
+         - 401
+         - 25
+       * - |J-K|
+         - 0.07 ≤ |J-K| ≤ 0.80
+         - −5.0 ≤ [Fe/H] ≤ 0.4
+         - 412
+         - 132
+       * - |BT-VT|
+         - 0.19 ≤ |BT-VT| ≤ 1.49
+         - −2.7 ≤ [Fe/H] ≤ 0.4
+         - 251
+         - 79
+       * - (*V*:sub:`T` − *J*)
+         - 0.77 ≤ (*V*:sub:`T` − *J*) ≤ 2.56
+         - −2.7 ≤ [Fe/H] ≤ 0.4
+         - 272
+         - 43
+       * - (*V*:sub:`T` − *H*)
+         - 0.77 ≤ (*V*:sub:`T` − *H*) ≤ 3.16
+         - −2.7 ≤ [Fe/H] ≤ 0.4
+         - 263
+         - 26
+       * - (*V*:sub:`T` − *K*)
+         - 0.99 ≤ (*V*:sub:`T` − *K*) ≤ 3.29
+         - −2.4 ≤ [Fe/H] ≤ 0.4
+         - 258
+         - 18
+       * - |b-y|
+         - 0.18 ≤ |b-y| ≤ 0.72
+         - −3.7 ≤ [Fe/H] ≤ 0.5
+         - 1120
+         - 62
+
+    Args:
+        index (string): Name of color index.
+        color (float): Value of color index.
+        FeH (float): Metallicity [Fe/H].
+        extrapolation (bool): Extend the applicable ranges if *True*. Default is
+            *False*.
+    Returns:
+        float: Effective temperature (|Teff|) in K.
+    References:
+        * `Casagrande et al., 2010, A&A, 512, 54 <http://adsabs.harvard.edu/abs/2010A&A...512A..54C>`_
+
     '''
     reference = 'Casagrande, 2010, A&A, 512, A54'
 
