@@ -1960,9 +1960,11 @@ def _get_dwarf_Teff_Masana2006(index, color, **kwargs):
     calibration relations given by `Masana+ 2006
     <http://adsabs.harvard.edu/abs/2006A&A...450..735M>`_.
 
-    Masana et al. 2006 presents calibration relations of |Teff| versus |V-K| and
-    metallicities for FGK stars.
+    Masana et al. 2006 presents calibration relations of |Teff| versus |V-K|,
+    metallicities ([M/H]), and surface gravities (log\ *g*) for FGK stars.
     *K* photometry are in 2MASS system.
+    The standard deviation of |Teff| are ~20 K for stars with 0.35 < |V-K| <
+    1.15, and ~25 K for stars with 1.15 ≤ |V-K| < 3.0.
 
     The applicable ranges of |V-K| and [M/H] are:
 
@@ -1978,15 +1980,16 @@ def _get_dwarf_Teff_Masana2006(index, color, **kwargs):
            0.4  < |V-K| < 3.0 |br|
            0.5  < |V-K| < 2.9 |br|
            1.0  < |V-K| < 2.9
-         - +0.5 ≤ [M/H] < 0.5 |br|
-           −0.5 ≤ [M/H] < 0.0 |br|
+         - +0.5 ≤ [M/H] < 0.5  |br|
+           −0.5 ≤ [M/H] < 0.0  |br|
            −1.5 ≤ [M/H] < −0.5 |br|
            −3.0 ≤ [M/H] < −1.5
 
     Args:
         index (string): Name of color index. Must be *"V-K"*
         color (float): Value of color index.
-        FeH (float): Metallicity [Fe/H].
+        FeH (float): Metallicity [M/H].
+        logg (float): Surface gravity (log\ *g*).
         extrapolation (bool): Extend the applicable ranges if *True*. Default is
             *False*.
     Returns:
