@@ -845,7 +845,7 @@ def _get_dwarf_Teff_Ramirez2005(index, color, **kwargs):
     |V-J|, |V-H|, and |V-K| in Johnson-2MASS system,
     and (*V*:sub:`T` − *K*) in Tycho-2MASS system.
 
-    The applicable range of color indices and metallicities for dwarfs, numbers
+    The applicable ranges of color indices and metallicities for dwarfs, numbers
     of sample stars, and standard deviations of |Teff| are summarized as below
     (Table 2 & 4 of Ramirez et al. 2005):
 
@@ -1401,7 +1401,7 @@ def _get_giant_Teff_Ramirez2005(index, color, **kwargs):
     |V-J|, |V-H|, and |V-K| in Johnson-2MASS system,
     and (*V*:sub:`T` − *K*) in Tycho-2MASS system.
 
-    The applicable range of color indices and metallicities for dwarfs, numbers
+    The applicable ranges of color indices and metallicities for dwarfs, numbers
     of sample stars, and standard deviations of |Teff| are summarized as below
     (Table 3 & 5 of Ramirez et al. 2005):
 
@@ -1960,9 +1960,39 @@ def _get_dwarf_Teff_Masana2006(index, color, **kwargs):
     calibration relations given by `Masana+ 2006
     <http://adsabs.harvard.edu/abs/2006A&A...450..735M>`_.
 
-    References
-    ----------
-    * `Masana et al. 2006, A&A, 450, 735 <http://adsabs.harvard.edu/abs/2006A&A...450..735M>`_
+    Masana et al. 2006 presents calibration relations of |Teff| versus |V-K| and
+    metallicities for FGK stars.
+    *K* photometry are in 2MASS system.
+
+    The applicable ranges of |V-K| and [M/H] are:
+
+    .. list-table::
+       :widths: 10, 20, 20
+       :header-rows: 1
+
+       * - color index
+         - color
+         - [M/H]
+       * - |V-K|
+         - 0.35 < |V-K| < 2.8 |br|
+           0.4  < |V-K| < 3.0 |br|
+           0.5  < |V-K| < 2.9 |br|
+           1.0  < |V-K| < 2.9
+         - +0.5 ≤ [M/H] < 0.5 |br|
+           −0.5 ≤ [M/H] < 0.0 |br|
+           −1.5 ≤ [M/H] < −0.5 |br|
+           −3.0 ≤ [M/H] < −1.5
+
+    Args:
+        index (string): Name of color index. Must be *"V-K"*
+        color (float): Value of color index.
+        FeH (float): Metallicity [Fe/H].
+        extrapolation (bool): Extend the applicable ranges if *True*. Default is
+            *False*.
+    Returns:
+        float: Effective temperature (|Teff|) in K.
+    References:
+        * `Masana et al. 2006, A&A, 450, 735 <http://adsabs.harvard.edu/abs/2006A&A...450..735M>`_
 
     '''
     reference = 'Masana et al., 2006, A&A, 450, 735'
@@ -2217,7 +2247,7 @@ def _get_dwarf_Teff_Casagrande2010(index, color, **kwargs):
     system, *B*:sub:`T`\ *V*:sub:`T` in Tycho system, *RI* in Cousins system, and
     *JHK* in 2MASS catalogue.
 
-    The applicable range of color indices and metallicities for dwarfs, numbers
+    The applicable ranges of color indices and metallicities for dwarfs, numbers
     of sample stars, and standard deviations of |Teff| are summarized as below
     (Table 4 of Casagrande et al. 2010):
 
