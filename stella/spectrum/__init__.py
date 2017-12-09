@@ -1,4 +1,4 @@
-
+from . import specwcs
 def wl_vac_to_air(wl_vac, unit='Angstrom',ref='Ciddor1996'):
     '''
     Convert vacuum wavelength to air wavelength.
