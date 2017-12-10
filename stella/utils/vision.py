@@ -80,9 +80,9 @@ def wavelength_to_rgb(wavelength):
     See http://www.physics.sfasu.edu/astro/color/spectra.html
 
     Args:
-        wavelength (float): Wavelength in Angstrom
+        wavelength (float): Wavelength in Angstrom.
     Returns:
-        tuple: (R, G, B) color in 0~255.
+        tuple: (R, G, B) color in integar between [0, 255].
 
     '''
     if 3800 <= wavelength <= 4400:
