@@ -72,3 +72,47 @@ def temp_to_rgb(temp):
         blue = 1.0
 
     return red, green, blue
+
+def wavelength_to_rgb(wavelength):
+    '''
+    Convert wavelength to RGB color.
+
+    See http://www.physics.sfasu.edu/astro/color/spectra.html
+
+    Args:
+        wavelength (float): Wavelength in Angstrom
+    Returns:
+        tuple: (R, G, B) color in 0~255.
+
+    '''
+    if 3800 <= wavelength <= 4400:
+        r, g, b = (4400.-wavelength)/(4400.-3800.), 0, 1
+    elif 4400 <= wavelength <= 4900:
+        r, g, b = 0, (wavelength-4400.)/(4900.-4400.), 1
+    elif 4900 <= wavelength <= 5100:
+        r, g, b = 0, 1, (5100.-wavelength)/(5100.-4900.)
+    elif 5100 <= wavelength <= 5800:
+        r, g, b = (wavelength-5100.)/(5800.-5100.), 1, 0
+    elif 5800 <= wavelength <= 6450:
+        r, g, b = 1, (6450.-wavelength)/(6450.-5800.), 0
+    elif 6450 <= wavelength <= 7800:
+        r, g, b = 1, 0, 0
+    elif wv > 7800:
+        r, g, b = 1, 0, 0
+    if wv < 3800:
+        r, g, b = max((4400.-wavelength)/(4400.-3800.),0), 0, 1
+    if wv > 7000:
+        s = 0.3 + 0.7*(7800.-wavelength)/(7800.-7000.)
+    elif wv < 4200:
+        s = 0.3 + 0.7*(wavelength-3800.)/(4200.-3800.)
+    else:
+        s = 1.0
+
+    if s < 0:
+        s = 0.
+
+    gamma = 0.8
+    red   = int((s*r)**gamma*255)
+    green = int((s*g)**gamma*255)
+    blue  = int((s*b)**gamma*255)
+    return (red, green, blue)
