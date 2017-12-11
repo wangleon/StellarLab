@@ -2105,6 +2105,8 @@ def _get_dwarf_Teff_GB2009(index, color, **kwargs):
             *False*.
     Returns:
         float: Effective temperature (|Teff|) in K.
+    See also:
+        :func:`_get_giant_Teff_GB2009`
     References:
         * `González Hernández & Bonifacio, 2009, A&A, 497, 497 <http://adsabs.harvard.edu/abs/2009A&A...497..497G>`_
     '''
@@ -2153,10 +2155,71 @@ def _get_giant_Teff_GB2009(index, color, **kwargs):
     '''Convert color to *T*:sub:`eff` for giants using the calibration relations
     given by `González Hernández & Bonifacio, 2009
     <http://adsabs.harvard.edu/abs/2009A&A...497..497G>`_.
+    
+    González Hernández & Bonifacio 2009 presents |Teff| scales of the infrared
+    flux method (IRFM) using the 2MASS catalogue.
+    The 2MASS *JHK*:sub:`s` colors are computed using the fluxes from ATLAS
+    models.
+    The photometric data include *BV* in Johnson sytsem, *RI* in Cousins system,
+    and *JHK*:sub:`s` in 2MASS catalogue.
 
-    References
-    ----------
-    * `González Hernández & Bonifacio, 2009, A&A, 497, 497 <http://adsabs.harvard.edu/abs/2009A&A...497..497G>`_
+    The applicable ranges of color indices and metallicities for giants, numbers
+    of sample stars, and the standard deviations of |Teff| are summarized as
+    below (Table 5 of González Hernández & Bonifacio 2009):
+
+    .. list-table::
+       :widths: 10, 20, 20, 10, 10
+       :header-rows: 1
+
+       * - color index
+         - color
+         - [Fe/H]
+         - *N*:sub:`star`
+         - *σ*\ (|Teff|) (K)
+       * - |B-V|
+         - 0.3 ≤ |B-V| ≤ 1.4
+         - −4.0 ≤ [Fe/H] ≤ 0.2
+         - 120
+         - 57
+       * - |V-R|
+         - 0.3 ≤ |V-R| ≤ 0.7
+         - −4.0 ≤ [Fe/H] ≤ 0.1
+         - 55
+         - 85
+       * - |V-J|
+         - 1.0 ≤ |V-J| ≤ 2.4
+         - −4.0 ≤ [Fe/H] ≤ 0.2
+         - 138
+         - 18
+       * - |V-H|
+         - 0.8 ≤ |V-H| ≤ 3.1
+         - −4.0 ≤ [Fe/H] ≤ 0.2
+         - 144
+         - 23
+       * - |V-K|
+         - 1.1 ≤ |V-K| ≤ 3.4
+         - −4.0 ≤ [Fe/H] ≤ 0.2
+         - 145
+         - 23
+       * - |J-K|
+         - 0.1 ≤ |J-K| ≤ 0.9
+         - −4.0 ≤ [Fe/H] ≤ 0.2
+         - 145
+         - 94
+
+    Args:
+        index (string): Name of color index.
+        color (float): Value of color index.
+        FeH (float): Metallicity [Fe/H].
+        extrapolation (bool): Extend the applicable ranges if *True*. Default is
+            *False*.
+    Returns:
+        float: Effective temperature (|Teff|) in K.
+    See also:
+        :func:`_get_dwarf_Teff_GB2009`
+    References:
+        * `González Hernández & Bonifacio, 2009, A&A, 497, 497 <http://adsabs.harvard.edu/abs/2009A&A...497..497G>`_
+
     '''
 
     reference = 'Gonzalez et al., 2009, A&A, 497, 497'
