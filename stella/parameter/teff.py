@@ -119,8 +119,8 @@ def _BV_to_Teff_Flower1996(BV, is_supergiant=False):
     return 10**logTeff
 
 def _get_dwarf_Teff_Alonso1996(index, color, **kwargs):
-    '''Convert color and [Fe/H] to *T*:sub:`eff` for dwarfs and subdwarfs using
-    the calibration relations given by `Alonso+ 1996
+    '''Convert color and [Fe/H] to |Teff| for dwarfs and subdwarfs using the
+    calibration relations given by `Alonso+ 1996
     <http://adsabs.harvard.edu/abs/1996A&A...313..873A>`_.
 
     `Alonso+ 1996 <http://adsabs.harvard.edu/abs/1996A&A...313..873A>`_ provides
@@ -417,8 +417,8 @@ def _get_dwarf_Teff_Alonso1996(index, color, **kwargs):
     return 5040./theta
 
 def _get_giant_Teff_Alonso1999(index, color, **kwargs):
-    '''Convert color and [Fe/H] to *T*:sub:`eff` for giants using the
-    calibration relations given by `Alonso+ 1999
+    '''Convert color and [Fe/H] to |Teff| for giants using the calibration
+    relations given by `Alonso+ 1999
     <http://adsabs.harvard.edu/abs/1999A&AS..140..261A>`_.
 
     `Alonso+ 1999 <http://adsabs.harvard.edu/abs/1999A&AS..140..261A>`_ provides
@@ -1380,8 +1380,8 @@ def _get_dwarf_Teff_Ramirez2005(index, color, **kwargs):
     return Teff
 
 def _get_giant_Teff_Ramirez2005(index, color, **kwargs):
-    '''Convert color and [Fe/H] to *T*:sub:`eff` for giants using the
-    calibration relations given by `Ramirez+ 2005
+    '''Convert color index and [Fe/H] to |Teff| for giants using the calibration
+    relations given by `Ramirez+ 2005
     <http://adsabs.harvard.edu/abs/2005ApJ...626..465R>`_.
 
     Ramirez et al. 2005 presents calibration relations of |Teff| versus 17 color
@@ -1390,16 +1390,16 @@ def _get_giant_Teff_Ramirez2005(index, color, **kwargs):
     The spectral types range from F0 to K5, or |Teff| range between 4000 K and
     7000 K. Some relations extend to below 4000 K or above 8000 K.
     The color indices include
-    |B-V| in Johnson system,
-    |BT-VT| in Tycho system,
-    |b-y| in Strömgren system,
+    (*B* − *V*) in Johnson system,
+    (*B*:sub:`T` − *V*:sub:`T`) in Tycho system,
+    (*b* − *y*) in Strömgren system,
     (*Y* − *V*) and (*V* − *S*) in Vilnius system,
     (*B*:sub:`2` − *V*:sub:`1`), (*B*:sub:`2` − *G*), and *t* in Geneva system,
     (*V* − *R*:sub:`c`), (*V* − *I*:sub:`c`), and (*R*:sub:`c` − *I*:sub:`c`) in
     Johnson-Cousins system,
     *C*\ (42 − 45) and *C*\ (42 − 48) in DDO system,
-    |V-J|, |V-H|, and |V-K| in Johnson-2MASS system,
-    and (*V*:sub:`T` − *K*) in Tycho-2MASS system.
+    (*V* − *J*), (*V* − *H*), and (*V* − *K*:sub:`s`) in Johnson-2MASS system,
+    and (*V*:sub:`T` − *K*:sub:`s`) in Tycho-2MASS system.
 
     The applicable ranges of color indices and metallicities for dwarfs, numbers
     of sample stars, and standard deviations of |Teff| are summarized as below
@@ -1414,22 +1414,22 @@ def _get_giant_Teff_Ramirez2005(index, color, **kwargs):
          - [Fe/H]
          - *N*:sub:`star`
          - *σ*\ (|Teff|) (K)
-       * - |B-V|
-         - 0.144 < |B-V| < 1.668 |br|
-           0.664 < |B-V| < 1.558 |br|
-           0.605 < |B-V| < 1.352 |br|
-           0.680 < |B-V| < 1.110
+       * - (*B* − *V*)
+         - 0.144 < (*B* − *V*) < 1.668 |br|
+           0.664 < (*B* − *V*) < 1.558 |br|
+           0.605 < (*B* − *V*) < 1.352 |br|
+           0.680 < (*B* − *V*) < 1.110
          - −0.5 < [Fe/H] < +0.5  |br|
            −1.5 < [Fe/H] < −0.5  |br|
            −2.5 < [Fe/H] < −1.5  |br|
            −4.0 < [Fe/H] < −2.5
          - 269
          - 51
-       * - |b-y|
-         - 0.053 < |b-y| < 1.077 |br|
-           0.309 < |b-y| < 0.893 |br|
-           0.388 < |b-y| < 0.702 |br|
-           0.404 < |b-y| < 0.683
+       * - (*b* − *y*)
+         - 0.053 < (*b* − *y*) < 1.077 |br|
+           0.309 < (*b* − *y*) < 0.893 |br|
+           0.388 < (*b* − *y*) < 0.702 |br|
+           0.404 < (*b* − *y*) < 0.683
          - −0.5 < [Fe/H] < +0.5  |br|
            −1.5 < [Fe/H] < −0.5  |br|
            −2.5 < [Fe/H] < −1.5  |br|
@@ -1546,33 +1546,33 @@ def _get_giant_Teff_Ramirez2005(index, color, **kwargs):
            −4.0 < [Fe/H] < −2.5
          - 191
          - 49
-       * - |BT-VT|
-         - 0.123 < |BT-VT| < 1.953 |br|
-           0.424 < |BT-VT| < 1.644 |br|
-           0.534 < |BT-VT| < 1.356 |br|
-           0.465 < |BT-VT| < 1.026
+       * - (*B*:sub:`T` − *V*:sub:`T`)
+         - 0.123 < (*B*:sub:`T` − *V*:sub:`T`) < 1.953 |br|
+           0.424 < (*B*:sub:`T` − *V*:sub:`T`) < 1.644 |br|
+           0.534 < (*B*:sub:`T` − *V*:sub:`T`) < 1.356 |br|
+           0.465 < (*B*:sub:`T` − *V*:sub:`T`) < 1.026
          - −0.5 < [Fe/H] < +0.5    |br|
            −1.5 < [Fe/H] < −0.5    |br|
            −2.5 < [Fe/H] < −1.5    |br|
            −4.0 < [Fe/H] < −2.5
          - 261
          - 82
-       * - |V-J|
-         - 1.259 < |V-J| < 2.400 |br|
-           1.030 < |V-J| < 3.418 |br|
-           1.033 < |V-J| < 2.679 |br|
-           0.977 < |V-J| < 2.048
+       * - (*V* − *J*)
+         - 1.259 < (*V* − *J*) < 2.400 |br|
+           1.030 < (*V* − *J*) < 3.418 |br|
+           1.033 < (*V* − *J*) < 2.679 |br|
+           0.977 < (*V* − *J*) < 2.048
          - −0.5 < [Fe/H] < +0.5  |br|
            −1.5 < [Fe/H] < −0.5  |br|
            −2.5 < [Fe/H] < −1.5  |br|
            −4.0 < [Fe/H] < −2.5
          - 163
          - 38
-       * - |V-H|
-         - 1.194 < |V-H| < 3.059 |br|
-           1.293 < |V-H| < 4.263 |br|
-           1.273 < |V-H| < 3.416 |br|
-           1.232 < |V-H| < 2.625
+       * - (*V* − *H*)
+         - 1.194 < (*V* − *H*) < 3.059 |br|
+           1.293 < (*V* − *H*) < 4.263 |br|
+           1.273 < (*V* − *H*) < 3.416 |br|
+           1.232 < (*V* − *H*) < 2.625
          - −0.5 < [Fe/H] < +0.5  |br|
            −1.5 < [Fe/H] < −0.5  |br|
            −2.5 < [Fe/H] < −1.5  |br|
@@ -1956,17 +1956,19 @@ def _get_giant_Teff_Ramirez2005(index, color, **kwargs):
     return Teff
 
 def _get_dwarf_Teff_Masana2006(index, color, **kwargs):
-    '''Convert color, [Fe/H] and log\ *g* to *T*:sub:`eff` for dwarfs using the
+    '''Convert color, [Fe/H] and log\ *g* to |Teff| for dwarfs using the
     calibration relations given by `Masana+ 2006
     <http://adsabs.harvard.edu/abs/2006A&A...450..735M>`_.
 
-    Masana et al. 2006 presents calibration relations of |Teff| versus |V-K|,
-    metallicities ([M/H]), and surface gravities (log\ *g*) for FGK stars.
-    *K* photometry are in 2MASS system.
-    The standard deviation of |Teff| are ~20 K for stars with 0.35 < |V-K| <
-    1.15, and ~25 K for stars with 1.15 ≤ |V-K| < 3.0.
+    Masana et al. 2006 presents calibration relations of |Teff| versus
+    (*V* − *K*:sub:`s`), metallicities ([M/H]), and surface gravities (log\ *g*)
+    for FGK stars.
+    The *K*:sub:`s` photometry are in 2MASS system.
+    The standard deviation of |Teff| are ~20 K for stars with 0.35 <
+    (*V* − *K*:sub:`s`) < 1.15, and ~25 K for stars with 1.15 ≤
+    (*V* − *K*:sub:`s`) < 3.0.
 
-    The applicable ranges of |V-K| and [M/H] are:
+    The applicable ranges of (*V* − *K*:sub:`s`) and [M/H] are:
 
     .. list-table::
        :widths: 10, 20, 20
@@ -1975,18 +1977,18 @@ def _get_dwarf_Teff_Masana2006(index, color, **kwargs):
        * - color index
          - color
          - [M/H]
-       * - |V-K|
-         - 0.35 < |V-K| < 2.8 |br|
-           0.4  < |V-K| < 3.0 |br|
-           0.5  < |V-K| < 2.9 |br|
-           1.0  < |V-K| < 2.9
+       * - (*V* − *K*:sub:`s`)
+         - 0.35 < (*V* − *K*:sub:`s`) < 2.8 |br|
+           0.4  < (*V* − *K*:sub:`s`) < 3.0 |br|
+           0.5  < (*V* − *K*:sub:`s`) < 2.9 |br|
+           1.0  < (*V* − *K*:sub:`s`) < 2.9
          - +0.5 ≤ [M/H] < 0.5  |br|
            −0.5 ≤ [M/H] < 0.0  |br|
            −1.5 ≤ [M/H] < −0.5 |br|
            −3.0 ≤ [M/H] < −1.5
 
     Args:
-        index (string): Name of color index. Must be *"V-K"*
+        index (string): Name of color index. Must be *"V-Ks"*
         color (float): Value of color index.
         FeH (float): Metallicity [M/H].
         logg (float): Surface gravity (log\ *g*).
@@ -2000,7 +2002,7 @@ def _get_dwarf_Teff_Masana2006(index, color, **kwargs):
     '''
     reference = 'Masana et al., 2006, A&A, 450, 735'
 
-    if index != 'V-K':
+    if index != 'V-Ks':
         raise ColorIndexError(index, reference)
 
     try:
@@ -2031,14 +2033,14 @@ def _get_dwarf_Teff_Masana2006(index, color, **kwargs):
                     + 0.0298*FeH - 0.0009*FeH**2 \
                     - 0.0184*color*FeH - 0.0028*logg
         else:
-            raise ParamRangeError('V-K', color, reference)
+            raise ParamRangeError('V-Ks', color, reference)
         return 5040./theta
     else:
-        raise ParamRangeError('V-K', color, reference)
+        raise ParamRangeError('V-Ks', color, reference)
 
 def _get_dwarf_Teff_GB2009(index, color, **kwargs):
-    '''Convert color to *T*:sub:`eff` for dwarfs using the calibration relations
-    given by `González Hernández & Bonifacio, 2009
+    '''Convert color to |Teff| for dwarfs using the calibration relations given
+    by `González Hernández & Bonifacio, 2009
     <http://adsabs.harvard.edu/abs/2009A&A...497..497G>`_.
     
     González Hernández & Bonifacio 2009 presents |Teff| scales of the infrared
@@ -2061,44 +2063,45 @@ def _get_dwarf_Teff_GB2009(index, color, **kwargs):
          - [Fe/H]
          - *N*:sub:`star`
          - *σ*\ (|Teff|) (K)
-       * - |B-V|
-         - 0.2 ≤ |B-V| ≤ 1.3
+       * - (*B* − *V*)
+         - 0.2 ≤ (*B* − *V*) ≤ 1.3
          - −3.5 ≤ [Fe/H] ≤ 0.5
          - 418
          - 76
-       * - |V-R|
-         - 0.2 ≤ |V-R| ≤ 0.8
+       * - (*V* − *R*:sub:`c`)
+         - 0.2 ≤ (*V* − *R*:sub:`c`) ≤ 0.8
          - −3.1 ≤ [Fe/H] ≤ 0.3
          - 164
          - 45
-       * - |V-I|
-         - 0.5 ≤ |V-I| ≤ 1.4
+       * - (*V* − *I*:sub:`c`)
+         - 0.5 ≤ (*V* − *I*:sub:`c`) ≤ 1.4
          - −3.1 ≤ [Fe/H] ≤ 0.3
          - 164
          - 52
-       * - |V-J|
-         - 0.5 ≤ |V-J| ≤ 2.3
+       * - (*V* − *J*)
+         - 0.5 ≤ (*V* − *J*) ≤ 2.3
          - −3.5 ≤ [Fe/H] ≤ 0.5
          - 430
          - 36
-       * - |V-H|
-         - 0.6 ≤ |V-H| ≤ 2.8
+       * - (*V* − *H*)
+         - 0.6 ≤ (*V* − *H*) ≤ 2.8
          - −3.5 ≤ [Fe/H] ≤ 0.5
          - 426
          - 30
-       * - |V-K|
-         - 0.7 ≤ |V-K| ≤ 3.0
+       * - (*V* − *K*:sub:`s`)
+         - 0.7 ≤ (*V* − *K*:sub:`s`) ≤ 3.0
          - −3.5 ≤ [Fe/H] ≤ 0.5
          - 431
          - 32
-       * - |J-K|
-         - 0.1 ≤ |J-K| ≤ 0.8
+       * - (*J* − *K*:sub:`s`)
+         - 0.1 ≤ (*J* − *K*:sub:`s`) ≤ 0.8
          - −3.5 ≤ [Fe/H] ≤ 0.5
          - 436
          - 139
 
     Args:
-        index (string): Name of color index.
+        index (string): Name of color index. Available values include *"B-V"*,
+            *"V-R"*, *"V-I"*, *"V-J"*, *"V-H"*, *"V-Ks"*, and *"J-Ks"*.
         color (float): Value of color index.
         FeH (float): Metallicity [Fe/H].
         extrapolation (bool): Extend the applicable ranges if *True*. Default is
@@ -2152,16 +2155,16 @@ def _get_dwarf_Teff_GB2009(index, color, **kwargs):
     return 5040./theta
 
 def _get_giant_Teff_GB2009(index, color, **kwargs):
-    '''Convert color to *T*:sub:`eff` for giants using the calibration relations
-    given by `González Hernández & Bonifacio, 2009
+    '''Convert color to |Teff| for giants using the calibration relations given
+    by `González Hernández & Bonifacio, 2009
     <http://adsabs.harvard.edu/abs/2009A&A...497..497G>`_.
     
     González Hernández & Bonifacio 2009 presents |Teff| scales of the infrared
     flux method (IRFM) using the 2MASS catalogue.
     The 2MASS *JHK*:sub:`s` colors are computed using the fluxes from ATLAS
     models.
-    The photometric data include *BV* in Johnson sytsem, *RI* in Cousins system,
-    and *JHK*:sub:`s` in 2MASS catalogue.
+    The photometric data include *BV* in Johnson sytsem, *R*:sub:`c`\ *I*:sub:`c`
+    in Cousins system, and *JHK*:sub:`s` in 2MASS catalogue.
 
     The applicable ranges of color indices and metallicities for giants, numbers
     of sample stars, and the standard deviations of |Teff| are summarized as
@@ -2176,39 +2179,40 @@ def _get_giant_Teff_GB2009(index, color, **kwargs):
          - [Fe/H]
          - *N*:sub:`star`
          - *σ*\ (|Teff|) (K)
-       * - |B-V|
-         - 0.3 ≤ |B-V| ≤ 1.4
+       * - (*B* − *V*)
+         - 0.3 ≤ (*B* − *V*) ≤ 1.4
          - −4.0 ≤ [Fe/H] ≤ 0.2
          - 120
          - 57
-       * - |V-R|
-         - 0.3 ≤ |V-R| ≤ 0.7
+       * - (*V* − *R*:sub:`c`)
+         - 0.3 ≤ (*V* − *R*:sub:`c`) ≤ 0.7
          - −4.0 ≤ [Fe/H] ≤ 0.1
          - 55
          - 85
-       * - |V-J|
-         - 1.0 ≤ |V-J| ≤ 2.4
+       * - (*V* − *J*)
+         - 1.0 ≤ (*V* − *J*) ≤ 2.4
          - −4.0 ≤ [Fe/H] ≤ 0.2
          - 138
          - 18
-       * - |V-H|
-         - 0.8 ≤ |V-H| ≤ 3.1
+       * - (*V* − *H*)
+         - 0.8 ≤ (*V* − *H*) ≤ 3.1
          - −4.0 ≤ [Fe/H] ≤ 0.2
          - 144
          - 23
-       * - |V-K|
-         - 1.1 ≤ |V-K| ≤ 3.4
+       * - (*V* − *K*:sub:`s`)
+         - 1.1 ≤ (*V* − *K*:sub:`s`) ≤ 3.4
          - −4.0 ≤ [Fe/H] ≤ 0.2
          - 145
          - 23
-       * - |J-K|
-         - 0.1 ≤ |J-K| ≤ 0.9
+       * - (*J* − *K*:sub:`s`)
+         - 0.1 ≤ (*J* − *K*:sub:`s`) ≤ 0.9
          - −4.0 ≤ [Fe/H] ≤ 0.2
          - 145
          - 94
 
     Args:
-        index (string): Name of color index.
+        index (string): Name of color index. Available values include *"B-V"*,
+            *"V-R"*, *"V-J"*, *"V-H"*, *"V-Ks"*, and *"J-Ks"*.
         color (float): Value of color index.
         FeH (float): Metallicity [Fe/H].
         extrapolation (bool): Extend the applicable ranges if *True*. Default is
