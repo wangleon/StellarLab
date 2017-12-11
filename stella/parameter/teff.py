@@ -2040,10 +2040,73 @@ def _get_dwarf_Teff_GB2009(index, color, **kwargs):
     '''Convert color to *T*:sub:`eff` for dwarfs using the calibration relations
     given by `González Hernández & Bonifacio, 2009
     <http://adsabs.harvard.edu/abs/2009A&A...497..497G>`_.
+    
+    González Hernández & Bonifacio 2009 presents |Teff| scales of the infrared
+    flux method (IRFM) using the 2MASS catalogue.
+    The 2MASS *JHK*:sub:`s` colors are computed using the fluxes from ATLAS
+    models.
+    The photometric data include *BV* in Johnson sytsem, *RI* in Cousins system,
+    and *JHK*:sub:`s` in 2MASS catalogue.
 
-    References
-    ----------
-    * `González Hernández & Bonifacio, 2009, A&A, 497, 497 <http://adsabs.harvard.edu/abs/2009A&A...497..497G>`_
+    The applicable ranges of color indices and metallicities for dwarfs, numbers
+    of sample stars, and the standard deviations of |Teff| are summarized as
+    below (Table 5 of González Hernández & Bonifacio 2009):
+
+    .. list-table::
+       :widths: 10, 20, 20, 10, 10
+       :header-rows: 1
+
+       * - color index
+         - color
+         - [Fe/H]
+         - *N*:sub:`star`
+         - *σ*\ (|Teff|) (K)
+       * - |B-V|
+         - 0.2 ≤ |B-V| ≤ 1.3
+         - −3.5 ≤ [Fe/H] ≤ 0.5
+         - 418
+         - 76
+       * - |V-R|
+         - 0.2 ≤ |V-R| ≤ 0.8
+         - −3.1 ≤ [Fe/H] ≤ 0.3
+         - 164
+         - 45
+       * - |V-I|
+         - 0.5 ≤ |V-I| ≤ 1.4
+         - −3.1 ≤ [Fe/H] ≤ 0.3
+         - 164
+         - 52
+       * - |V-J|
+         - 0.5 ≤ |V-J| ≤ 2.3
+         - −3.5 ≤ [Fe/H] ≤ 0.5
+         - 430
+         - 36
+       * - |V-H|
+         - 0.6 ≤ |V-H| ≤ 2.8
+         - −3.5 ≤ [Fe/H] ≤ 0.5
+         - 426
+         - 30
+       * - |V-K|
+         - 0.7 ≤ |V-K| ≤ 3.0
+         - −3.5 ≤ [Fe/H] ≤ 0.5
+         - 431
+         - 32
+       * - |J-K|
+         - 0.1 ≤ |J-K| ≤ 0.8
+         - −3.5 ≤ [Fe/H] ≤ 0.5
+         - 436
+         - 139
+
+    Args:
+        index (string): Name of color index.
+        color (float): Value of color index.
+        FeH (float): Metallicity [Fe/H].
+        extrapolation (bool): Extend the applicable ranges if *True*. Default is
+            *False*.
+    Returns:
+        float: Effective temperature (|Teff|) in K.
+    References:
+        * `González Hernández & Bonifacio, 2009, A&A, 497, 497 <http://adsabs.harvard.edu/abs/2009A&A...497..497G>`_
     '''
 
     reference = 'Gonzalez et al., 2009, A&A, 497, 497'
@@ -2247,8 +2310,8 @@ def _get_dwarf_Teff_Casagrande2010(index, color, **kwargs):
     color indices and metallicities for dwarfs and subgiants.
     The |Teff| are derived with the infrared flux method (IRFM).
     The photometric data include *BV* in Johnson system, *by* in Strömgren
-    system, *B*:sub:`T`\ *V*:sub:`T` in Tycho system, *RI* in Cousins system, and
-    *JHK* in 2MASS catalogue.
+    system, *B*:sub:`T`\ *V*:sub:`T` in Tycho system, *RI* in Cousins system,
+    and *JHK*:sub:`s` in 2MASS catalogue.
 
     The applicable ranges of color indices and metallicities for dwarfs, numbers
     of sample stars, and standard deviations of |Teff| are summarized as below
