@@ -87,7 +87,7 @@ def _BV_to_Teff_Flower1996(BV, is_supergiant=False):
     correct version in their Table 2.
 
     Args:
-        BV (float): Value of |B-V|.
+        BV (float): Value of (*B* − *V*).
         is_supergiant (bool): Whether the star is a super giant. Default is
             *False*.
     Returns:
@@ -126,13 +126,14 @@ def _get_dwarf_Teff_Alonso1996(index, color, **kwargs):
     `Alonso+ 1996 <http://adsabs.harvard.edu/abs/1996A&A...313..873A>`_ provides
     calibration relations of |Teff| versus different color indices and
     metallicities for low main sequence stars (F0-K5).
-    The color indices include |B-V|, |R-I|, |V-R|, |V-I|, |V-K|, |b-y| and
-    *c*:sub:`1`, *β*, |J-K|, and |J-H|.
+    The color indices include (*B* − *V*), (*R* − *I*), (*V* − *R*),
+    (*V* − *I*), (*V* − *K*), (*b* − *y*) and *c*:sub:`1`, *β*, (*J* − *K*),
+    and (*J* − *H*).
     The *VRI* magnitudes are in Johnson system, and *JHK* magnitudes are in
     *TCS* system.
-    The relations of |Teff| v.s. |V-K| have the smallest standard deviations on
-    |Teff|, and the relations of |Teff| v.s. |J-K|\ :sub:`TCS` are free of
-    [Fe/H].
+    The relations of |Teff| v.s. (*V* − *K*) have the smallest standard
+    deviations on |Teff|, and the relations of |Teff| v.s. (*J* − *K*) are free
+    of [Fe/H].
 
     The applicable ranges of color indices and metallicities, numbers of sample
     stars, and standard deviations of |Teff| are:
@@ -146,85 +147,85 @@ def _get_dwarf_Teff_Alonso1996(index, color, **kwargs):
          - [Fe/H]
          - *N*:sub:`star`
          - *σ*\ (|Teff|) (K)
-       * - |B-V|
-         - 0.20 ≤ |B-V| ≤ 1.5   |br|
-           0.30 ≤ |B-V| ≤ 1.0   |br|
-           0.35 ≤ |B-V| ≤ 0.9   |br|
-           0.30 ≤ |B-V| ≤ 0.8
+       * - (*B* − *V*)
+         - 0.20 ≤ (*B* − *V*) ≤ 1.5   |br|
+           0.30 ≤ (*B* − *V*) ≤ 1.0   |br|
+           0.35 ≤ (*B* − *V*) ≤ 0.9   |br|
+           0.30 ≤ (*B* − *V*) ≤ 0.8
          - −0.5 < [Fe/H] ≤ +0.5 |br|
            −1.5 < [Fe/H] ≤ −0.5 |br|
            −2.5 < [Fe/H] ≤ −1.5 |br|
            −3.5 < [Fe/H] ≤ −2.5
          - 410
          - 130
-       * - |R-I|
-         - 0.10 ≤ |R-I| ≤ 1.00  |br|
-           0.20 ≤ |R-I| ≤ 0.65  |br|
-           0.25 ≤ |R-I| ≤ 0.55  |br|
-           0.25 ≤ |R-I| ≤ 0.50
+       * - (*R* − *I*)
+         - 0.10 ≤ (*R* − *I*) ≤ 1.00  |br|
+           0.20 ≤ (*R* − *I*) ≤ 0.65  |br|
+           0.25 ≤ (*R* − *I*) ≤ 0.55  |br|
+           0.25 ≤ (*R* − *I*) ≤ 0.50
          - −0.5 < [Fe/H] ≤ +0.5 |br|
            −1.5 < [Fe/H] ≤ −0.5 |br|
            −2.5 < [Fe/H] ≤ −1.5 |br|
            −3.5 < [Fe/H] ≤ −2.5
          - 163
          - 135
-       * - |V-R|
-         - 0.25 ≤ |V-R| ≤ 0.6   |br|
-           0.30 ≤ |V-R| ≤ 0.6   |br|
-           0.40 ≤ |V-R| ≤ 0.6   |br|
-           0.40 ≤ |V-R| ≤ 0.6
+       * - (*V* − *R*)
+         - 0.25 ≤ (*V* − *R*) ≤ 0.6   |br|
+           0.30 ≤ (*V* − *R*) ≤ 0.6   |br|
+           0.40 ≤ (*V* − *R*) ≤ 0.6   |br|
+           0.40 ≤ (*V* − *R*) ≤ 0.6
          - −0.5 < [Fe/H] ≤ +0.5 |br|
            −1.5 < [Fe/H] ≤ −0.5 |br|
            −2.5 < [Fe/H] ≤ −1.5 |br|
            −3.5 < [Fe/H] ≤ −2.5
          - 102
          - 95
-       * - |V-R|
-         - 0.6 ≤ |V-R| ≤ 1.40   |br|
-           0.6 ≤ |V-R| ≤ 0.75   |br|
-           0.6 ≤ |V-R| ≤ 0.75   |br|
-           0.6 ≤ |V-R| ≤ 0.70
+       * - (*V* − *R*)
+         - 0.6 ≤ (*V* − *R*) ≤ 1.40   |br|
+           0.6 ≤ (*V* − *R*) ≤ 0.75   |br|
+           0.6 ≤ (*V* − *R*) ≤ 0.75   |br|
+           0.6 ≤ (*V* − *R*) ≤ 0.70
          - −0.5 < [Fe/H] ≤ +0.5 |br|
            −1.5 < [Fe/H] ≤ −0.5 |br|
            −2.5 < [Fe/H] ≤ −1.5 |br|
            −3.5 < [Fe/H] ≤ −2.5
          - 61
          - 115
-       * - |V-I|
-         - 0.50 ≤ |V-I| ≤ 2.50  |br|
-           0.60 ≤ |V-I| ≤ 1.30  |br|
-           0.70 ≤ |V-I| ≤ 1.30  |br|
-           0.65 ≤ |V-I| ≤ 1.20
+       * - (*V* − *I*)
+         - 0.50 ≤ (*V* − *I*) ≤ 2.50  |br|
+           0.60 ≤ (*V* − *I*) ≤ 1.30  |br|
+           0.70 ≤ (*V* − *I*) ≤ 1.30  |br|
+           0.65 ≤ (*V* − *I*) ≤ 1.20
          - −0.5 < [Fe/H] ≤ +0.5 |br|
            −1.5 < [Fe/H] ≤ −0.5 |br|
            −2.5 < [Fe/H] ≤ −1.5 |br|
            −3.5 < [Fe/H] ≤ −2.5
          - 163
          - 113
-       * - |V-K|
-         - 0.4 ≤ |V-K| ≤ 1.6    |br|
-           0.8 ≤ |V-K| ≤ 1.6    |br|
-           1.1 ≤ |V-K| ≤ 1.6    |br|
-           1.1 ≤ |V-K| ≤ 1.6
+       * - (*V* − *K*)
+         - 0.4 ≤ (*V* − *K*) ≤ 1.6    |br|
+           0.8 ≤ (*V* − *K*) ≤ 1.6    |br|
+           1.1 ≤ (*V* − *K*) ≤ 1.6    |br|
+           1.1 ≤ (*V* − *K*) ≤ 1.6
          - −0.5 < [Fe/H] ≤ +0.5 |br|
            −1.5 < [Fe/H] ≤ −0.5 |br|
            −2.5 < [Fe/H] ≤ −1.5 |br|
            −3.5 < [Fe/H] ≤ −2.5
          - 286
          - 23
-       * - |V-K|
-         - 1.6 ≤ |V-K| ≤ 4.1    |br|
-           1.6 ≤ |V-K| ≤ 3.0    |br|
-           1.6 ≤ |V-K| ≤ 2.4    |br|
-           1.6 ≤ |V-K| ≤ 2.2
+       * - (*V* − *K*)
+         - 1.6 ≤ (*V* − *K*) ≤ 4.1    |br|
+           1.6 ≤ (*V* − *K*) ≤ 3.0    |br|
+           1.6 ≤ (*V* − *K*) ≤ 2.4    |br|
+           1.6 ≤ (*V* − *K*) ≤ 2.2
          - −0.5 < [Fe/H] ≤ +0.5 |br|
            −1.5 < [Fe/H] ≤ −0.5 |br|
            −2.5 < [Fe/H] ≤ −1.5 |br|
            −3.5 < [Fe/H] ≤ −2.5
          - 195
          - 37
-       * - |b-y|, *c*:sub:`1`
-         - 0.2 ≤ |b-y| ≤ 0.7
+       * - (*b* − *y*), *c*:sub:`1`
+         - 0.2 ≤ (*b* − *y*) ≤ 0.7
          - −3.5 < [Fe/H] ≤ +0.5
          - 330
          - 110
@@ -239,22 +240,22 @@ def _get_dwarf_Teff_Alonso1996(index, color, **kwargs):
            −3.5 < [Fe/H] ≤ −2.5
          - 289
          - 141
-       * - |J-K|\ :sub:`TCS`
-         - 0.05 ≤ |J-K| ≤ 0.85  |br|
-           0.15 ≤ |J-K| ≤ 0.65  |br|
-           0.25 ≤ |J-K| ≤ 0.75  |br|
-           0.20 ≤ |J-K| ≤ 0.60
+       * - (*J* − *K*)\ :sub:`TCS`
+         - 0.05 ≤ (*J* − *K*) ≤ 0.85  |br|
+           0.15 ≤ (*J* − *K*) ≤ 0.65  |br|
+           0.25 ≤ (*J* − *K*) ≤ 0.75  |br|
+           0.20 ≤ (*J* − *K*) ≤ 0.60
          - −0.5 < [Fe/H] ≤ +0.5 |br|
            −1.5 < [Fe/H] ≤ −0.5 |br|
            −2.5 < [Fe/H] ≤ −1.5 |br|
            −3.5 < [Fe/H] ≤ −2.5
          - 410
          - 144
-       * - |J-H|\ :sub:`TCS`
-         - 0.00 ≤ |J-H| ≤ 0.65  |br|
-           0.15 ≤ |J-H| ≤ 0.55  |br|
-           0.20 ≤ |J-H| ≤ 0.60  |br|
-           0.15 ≤ |J-H| ≤ 0.45
+       * - (*J* − *H*)\ :sub:`TCS`
+         - 0.00 ≤ (*J* − *H*) ≤ 0.65  |br|
+           0.15 ≤ (*J* − *H*) ≤ 0.55  |br|
+           0.20 ≤ (*J* − *H*) ≤ 0.60  |br|
+           0.15 ≤ (*J* − *H*) ≤ 0.45
          - −0.5 < [Fe/H] ≤ +0.5 |br|
            −1.5 < [Fe/H] ≤ −0.5 |br|
            −2.5 < [Fe/H] ≤ −1.5 |br|
@@ -425,14 +426,15 @@ def _get_giant_Teff_Alonso1999(index, color, **kwargs):
     calibration relations of |Teff| versus different color indices and
     metallicities for giant stars with spectral types from F0 to K5.
     Their |Teff| are derived with the infrared flux method (IRFM).
-    The color indices include |B-V|, |B-V|, |V-R|, |V-I|, |R-I|, |V-K|, |J-H|,
-    |J-K|, |V-L'|, |I-K|, |b-y|, and |u-b|.
+    The color indices include (*U* − *V*), (*B* − *V*), (*V* − *R*),
+    (*V* − *I*), (*R* − *I*), (*V* − *K*), (*J* − *H*), (*J* − *K*),
+    (*V* − *L'*), (*I* − *K*), (*b* − *y*), and (*u* − *b*).
     The *UBVRI* magnitudes are in Johnson system, and *JHKL'* magnitudes are in
     TCS system.
-    The most precise calibration relation is that of |Teff| v.s. |V-K|, with the
-    standard deviations on |Teff| of only 25 K (for |V-K| > 2.0), or 40 K (for
-    |V-K| < 2.5).
-    The relations of |Teff| v.s. |V-I| and |V-L'| are free of [Fe/H].
+    The most precise calibration relation is that of |Teff| v.s. (*V* − *K*),
+    with the standard deviations on |Teff| of only 25 K (for *V* − *K* > 2.0),
+    or 40 K (for *V* − *K* < 2.5).
+    The relations of |Teff| v.s. (*V* − *I*) and (*V* − *L'*) are free of [Fe/H].
 
     The applicable ranges of color indices and metallicities, numbers of sample
     stars, and standard deviations of |Teff| are:
@@ -446,168 +448,168 @@ def _get_giant_Teff_Alonso1999(index, color, **kwargs):
          - [Fe/H]
          - *N*:sub:`star`
          - *σ*\ (|Teff|) (K)
-       * - |U-V|
-         - 0.40 ≤ |U-V| ≤ 1.20  |br|
-           0.35 ≤ |U-V| ≤ 1.20  |br|
-           0.40 ≤ |U-V| ≤ 1.20  |br|
-           0.50 ≤ |U-V| ≤ 1.20
+       * - (*U* − *V*)
+         - 0.40 ≤ (*U* − *V*) ≤ 1.20  |br|
+           0.35 ≤ (*U* − *V*) ≤ 1.20  |br|
+           0.40 ≤ (*U* − *V*) ≤ 1.20  |br|
+           0.50 ≤ (*U* − *V*) ≤ 1.20
          - −0.5 < [Fe/H] ≤ +0.2 |br|
            −1.5 < [Fe/H] ≤ −0.5 |br|
            −2.5 < [Fe/H] ≤ −1.5 |br|
            −3.0 < [Fe/H] ≤ −2.5
          - 127
          - 164
-       * - |U-V|
-         - 1.50 ≤ |U-V| ≤ 3.50  |br|
-           1.50 ≤ |U-V| ≤ 3.50  |br|
-           1.50 ≤ |U-V| ≤ 3.25
+       * - (*U* − *V*)
+         - 1.50 ≤ (*U* − *V*) ≤ 3.50  |br|
+           1.50 ≤ (*U* − *V*) ≤ 3.50  |br|
+           1.50 ≤ (*U* − *V*) ≤ 3.25
          - −0.5 < [Fe/H] ≤ +0.2 |br|
            −1.5 < [Fe/H] ≤ −0.5 |br|
            −2.5 < [Fe/H] ≤ −1.5
          - 283
          - 80
-       * - |B-V|
-         - 0.20 ≤ |B-V| ≤ 0.80  |br|
-           0.35 ≤ |B-V| ≤ 0.80  |br|
-           0.35 ≤ |B-V| ≤ 0.80  |br|
-           0.50 ≤ |B-V| ≤ 0.80
+       * - (*B* − *V*)
+         - 0.20 ≤ (*B* − *V*) ≤ 0.80  |br|
+           0.35 ≤ (*B* − *V*) ≤ 0.80  |br|
+           0.35 ≤ (*B* − *V*) ≤ 0.80  |br|
+           0.50 ≤ (*B* − *V*) ≤ 0.80
          - −0.5 < [Fe/H] ≤ +0.2 |br|
            −1.5 < [Fe/H] ≤ −0.5 |br|
            −2.5 < [Fe/H] ≤ −1.5 |br|
            −3.0 < [Fe/H] ≤ −2.5
          - 122
          - 167
-       * - |B-V|
-         - 0.70 ≤ |B-V| ≤ 1.90  |br|
-           0.70 ≤ |B-V| ≤ 1.80  |br|
-           0.70 ≤ |B-V| ≤ 1.35  |br|
-           0.70 ≤ |B-V| ≤ 1.00
+       * - (*B* − *V*)
+         - 0.70 ≤ (*B* − *V*) ≤ 1.90  |br|
+           0.70 ≤ (*B* − *V*) ≤ 1.80  |br|
+           0.70 ≤ (*B* − *V*) ≤ 1.35  |br|
+           0.70 ≤ (*B* − *V*) ≤ 1.00
          - −0.5 < [Fe/H] ≤ +0.2 |br|
            −1.5 < [Fe/H] ≤ −0.5 |br|
            −2.5 < [Fe/H] ≤ −1.5 |br|
            −3.0 < [Fe/H] ≤ −2.5
          - 416
          - 96
-       * - |V-R|
-         - 0.15 ≤ |V-R| ≤ 1.70  |br|
-           0.45 ≤ |V-R| ≤ 1.50  |br|
-           0.50 ≤ |V-R| ≤ 1.00  |br|
-           0.55 ≤ |V-R| ≤ 0.85
+       * - (*V* − *R*)
+         - 0.15 ≤ (*V* − *R*) ≤ 1.70  |br|
+           0.45 ≤ (*V* − *R*) ≤ 1.50  |br|
+           0.50 ≤ (*V* − *R*) ≤ 1.00  |br|
+           0.55 ≤ (*V* − *R*) ≤ 0.85
          - −0.5 < [Fe/H] ≤ +0.2 |br|
            −1.5 < [Fe/H] ≤ −0.5 |br|
            −2.5 < [Fe/H] ≤ −1.5 |br|
            −3.0 < [Fe/H] ≤ −2.5
          - 248
          - 150
-       * - |V-I|
-         - 0.20 ≤ |V-I| ≤ 2.90  |br|
-           0.80 ≤ |V-I| ≤ 2.00  |br|
-           0.85 ≤ |V-I| ≤ 2.20  |br|
-           1.00 ≤ |V-I| ≤ 1.70
+       * - (*V* − *I*)
+         - 0.20 ≤ (*V* − *I*) ≤ 2.90  |br|
+           0.80 ≤ (*V* − *I*) ≤ 2.00  |br|
+           0.85 ≤ (*V* − *I*) ≤ 2.20  |br|
+           1.00 ≤ (*V* − *I*) ≤ 1.70
          - −0.5 < [Fe/H] ≤ +0.2 |br|
            −1.5 < [Fe/H] ≤ −0.5 |br|
            −2.5 < [Fe/H] ≤ −1.5 |br|
            −3.0 < [Fe/H] ≤ −2.5
          - 214
          - 125
-       * - |R-I|
-         - 0.15 ≤ |R-I| ≤ 1.40  |br|
-           0.25 ≤ |R-I| ≤ 0.80  |br|
-           0.35 ≤ |R-I| ≤ 0.70  |br|
-           0.40 ≤ |R-I| ≤ 0.65
+       * - (*R* − *I*)
+         - 0.15 ≤ (*R* − *I*) ≤ 1.40  |br|
+           0.25 ≤ (*R* − *I*) ≤ 0.80  |br|
+           0.35 ≤ (*R* − *I*) ≤ 0.70  |br|
+           0.40 ≤ (*R* − *I*) ≤ 0.65
          - −0.5 < [Fe/H] ≤ +0.2 |br|
            −1.5 < [Fe/H] ≤ −0.5 |br|
            −2.5 < [Fe/H] ≤ −1.5 |br|
            −3.0 < [Fe/H] ≤ −2.5
          - 217
          - 150
-       * - |V-K|
-         - 0.20 ≤ |V-K| ≤ 2.50  |br|
-           1.00 ≤ |V-K| ≤ 2.50  |br|
-           1.20 ≤ |V-K| ≤ 2.50  |br|
-           1.70 ≤ |V-K| ≤ 2.50
+       * - (*V* − *K*)
+         - 0.20 ≤ (*V* − *K*) ≤ 2.50  |br|
+           1.00 ≤ (*V* − *K*) ≤ 2.50  |br|
+           1.20 ≤ (*V* − *K*) ≤ 2.50  |br|
+           1.70 ≤ (*V* − *K*) ≤ 2.50
          - −0.5 < [Fe/H] ≤ +0.2 |br|
            −1.5 < [Fe/H] ≤ −0.5 |br|
            −2.5 < [Fe/H] ≤ −1.5 |br|
            −3.0 < [Fe/H] ≤ −2.5
          - 256
          - 40
-       * - |V-K|
-         - 2.00 ≤ |V-K| ≤ 4.90  |br|
-           2.00 ≤ |V-K| ≤ 4.60  |br|
-           2.00 ≤ |V-K| ≤ 3.40  |br|
-           2.00 ≤ |V-K| ≤ 2.80
+       * - (*V* − *K*)
+         - 2.00 ≤ (*V* − *K*) ≤ 4.90  |br|
+           2.00 ≤ (*V* − *K*) ≤ 4.60  |br|
+           2.00 ≤ (*V* − *K*) ≤ 3.40  |br|
+           2.00 ≤ (*V* − *K*) ≤ 2.80
          - −0.5 < [Fe/H] ≤ +0.2 |br|
            −1.5 < [Fe/H] ≤ −0.5 |br|
            −2.5 < [Fe/H] ≤ −1.5 |br|
            −3.0 < [Fe/H] ≤ −2.5
          - 412
          - 25
-       * - |J-H|
-         - 0.00 ≤ |J-H| ≤ 0.90  |br|
-           0.20 ≤ |J-H| ≤ 0.80  |br|
-           0.30 ≤ |J-H| ≤ 0.70  |br|
-           0.35 ≤ |J-H| ≤ 0.65
+       * - (*J* − *H*)
+         - 0.00 ≤ (*J* − *H*) ≤ 0.90  |br|
+           0.20 ≤ (*J* − *H*) ≤ 0.80  |br|
+           0.30 ≤ (*J* − *H*) ≤ 0.70  |br|
+           0.35 ≤ (*J* − *H*) ≤ 0.65
          - −0.5 < [Fe/H] ≤ +0.2 |br|
            −1.5 < [Fe/H] ≤ −0.5 |br|
            −2.5 < [Fe/H] ≤ −1.5 |br|
            −3.0 < [Fe/H] ≤ −2.5
          - 505
          - 170
-       * - |J-K|
-         - 0.00 ≤ |J-K| ≤ 1.10  |br|
-           0.20 ≤ |J-K| ≤ 1.00  |br|
-           0.30 ≤ |J-K| ≤ 0.90  |br|
-           0.40 ≤ |J-K| ≤ 0.80
+       * - (*J* − *K*)
+         - 0.00 ≤ (*J* − *K*) ≤ 1.10  |br|
+           0.20 ≤ (*J* − *K*) ≤ 1.00  |br|
+           0.30 ≤ (*J* − *K*) ≤ 0.90  |br|
+           0.40 ≤ (*J* − *K*) ≤ 0.80
          - −0.5 < [Fe/H] ≤ +0.2 |br|
            −1.5 < [Fe/H] ≤ −0.5 |br|
            −2.5 < [Fe/H] ≤ −1.5 |br|
            −3.0 < [Fe/H] ≤ −2.5
          - 511
          - 125
-       * - |V-L'|
-         - 0.40 ≤ |V-L'| ≤ 5.00
+       * - (*V* − *L'*)
+         - 0.40 ≤ (*V* − *L'*) ≤ 5.00
          - −0.5 < [Fe/H] ≤ +0.2
          - 122
          - 65
-       * - |I-K|
-         - 0.00 ≤ |I-K| ≤ 1.90  |br|
-           0.50 ≤ |I-K| ≤ 1.60  |br|
-           0.70 ≤ |I-K| ≤ 1.50  |br|
-           0.80 ≤ |I-K| ≤ 1.20
+       * - (*I* − *K*)
+         - 0.00 ≤ (*I* − *K*) ≤ 1.90  |br|
+           0.50 ≤ (*I* − *K*) ≤ 1.60  |br|
+           0.70 ≤ (*I* − *K*) ≤ 1.50  |br|
+           0.80 ≤ (*I* − *K*) ≤ 1.20
          - −0.5 < [Fe/H] ≤ +0.2 |br|
            −1.5 < [Fe/H] ≤ −0.5 |br|
            −2.5 < [Fe/H] ≤ −1.5 |br|
            −3.0 < [Fe/H] ≤ −2.5
          - 213
          - 130
-       * - |b-y|
-         - 0.00 ≤ |b-y| ≤ 0.55  |br|
-           0.30 ≤ |b-y| ≤ 0.55  |br|
-           0.35 ≤ |b-y| ≤ 0.55  |br|
-           0.40 ≤ |b-y| ≤ 0.55
+       * - (*b* − *y*)
+         - 0.00 ≤ (*b* − *y*) ≤ 0.55  |br|
+           0.30 ≤ (*b* − *y*) ≤ 0.55  |br|
+           0.35 ≤ (*b* − *y*) ≤ 0.55  |br|
+           0.40 ≤ (*b* − *y*) ≤ 0.55
          - −0.5 < [Fe/H] ≤ +0.2 |br|
            −1.5 < [Fe/H] ≤ −0.5 |br|
            −2.5 < [Fe/H] ≤ −1.5 |br|
            −3.0 < [Fe/H] ≤ −2.5
          - 118
          - 110
-       * - |b-y|
-         - 0.50 ≤ |b-y| ≤ 1.00  |br|
-           0.50 ≤ |b-y| ≤ 0.90  |br|
-           0.50 ≤ |b-y| ≤ 0.80  |br|
-           0.50 ≤ |b-y| ≤ 0.70
+       * - (*b* − *y*)
+         - 0.50 ≤ (*b* − *y*) ≤ 1.00  |br|
+           0.50 ≤ (*b* − *y*) ≤ 0.90  |br|
+           0.50 ≤ (*b* − *y*) ≤ 0.80  |br|
+           0.50 ≤ (*b* − *y*) ≤ 0.70
          - −0.5 < [Fe/H] ≤ +0.2 |br|
            −1.5 < [Fe/H] ≤ −0.5 |br|
            −2.5 < [Fe/H] ≤ −1.5 |br|
            −3.0 < [Fe/H] ≤ −2.5
          - 169
          - 70
-       * - |u-b|
-         - 1.60 ≤ |u-b| ≤ 4.00  |br|
-           1.60 ≤ |u-b| ≤ 3.70  |br|
-           1.60 ≤ |u-b| ≤ 3.40  |br|
-           1.60 ≤ |u-b| ≤ 2.60
+       * - (*u* − *b*)
+         - 1.60 ≤ (*u* − *b*) ≤ 4.00  |br|
+           1.60 ≤ (*u* − *b*) ≤ 3.70  |br|
+           1.60 ≤ (*u* − *b*) ≤ 3.40  |br|
+           1.60 ≤ (*u* − *b*) ≤ 2.60
          - −0.5 < [Fe/H] ≤ +0.2 |br|
            −1.5 < [Fe/H] ≤ −0.5 |br|
            −2.5 < [Fe/H] ≤ −1.5 |br|
@@ -834,16 +836,16 @@ def _get_dwarf_Teff_Ramirez2005(index, color, **kwargs):
     The spectral types range from F0 to K5, or |Teff| range between 4000 K and
     7000 K. Some relations extend to below 4000 K or above 8000 K.
     The color indices include
-    |B-V| in Johnson system,
-    |BT-VT| in Tycho system,
-    |b-y| in Strömgren system,
+    (*B* − *V*) in Johnson system,
+    (*B*:sub:`T` − *V*:sub:`T`) in Tycho system,
+    (*b* − *y*) in Strömgren system,
     (*Y* − *V*) and (*V* − *S*) in Vilnius system,
     (*B*:sub:`2` − *V*:sub:`1`), (*B*:sub:`2` − *G*), and *t* in Geneva system,
     (*V* − *R*:sub:`c`), (*V* − *I*:sub:`c`), and (*R*:sub:`c` − *I*:sub:`c`) in
     Johnson-Cousins system,
     *C*\ (42 − 45) and *C*\ (42 − 48) in DDO system,
-    |V-J|, |V-H|, and |V-K| in Johnson-2MASS system,
-    and (*V*:sub:`T` − *K*) in Tycho-2MASS system.
+    (*V* − *J*), (*V* − *H*), and (*V* − *K*:sub:`s`) in Johnson-2MASS system,
+    and (*V*:sub:`T` − *K*:sub:`s`) in Tycho-2MASS system.
 
     The applicable ranges of color indices and metallicities for dwarfs, numbers
     of sample stars, and standard deviations of |Teff| are summarized as below
@@ -858,22 +860,22 @@ def _get_dwarf_Teff_Ramirez2005(index, color, **kwargs):
          - [Fe/H]
          - *N*:sub:`star`
          - *σ*\ (|Teff|) (K)
-       * - |B-V|
-         - 0.310 < |B-V| < 1.507 |br|
-           0.307 < |B-V| < 1.202 |br|
-           0.335 < |B-V| < 1.030 |br|
-           0.343 < |B-V| < 0.976
+       * - (*B* − *V*)
+         - 0.310 < (*B* − *V*) < 1.507 |br|
+           0.307 < (*B* − *V*) < 1.202 |br|
+           0.335 < (*B* − *V*) < 1.030 |br|
+           0.343 < (*B* − *V*) < 0.976
          - −0.5 < [Fe/H] < +0.5  |br|
            −1.5 < [Fe/H] < −0.5  |br|
            −2.5 < [Fe/H] < −1.5  |br|
            −4.0 < [Fe/H] < −2.5
          - 495
          - 88
-       * - |b-y|
-         - 0.248 < |b-y| < 0.824 |br|
-           0.234 < |b-y| < 0.692 |br|
-           0.290 < |b-y| < 0.672 |br|
-           0.270 < |b-y| < 0.479
+       * - (*b* − *y*)
+         - 0.248 < (*b* − *y*) < 0.824 |br|
+           0.234 < (*b* − *y*) < 0.692 |br|
+           0.290 < (*b* − *y*) < 0.672 |br|
+           0.270 < (*b* − *y*) < 0.479
          - −0.5 < [Fe/H] < +0.5  |br|
            −1.5 < [Fe/H] < −0.5  |br|
            −2.5 < [Fe/H] < −1.5  |br|
@@ -982,51 +984,51 @@ def _get_dwarf_Teff_Ramirez2005(index, color, **kwargs):
            −2.5 < [Fe/H] < −1.5
          - 133
          - 70
-       * - |BT-VT|
-         - 0.344 < |BT-VT| < 1.715 |br|
-           0.391 < |BT-VT| < 1.556 |br|
-           0.380 < |BT-VT| < 0.922 |br|
-           0.367 < |BT-VT| < 0.504
+       * - (*B*:sub:`T` − *V*:sub:`T`)
+         - 0.344 < (*B*:sub:`T` − *V*:sub:`T`) < 1.715 |br|
+           0.391 < (*B*:sub:`T` − *V*:sub:`T`) < 1.556 |br|
+           0.380 < (*B*:sub:`T` − *V*:sub:`T`) < 0.922 |br|
+           0.367 < (*B*:sub:`T` − *V*:sub:`T`) < 0.504
          - −0.5 < [Fe/H] < +0.5    |br|
            −1.5 < [Fe/H] < −0.5    |br|
            −2.5 < [Fe/H] < −1.5    |br|
            −4.0 < [Fe/H] < −2.5
          - 378
          - 104
-       * - |V-J|
-         - 0.815 < |V-J| < 2.608 |br|
-           0.860 < |V-J| < 2.087 |br|
-           0.927 < |V-J| < 1.983 |br|
-           0.891 < |V-J| < 1.932
+       * - (*V* − *J*)
+         - 0.815 < (*V* − *J*) < 2.608 |br|
+           0.860 < (*V* − *J*) < 2.087 |br|
+           0.927 < (*V* − *J*) < 1.983 |br|
+           0.891 < (*V* − *J*) < 1.932
          - −0.5 < [Fe/H] < +0.5  |br|
            −1.5 < [Fe/H] < −0.5  |br|
            −2.5 < [Fe/H] < −1.5  |br|
            −4.0 < [Fe/H] < −2.5
          - 361
          - 62
-       * - |V-H|
-         - 0.839 < |V-H| < 3.215 |br|
-           1.032 < |V-H| < 2.532 |br|
-           1.070 < |V-H| < 2.535 |br|
-           1.093 < |V-H| < 2.388
+       * - (*V* − *H*)
+         - 0.839 < (*V* − *H*) < 3.215 |br|
+           1.032 < (*V* − *H*) < 2.532 |br|
+           1.070 < (*V* − *H*) < 2.535 |br|
+           1.093 < (*V* − *H*) < 2.388
          - −0.5 < [Fe/H] < +0.5  |br|
            −1.5 < [Fe/H] < −0.5  |br|
            −2.5 < [Fe/H] < −1.5  |br|
            −4.0 < [Fe/H] < −2.5
          - 364
          - 57
-       * - |V-K|
-         - 0.896 < |V-K| < 3.360 |br|
-           1.060 < |V-K| < 2.665 |br|
-           1.101 < |V-K| < 2.670 |br|
-           1.126 < |V-K| < 2.596
+       * - (*V* − *K*:sub:`s`)
+         - 0.896 < (*V* − *K*) < 3.360 |br|
+           1.060 < (*V* − *K*) < 2.665 |br|
+           1.101 < (*V* − *K*) < 2.670 |br|
+           1.126 < (*V* − *K*) < 2.596
          - −0.5 < [Fe/H] < +0.5  |br|
            −1.5 < [Fe/H] < −0.5  |br|
            −2.5 < [Fe/H] < −1.5  |br|
            −4.0 < [Fe/H] < −2.5
          - 397
          - 50
-       * - (*V*:sub:`T` − *K*)
+       * - (*V*:sub:`T` − *K*:sub:`s`)
          - 0.942 < (*V*:sub:`T` − *K*) < 3.284 |br|
            1.078 < (*V*:sub:`T` − *K*) < 2.561 |br|
            1.237 < (*V*:sub:`T` − *K*) < 2.406 |br|
@@ -1077,8 +1079,8 @@ def _get_dwarf_Teff_Ramirez2005(index, color, **kwargs):
     coef['BT-VT']  = [0.5619, 0.4462, -0.0029,  0.0003, -0.0746, -0.0190]
     coef['V-J']    = [0.4050, 0.4792, -0.0617, -0.0392,  0.0401, -0.0023]
     coef['V-H']    = [0.4931, 0.3056, -0.0241, -0.0396,  0.0678,  0.0020]
-    coef['V-K']    = [0.4942, 0.2809, -0.0180, -0.0294,  0.0444, -0.0008]
-    coef['VT-K']   = [0.4886, 0.2773, -0.0195, -0.0300,  0.0467, -0.0008]
+    coef['V-Ks']   = [0.4942, 0.2809, -0.0180, -0.0294,  0.0444, -0.0008]
+    coef['VT-Ks']  = [0.4886, 0.2773, -0.0195, -0.0300,  0.0467, -0.0008]
 
     if index in coef:
         a = coef[index]
@@ -1331,7 +1333,7 @@ def _get_dwarf_Teff_Ramirez2005(index, color, **kwargs):
             elif -4.0 < FeH <=-2.5 and 1.093 <= color <= 2.388: P = P4
             else:
                 raise ParamRangeError(index, color, reference)
-    elif index == 'V-K':
+    elif index == 'V-Ks':
         P1 = [-1425.36, 3218.36, -2566.54, 859.644, -102.554]
         P2 = [2.35133]
         P3 = [-1849.46, 4577.00, -4284.02, 1770.38, -268.589]
@@ -1348,7 +1350,7 @@ def _get_dwarf_Teff_Ramirez2005(index, color, **kwargs):
             elif -4.0 < FeH <=-2.5 and 1.126 <= color <= 2.596: P = P4
             else:
                 raise ParamRangeError(index, color, reference)
-    elif index == 'VT-K':
+    elif index == 'VT-Ks':
         P1 = [-1581.85, 3273.10, -2395.38, 736.352, -80.8177]
         P2 = [68.1279, -130.968, 52.8391]
         P3 = [-2384.82, 4196.14, -2557.04, 595.365, -31.9955]
@@ -1579,22 +1581,22 @@ def _get_giant_Teff_Ramirez2005(index, color, **kwargs):
            −4.0 < [Fe/H] < −2.5
          - 177
          - 32
-       * - |V-K|
-         - 1.244 < |V-K| < 3.286 |br|
-           1.366 < |V-K| < 4.474 |br|
-           1.334 < |V-K| < 3.549 |br|
-           1.258 < |V-K| < 2.768
+       * - (*V* − *K*:sub:`s`)
+         - 1.244 < (*V* − *K*:sub:`s`) < 3.286 |br|
+           1.366 < (*V* − *K*:sub:`s`) < 4.474 |br|
+           1.334 < (*V* − *K*:sub:`s`) < 3.549 |br|
+           1.258 < (*V* − *K*:sub:`s`) < 2.768
          - −0.5 < [Fe/H] < +0.5  |br|
            −1.5 < [Fe/H] < −0.5  |br|
            −2.5 < [Fe/H] < −1.5  |br|
            −4.0 < [Fe/H] < −2.5
          - 182
          - 28
-       * - (*V*:sub:`T` − *K*)
-         - 1.107 < (*V*:sub:`T` − *K*) < 3.944 |br|
-           1.403 < (*V*:sub:`T` − *K*) < 3.157 |br|
-           1.339 < (*V*:sub:`T` − *K*) < 3.750 |br|
-           1.668 < (*V*:sub:`T` − *K*) < 2.722
+       * - (*V*:sub:`T` − *K*:sub:`s`)
+         - 1.107 < (*V*:sub:`T` − *K*:sub:`s`) < 3.944 |br|
+           1.403 < (*V*:sub:`T` − *K*:sub:`s`) < 3.157 |br|
+           1.339 < (*V*:sub:`T` − *K*:sub:`s`) < 3.750 |br|
+           1.668 < (*V*:sub:`T` − *K*:sub:`s`) < 2.722
          - −0.5 < [Fe/H] < +0.5  |br|
            −1.5 < [Fe/H] < −0.5  |br|
            −2.5 < [Fe/H] < −1.5  |br|
@@ -1641,8 +1643,8 @@ def _get_giant_Teff_Ramirez2005(index, color, **kwargs):
     coef['BT-VT']  = [0.5726, 0.4461, -0.0324,  0.0518, -0.1170, -0.0094]
     coef['V-J']    = [0.2943, 0.5604, -0.0677,  0.0179, -0.0532, -0.0088]
     coef['V-H']    = [0.4354, 0.3405, -0.0263, -0.0012, -0.0049, -0.0027]
-    coef['V-K']    = [0.4405, 0.3272, -0.0252, -0.0016, -0.0053, -0.0040]
-    coef['VT-K']   = [0.4813, 0.2871, -0.0203, -0.0045,  0.0062, -0.0019]
+    coef['V-Ks']   = [0.4405, 0.3272, -0.0252, -0.0016, -0.0053, -0.0040]
+    coef['VT-Ks']  = [0.4813, 0.2871, -0.0203, -0.0045,  0.0062, -0.0019]
 
     if index in coef.keys():
         a = coef[index]
@@ -1907,7 +1909,7 @@ def _get_giant_Teff_Ramirez2005(index, color, **kwargs):
             elif -4.0 < FeH <=-2.5 and 1.232 <= color <= 2.625: P = P4
             else:
                 raise ParamRangeError(index, color, reference)
-    elif index == 'V-K':
+    elif index == 'V-Ks':
         P1 = [-72.6664, 36.5361]
         P2 = [86.0358, -65.4928, 10.8901]
         P3 = [-6.96153, 14.3298]
@@ -1924,7 +1926,7 @@ def _get_giant_Teff_Ramirez2005(index, color, **kwargs):
             elif -4.0 < FeH <=-2.5 and 1.258 <= color <= 2.768: P = P4
             else:
                 raise ParamRangeError(index, color, reference)
-    elif index == 'VT-K':
+    elif index == 'VT-Ks':
         P1 = [-37.2128, 31.2900, -6.72743]
         P2 = [-193.512, 166.183, -33.2781]
         P3 = [-2.02136]
@@ -2265,8 +2267,8 @@ def _get_giant_Teff_GB2009(index, color, **kwargs):
     return 5040./theta
 
 def _get_dwarf_Teff_Onehag2009(index, color, **kwargs):
-    '''Convert color and [Fe/H] to *T*:sub:`eff` for dwarfs using the
-    calibration relations given by `Önehag+ 2009
+    '''Convert color and [Fe/H] to |Teff| for dwarfs using the calibration
+    relations given by `Önehag+ 2009
     <http://adsabs.harvard.edu/abs/2009A&A...498..527O>`_.
 
     Notes
@@ -2369,16 +2371,16 @@ def _get_giant_Teff_Onehag2009(index, color, **kwargs):
     return 5040./theta
 
 def _get_dwarf_Teff_Casagrande2010(index, color, **kwargs):
-    '''Convert color and [Fe/H] to *T*:sub:`eff` for dwarfs using the
-    calibration relations given by `Casagrande+ 2010
+    '''Convert color and [Fe/H] to |Teff| for dwarfs using the calibration
+    relations given by `Casagrande+ 2010
     <http://adsabs.harvard.edu/abs/2010A&A...512A..54C>`_.
 
     Casagrande et al. 2010 presents calibration relations of |Teff| versus 13
     color indices and metallicities for dwarfs and subgiants.
     The |Teff| are derived with the infrared flux method (IRFM).
     The photometric data include *BV* in Johnson system, *by* in Strömgren
-    system, *B*:sub:`T`\ *V*:sub:`T` in Tycho system, *RI* in Cousins system,
-    and *JHK*:sub:`s` in 2MASS catalogue.
+    system, *B*:sub:`T`\ *V*:sub:`T` in Tycho system, *R*:sub:`c`\ *I*:sub:`c`
+    in Cousins system, and *JHK*:sub:`s` in 2MASS catalogue.
 
     The applicable ranges of color indices and metallicities for dwarfs, numbers
     of sample stars, and standard deviations of |Teff| are summarized as below
@@ -2393,8 +2395,8 @@ def _get_dwarf_Teff_Casagrande2010(index, color, **kwargs):
          - [Fe/H]
          - *N*:sub:`star`
          - *σ*\ (|Teff|) (K)
-       * - |B-V|
-         - 0.18 ≤ |B-V| ≤ 1.29
+       * - (*B* − *V*)
+         - 0.18 ≤ (*B* − *V*) ≤ 1.29
          - −5.0 ≤ [Fe/H] ≤ 0.4
          - 400
          - 73
@@ -2403,8 +2405,8 @@ def _get_dwarf_Teff_Casagrande2010(index, color, **kwargs):
          - −5.0 ≤ [Fe/H] ≤ 0.3
          - 201
          - 62
-       * - |R-I|
-         - 0.23 ≤ |R-I| ≤ 0.68
+       * - (*R*:sub:`c` − *I*:sub:`c`)
+         - 0.23 ≤ (*R* − *I*) ≤ 0.68
          - −5.0 ≤ [Fe/H] ≤ 0.3
          - 211
          - 82
@@ -2413,28 +2415,28 @@ def _get_dwarf_Teff_Casagrande2010(index, color, **kwargs):
          - −5.0 ≤ [Fe/H] ≤ 0.3
          - 208
          - 59
-       * - |V-J|
-         - 0.61 ≤ |V-J| ≤ 2.44
+       * - (*V* − *J*)
+         - 0.61 ≤ (*V* − *J*) ≤ 2.44
          - −5.0 ≤ [Fe/H] ≤ 0.4
          - 401
          - 42
-       * - |V-H|
-         - 0.67 ≤ |V-H| ≤ 3.01
+       * - (*V* − *H*)
+         - 0.67 ≤ (*V* − *H*) ≤ 3.01
          - −5.0 ≤ [Fe/H] ≤ 0.4
          - 401
          - 33
-       * - |V-K|
-         - 0.78 ≤ |V-K| ≤ 3.15
+       * - (*V* − *K*)
+         - 0.78 ≤ (*V* − *K*) ≤ 3.15
          - −5.0 ≤ [Fe/H] ≤ 0.4
          - 401
          - 25
-       * - |J-K|
-         - 0.07 ≤ |J-K| ≤ 0.80
+       * - (*J* − *K*)
+         - 0.07 ≤ (*J* − *K*) ≤ 0.80
          - −5.0 ≤ [Fe/H] ≤ 0.4
          - 412
          - 132
-       * - |BT-VT|
-         - 0.19 ≤ |BT-VT| ≤ 1.49
+       * - (*B*:sub:`T` − *V*:sub:`T`)
+         - 0.19 ≤ (*B*:sub:`T` − *V*:sub:`T`) ≤ 1.49
          - −2.7 ≤ [Fe/H] ≤ 0.4
          - 251
          - 79
@@ -2453,8 +2455,8 @@ def _get_dwarf_Teff_Casagrande2010(index, color, **kwargs):
          - −2.4 ≤ [Fe/H] ≤ 0.4
          - 258
          - 18
-       * - |b-y|
-         - 0.18 ≤ |b-y| ≤ 0.72
+       * - (*b* − *y*)
+         - 0.18 ≤ (*b* − *y*) ≤ 0.72
          - −3.7 ≤ [Fe/H] ≤ 0.5
          - 1120
          - 62
