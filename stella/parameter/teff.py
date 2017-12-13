@@ -2271,13 +2271,45 @@ def _get_dwarf_Teff_Onehag2009(index, color, **kwargs):
     relations given by `Önehag+ 2009
     <http://adsabs.harvard.edu/abs/2009A&A...498..527O>`_.
 
-    Notes
-    -----
     Only used for stars with log\ *g* >= 4.0
 
-    References
-    ----------
-    * `Önehag et al., 2009, A&A, 498, 527 <http://adsabs.harvard.edu/abs/2009A&A...498..527O>`_
+    Applicable ranges are:
+
+    .. list-table::
+       :widths: 10, 20, 20, 10, 10
+       :header-rows: 1
+
+       * - color index
+         - color
+         - [Fe/H]
+         - *N*:sub:`star`
+         - *σ*\ (|Teff|) (K)
+       * - (*b* − *y*), *c*:sub:`1`
+         - 0.20 ≤ (*b* − *y*) ≤ 0.70 |br|
+           0.10 ≤ *c*:sub:`1` ≤ 0.55 |br|
+         - −3.0 ≤ [Fe/H] ≤ 0.50
+         -
+         -
+       * - H:sub:`β`
+         - 2.51 ≤  H:sub:`β` ≤ 2.62
+         - −2.5 ≤ [Fe/H] ≤ −1.5
+         -
+         -
+
+    Args:
+        index (string): Name of color index. Available values include *"b-y"*,
+            *"Hebta"*.
+        color (float): Value of color index.
+        c1 (float): color index of *c*:sub:`1`.
+        FeH (float): Metallicity [Fe/H].
+        extrapolation (bool): Extend the applicable ranges if *True*. Default is
+            *False*.
+    Returns:
+        float: Effective temperature (|Teff|) in K.
+    See also:
+        :func:`_get_giant_Teff_Onehag2009`
+    References:
+        * `Önehag et al., 2009, A&A, 498, 527 <http://adsabs.harvard.edu/abs/2009A&A...498..527O>`_
     '''
     reference = 'Onehag et al., 2009, A&A, 498, 527'
 
@@ -2329,13 +2361,20 @@ def _get_giant_Teff_Onehag2009(index, color, **kwargs):
     calibration relations given by `Önehag+ 2009
     <http://adsabs.harvard.edu/abs/2009A&A...498..527O>`_.
 
-    Notes
-    -----
     Only used for 1.5 <= log\ *g* <= 3.5
 
-    References
-    ----------
-    * `Önehag et al., 2009, A&A, 498, 527 <http://adsabs.harvard.edu/abs/2009A&A...498..527O>`_
+    Args:
+        index (string): Name of color index. Available values include *"b-y"*,
+        color (float): Value of color index.
+        FeH (float): Metallicity [Fe/H].
+        extrapolation (bool): Extend the applicable ranges if *True*. Default is
+            *False*.
+    Returns:
+        float: Effective temperature (|Teff|) in K.
+    See also:
+        :func:`_get_dwarf_Teff_Onehag2009`
+    References:
+        * `Önehag et al., 2009, A&A, 498, 527 <http://adsabs.harvard.edu/abs/2009A&A...498..527O>`_
     '''
     reference = 'Onehag et al., 2009, A&A, 498, 527'
 
