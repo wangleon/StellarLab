@@ -2276,30 +2276,23 @@ def _get_dwarf_Teff_Onehag2009(index, color, **kwargs):
     Applicable ranges are:
 
     .. list-table::
-       :widths: 10, 20, 20, 10, 10
+       :widths: 10, 30, 20
        :header-rows: 1
 
        * - color index
          - color
          - [Fe/H]
-         - *N*:sub:`star`
-         - *σ*\ (|Teff|) (K)
        * - (*b* − *y*), *c*:sub:`1`
-         - 0.20 ≤ (*b* − *y*) ≤ 0.70 |br|
-           0.10 ≤ *c*:sub:`1` ≤ 0.55 |br|
+         - 0.20 ≤ (*b* − *y*) ≤ 0.70, 0.10 ≤ *c*:sub:`1` ≤ 0.55
          - −3.0 ≤ [Fe/H] ≤ 0.50
-         -
-         -
-       * - H:sub:`β`
-         - 2.51 ≤  H:sub:`β` ≤ 2.62
+       * - H\ :sub:`β`
+         - 2.51 ≤  H\ :sub:`β` ≤ 2.62
          - −2.5 ≤ [Fe/H] ≤ −1.5
-         -
-         -
 
     Args:
         index (string): Name of color index. Available values include *"b-y"*,
-            *"Hebta"*.
-        color (float): Value of color index.
+            *"Hbeta"*.
+        color (float): Value of color index (*b* − *y* or H\ :sub:`β`).
         c1 (float): color index of *c*:sub:`1`.
         FeH (float): Metallicity [Fe/H].
         extrapolation (bool): Extend the applicable ranges if *True*. Default is
@@ -2361,11 +2354,27 @@ def _get_giant_Teff_Onehag2009(index, color, **kwargs):
     calibration relations given by `Önehag+ 2009
     <http://adsabs.harvard.edu/abs/2009A&A...498..527O>`_.
 
-    Only used for 1.5 <= log\ *g* <= 3.5
+    Only used for 1.5 <= log\ *g* <= 3.5.
+
+    Applicable ranges are:
+
+    .. list-table::
+       :widths: 10, 20, 20
+       :header-rows: 1
+
+       * - color index
+         - color
+         - [Fe/H]
+       * - (*b* − *y*)
+         - 0.15 ≤ (*b* − *y*) ≤ 0.424 |br|
+           0.424 ≤ (*b* − *y*) ≤ 0.712 |br|
+           0.428 ≤ (*b* − *y*) ≤ 0.794
+         - |br| −5.0 ≤ [Fe/H] ≤ −0.5 |br|
+           −0.5 ≤ [Fe/H] ≤ +0.5
 
     Args:
-        index (string): Name of color index. Available values include *"b-y"*,
-        color (float): Value of color index.
+        index (string): Name of color index. Must be *"b-y"*.
+        color (float): Value of color index (*b* − *y*).
         FeH (float): Metallicity [Fe/H].
         extrapolation (bool): Extend the applicable ranges if *True*. Default is
             *False*.
