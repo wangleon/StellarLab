@@ -7,6 +7,15 @@ def get_Teff():
 def color_to_Teff(index, color, ref, **kwargs):
     '''Convert color to *T*:sub:`eff` using a variety of calibration relations.
 
+    Args:
+        index (string): Name of color index.
+        color (float): Value of color index.
+        ref (string): Reference.
+        extrapolation (bool): Extend the applicable ranges if *True*. Default is
+            *False*.
+    Returns:
+        float: Effective temperature (|Teff|) in K.
+
     Notes:
         Available calibration ralitions:
 
