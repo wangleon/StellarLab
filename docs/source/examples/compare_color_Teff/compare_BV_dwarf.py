@@ -43,8 +43,7 @@ def main():
             ax.set_yticklabels([])
         ax.grid(True)
 
-    #fig.savefig('compare_BV_dwarf.png')
-    fig.savefig('1.png')
+    fig.savefig('compare_BV_dwarf.png')
     plt.show()
 
 if __name__=='__main__':

@@ -6,7 +6,7 @@ Comparison of Color - *T*:sub:`eff` Calibration Relations
 
 (*B* − *V*) v.s. *T*:sub:`eff` Relations for Dwarfs
 ---------------------------------------------------
-.. figure:: 1.png
+.. figure:: compare_BV_dwarf.png
    :alt: B-V vs. Teff for dwarfs
    :align: center
    :width: 1200px
