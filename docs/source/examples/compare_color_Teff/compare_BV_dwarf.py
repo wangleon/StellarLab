@@ -8,7 +8,7 @@ def main():
     BVtry_lst = np.arange(0.0,1.8+1e-4,0.01)
     ref_lst = ['Alonso1996','Ramirez2005','GB2009','Casagrande2010']
 
-    fig = plt.figure(figsize=(12,4), dpi=150)
+    fig = plt.figure(figsize=(15,5), dpi=150)
     for ifeh, feh in enumerate([-3,-2,-1,0]):
         BV_lst, teff_lst = {}, {}
         for ref in ref_lst:
@@ -22,7 +22,7 @@ def main():
                 except:
                     continue
 
-        ax = fig.add_axes([ifeh*0.23+0.07, 0.15, 0.21, 0.8])
+        ax = fig.add_axes([ifeh*0.24+0.05, 0.12, 0.218, 0.83])
         for ref in ref_lst:
             ax.plot(BV_lst[ref], teff_lst[ref], '-', label=ref)
         leg = ax.legend()
@@ -38,13 +38,12 @@ def main():
         for tick in ax.yaxis.get_major_ticks():
             tick.label1.set_fontsize(10)
         if ifeh == 0:
-            ax.set_ylabel('$T_{\\rm eff}$')
+            ax.set_ylabel('$T_{\\rm eff}\,(\mathrm{K})$')
         else:
             ax.set_yticklabels([])
         ax.grid(True)
 
     fig.savefig('compare_BV_dwarf.png')
-    plt.show()
 
 if __name__=='__main__':
     main()
