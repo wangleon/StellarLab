@@ -15,12 +15,12 @@ Table of Contents
 Modules
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
    :glob:
    
    modules/catalog/*
    modules/evolution/*
-   modules/parameter/*
+   modules/parameter
    modules/kinetics/*
    modules/utils
 

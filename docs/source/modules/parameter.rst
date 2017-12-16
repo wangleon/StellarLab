@@ -3,12 +3,12 @@
 
    <br />
 
+Stellar Parameters
+==================
 
 Effective Temperature
-=====================
+---------------------
 
-Summaries
----------
 .. currentmodule:: stella.parameter.teff
 .. autosummary::
    color_to_Teff
@@ -24,8 +24,23 @@ Summaries
    _get_dwarf_Teff_Ramirez2005
    _get_giant_Teff_Ramirez2005
 
-Functions
----------
 .. automodule:: stella.parameter.teff
    :members:
    :private-members:
+
+Bolometric Correction
+---------------------
+.. automodule:: stella.parameter.bc
+    :members:
+    :private-members:
+
+Metallicity
+-----------
+.. automodule:: stella.parameter.metal
+    :members:
+    :private-members:
+
+Stellar Population
+------------------
+.. automodule:: stella.parameter.population
+    :members:
