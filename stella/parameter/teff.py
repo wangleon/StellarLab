@@ -648,188 +648,248 @@ def _get_giant_Teff_Alonso1999(index, color, **kwargs):
     FeH = kwargs.pop('FeH', 0.0)
     extrapolation = kwargs.pop('extrapolation', False)
 
-    eq = {}
-    eq[1] =[0.6388, 0.4065,  -0.1117,   -2.308e-3, -7.783e-2, -1.200e-2]
-    eq[2] =[0.8323, 9.374e-2, 1.184e-2,  2.351e-2, -0.1392,   -1.944e-2]
-    eq[3] =[0.5716, 0.5404,  -6.126e-2, -4.862e-2, -1.777e-2, -7.969e-3]
-    eq[4] =[0.6177, 0.4354,  -4.025e-3,  5.204e-2, -0.1127,   -1.385e-2]
-    eq[5] =[0.4972, 0.8841,  -0.1904,   -1.197e-2, -1.025e-2, -5.500e-3]
-    #eq[6]=[e-2 (V-I)2-2.693e-2(V-I)3,0.017,125,214
-    eq[7] =[0.4974, 1.345,   -0.5008,   -8.134e-2,  3.705e-2, -6.184e-3]
-    eq[8] =[0.5558, 0.2105,   1.981e-3, -9.965e-3,  1.325e-2, -2.726e-3]
-    eq[9] =[0.3770, 0.3660,  -3.170e-2, -3.074e-3, -2.765e-3, -2.973e-3]
-    eq[10]=[0.5977, 1.015,   -1.020e-1, -1.029e-2,  3.006e-2,  1.013e-2]
-    eq[11]=[0.5816, 0.9134,  -0.1443,    0.0000,    0.0000,    0.0000  ]
-    #eq[12]=[(V-L')*, e-2 (V-L')2-4.651e-3(V-L')3, 0.009, 65, 122
-    eq[13]=[0.5859, 0.4846,  -2.457e-2,  0.0000,    0.0000,    0.0000  ]
-    eq[14]=[0.5815, 0.7263,   6.856e-2, -6.832e-2, -1.062e-2, -1.079e-2]
-    eq[15]=[0.4399, 1.209,   -0.3541,    8.443e-2, -0.1063,   -1.686e-2]
-    eq[16]=[0.5883, 0.2008,  -5.931e-3,  5.319e-3, -1.000e-1, -1.542e-2]
+    coeff = {
+        1:  [0.6388, 0.4065,  -0.1117,   -2.308e-3, -7.783e-2, -1.200e-2],
+        2:  [0.8323, 9.374e-2, 1.184e-2,  2.351e-2, -0.1392,   -1.944e-2],
+        3:  [0.5716, 0.5404,  -6.126e-2, -4.862e-2, -1.777e-2, -7.969e-3],
+        4:  [0.6177, 0.4354,  -4.025e-3,  5.204e-2, -0.1127,   -1.385e-2],
+        5:  [0.4972, 0.8841,  -0.1904,   -1.197e-2, -1.025e-2, -5.500e-3],
+        # 6
+        7:  [0.4974, 1.345,   -0.5008,   -8.134e-2,  3.705e-2, -6.184e-3],
+        8:  [0.5558, 0.2105,   1.981e-3, -9.965e-3,  1.325e-2, -2.726e-3],
+        9:  [0.3770, 0.3660,  -3.170e-2, -3.074e-3, -2.765e-3, -2.973e-3],
+        10: [0.5977, 1.015,   -1.020e-1, -1.029e-2,  3.006e-2,  1.013e-2],
+        11: [0.5816, 0.9134,  -0.1443,    0.0000,    0.0000,    0.0000  ],
+        #12
+        13: [0.5859, 0.4846,  -2.457e-2,  0.0000,    0.0000,    0.0000  ],
+        14: [0.5815, 0.7263,   6.856e-2, -6.832e-2, -1.062e-2, -1.079e-2],
+        15: [0.4399, 1.209,   -0.3541,    8.443e-2, -0.1063,   -1.686e-2],
+        16: [0.5883, 0.2008,  -5.931e-3,  5.319e-3, -1.000e-1, -1.542e-2],
+        }
+
+    f1 = lambda a, color, FeH: a[0] + a[1]*color + a[2]*color**2 + \
+                               a[3]*color*FeH + a[4]*FeH + a[5]*FeH**2
+
+    f2 = lambda a, color: a[0] + a[1]*color + a[2]*color**2 + a[3]*color**3
 
     # determine equation
     if index == 'U-V':
         if extrapolation:
-            if color <= 1.35: choose = 1
-            else:             choose = 2
+            if color <= 1.20:
+                a = coeff[1]
+            elif color >= 1.50:
+                a = coeff[2]
+            else:
+                d1, d2 = color-1.20, 1.50-color
+                w1, w2 = d2/(d1+d2), d1/(d1+d2)
+                a = [w1*coeff[1][i] + w2*coeff[2][i] for i in range(6)]
         else:
-            if   0.40<=color<=1.20 and +0.2>=FeH>-0.5: choose = 1
-            elif 0.35<=color<=1.20 and -0.5>=FeH>-1.5: choose = 1
-            elif 0.40<=color<=1.20 and -1.5>=FeH>-2.5: choose = 1
-            elif 0.50<=color<=1.20 and -2.5>=FeH>-3.0: choose = 1
+            if   0.40<=color<=1.20 and +0.2>=FeH>-0.5: a = coeff[1]
+            elif 0.35<=color<=1.20 and -0.5>=FeH>-1.5: a = coeff[1]
+            elif 0.40<=color<=1.20 and -1.5>=FeH>-2.5: a = coeff[1]
+            elif 0.50<=color<=1.20 and -2.5>=FeH>-3.0: a = coeff[1]
 
-            elif 1.50<=color<=3.50 and +0.2>=FeH>-0.5: choose = 2
-            elif 1.50<=color<=3.50 and -0.5>=FeH>-1.5: choose = 2
-            elif 1.50<=color<=3.25 and -1.5>=FeH>-2.5: choose = 2
+            elif 1.50<=color<=3.50 and +0.2>=FeH>-0.5: a = coeff[2]
+            elif 1.50<=color<=3.50 and -0.5>=FeH>-1.5: a = coeff[2]
+            elif 1.50<=color<=3.25 and -1.5>=FeH>-2.5: a = coeff[2]
+
+            elif 1.20 < color < 1.50 and +0.2>=FeH>-2.5:
+                d1, d2 = color-1.20, 1.50-color
+                w1, w2 = d2/(d1+d2), d1/(d1+d2)
+                a = [w1*coeff[1][i] + w2*coeff[2][i] for i in range(6)]
 
             else: raise ValueError
+
+        theta = f1(a, color, FeH)
 
     elif index == 'B-V':
         if extrapolation:
-            if color <= 0.75: choose = 3
-            else:             choose = 4
+            if color <= 0.70:
+                a = coeff[3]
+            elif color >= 0.80:
+                a = coeff[4]
+            else:
+                d1, d2 = color-0.70, 0.80-color
+                w1, w2 = d2/(d1+d2), d1/(d1+d2)
+                a = [w1*coeff[3][i] + w2*coeff[4][i] for i in range(6)]
         else:
-            if   0.20<=color<=0.80 and +0.2>=FeH>-0.5: choose = 3
-            elif 0.35<=color<=0.80 and -0.5>=FeH>-1.5: choose = 3
-            elif 0.35<=color<=0.80 and -1.5>=FeH>-2.5: choose = 3
-            elif 0.50<=color<=0.80 and -2.5>=FeH>-3.0: choose = 3
+            if   0.20<=color<=0.70 and +0.2>=FeH>-0.5: a = coeff[3]
+            elif 0.35<=color<=0.70 and -0.5>=FeH>-1.5: a = coeff[3]
+            elif 0.35<=color<=0.70 and -1.5>=FeH>-2.5: a = coeff[3]
+            elif 0.50<=color<=0.70 and -2.5>=FeH>-3.0: a = coeff[3]
 
-            elif 0.70<=color<=1.90 and +0.2>=FeH>-0.5: choose = 4
-            elif 0.70<=color<=1.80 and -0.5>=FeH>-1.5: choose = 4
-            elif 0.70<=color<=1.35 and -1.5>=FeH>-2.5: choose = 4
-            elif 0.70<=color<=1.00 and -2.5>=FeH>-3.0: choose = 4
+            elif 0.80<=color<=1.90 and +0.2>=FeH>-0.5: a = coeff[4]
+            elif 0.80<=color<=1.80 and -0.5>=FeH>-1.5: a = coeff[4]
+            elif 0.80<=color<=1.35 and -1.5>=FeH>-2.5: a = coeff[4]
+            elif 0.80<=color<=1.00 and -2.5>=FeH>-3.0: a = coeff[4]
+
+            elif 0.70<color<0.80 and +0.2>=FeH>-3.0:
+                d1, d2 = color-0.70, 0.80-color
+                w1, w2 = d2/(d1+d2), d1/(d1+d2)
+                a = [w1*coeff[3][i] + w2*coeff[4][i] for i in range(6)]
 
             else: raise ValueError
+
+        theta = f1(a, color, FeH)
 
     elif index == 'V-R':
         if extrapolation:
-            choose = 5
+            a = coeff[5]
         else:
-            if   0.15<=color<=1.70 and +0.2>=FeH>-0.5: choose = 5
-            elif 0.45<=color<=1.50 and -0.5>=FeH>-1.5: choose = 5
-            elif 0.50<=color<=1.00 and -1.5>=FeH>-2.5: choose = 5
-            elif 0.55<=color<=0.85 and -2.5>=FeH>-3.0: choose = 5
+            if   0.15<=color<=1.70 and +0.2>=FeH>-0.5: a = coeff[5]
+            elif 0.45<=color<=1.50 and -0.5>=FeH>-1.5: a = coeff[5]
+            elif 0.50<=color<=1.00 and -1.5>=FeH>-2.5: a = coeff[5]
+            elif 0.55<=color<=0.85 and -2.5>=FeH>-3.0: a = coeff[5]
 
             else: raise ValueError
+
+        theta = f1(a, color, FeH)
 
     elif index == 'V-I':
-        if extrapolation:
-            choose = 6
-        else:
-            if   0.20<=color<=2.90 and +0.2>=FeH>-0.5: choose = 6
-            elif 0.80<=color<=2.00 and -0.5>=FeH>-1.5: choose = 6
-            elif 0.85<=color<=2.20 and -1.5>=FeH>-2.5: choose = 6
-            elif 1.00<=color<=1.70 and -2.5>=FeH>-3.0: choose = 6
+        if extrapolation or \
+            (0.20<=color<=2.90 and +0.2>=FeH>-0.5) or \
+            (0.80<=color<=2.00 and -0.5>=FeH>-1.5) or \
+            (0.85<=color<=2.20 and -1.5>=FeH>-2.5) or \
+            (1.00<=color<=1.70 and -2.5>=FeH>-3.0):
 
-            else: raise ValueError
+            theta = 0.5379 + 0.3981*color + 4.432e-2*color**2 - 2.693e-2*color**3
+
+        else:
+            raise ValueError
 
     elif index == 'R-I':
         if extrapolation:
-            choose = 7
+            a = coeff[7]
         else:
-            if   0.15<=color<=1.40 and +0.2>=FeH>-0.5: choose = 7
-            elif 0.25<=color<=0.80 and -0.5>=FeH>-1.5: choose = 7
-            elif 0.35<=color<=0.70 and -1.5>=FeH>-2.5: choose = 7
-            elif 0.40<=color<=0.65 and -2.5>=FeH>-3.0: choose = 7
+            if   0.15<=color<=1.40 and +0.2>=FeH>-0.5: a = coeff[7]
+            elif 0.25<=color<=0.80 and -0.5>=FeH>-1.5: a = coeff[7]
+            elif 0.35<=color<=0.70 and -1.5>=FeH>-2.5: a = coeff[7]
+            elif 0.40<=color<=0.65 and -2.5>=FeH>-3.0: a = coeff[7]
 
             else: raise ValueError
+
+        theta = f1(a, color, FeH)
 
     elif index == 'V-K':
         if extrapolation:
-            if color <= 2.25: choose = 8
-            else:             choose = 9
+            if color <= 2.00:
+                a = coeff[8]
+            elif color >= 2.50:
+                a = coeff[9]
+            else:
+                d1, d2 = color-2.00, 2.50-color
+                w1, w2 = d2/(d1+d2), d1/(d1+d2)
+                a = [w1*coeff[8][i] + w2*coeff[9][i] for i in range(6)]
         else:
-            if   0.20<=color<=2.50 and +0.2>=FeH>-0.5: choose = 8
-            elif 1.00<=color<=2.50 and -0.5>=FeH>-1.5: choose = 8
-            elif 1.20<=color<=2.50 and -1.5>=FeH>-2.5: choose = 8
-            elif 1.70<=color<=2.50 and -2.5>=FeH>-3.0: choose = 8
+            if   0.20<=color<=2.00 and +0.2>=FeH>-0.5: a = coeff[8]
+            elif 1.00<=color<=2.00 and -0.5>=FeH>-1.5: a = coeff[8]
+            elif 1.20<=color<=2.00 and -1.5>=FeH>-2.5: a = coeff[8]
+            elif 1.70<=color<=2.00 and -2.5>=FeH>-3.0: a = coeff[8]
 
-            elif 2.00<=color<=4.90 and +0.2>=FeH>-0.5: choose = 9
-            elif 2.00<=color<=4.60 and -0.5>=FeH>-1.5: choose = 9
-            elif 2.00<=color<=3.40 and -1.5>=FeH>-2.5: choose = 9
-            elif 2.00<=color<=2.80 and -2.5>=FeH>-3.0: choose = 9
+            elif 2.50<=color<=4.90 and +0.2>=FeH>-0.5: a = coeff[9]
+            elif 2.50<=color<=4.60 and -0.5>=FeH>-1.5: a = coeff[9]
+            elif 2.50<=color<=3.40 and -1.5>=FeH>-2.5: a = coeff[9]
+            elif 2.50<=color<=2.80 and -2.5>=FeH>-3.0: a = coeff[9]
+
+            elif 2.00<color<2.50 and +0.2>=FeH>-3.0:
+                d1, d2 = color-2.00, 2.50-color
+                w1, w2 = d2/(d1+d2), d1/(d1+d2)
+                a = [w1*coeff[8][i] + w2*coeff[9][i] for i in range(6)]
 
             else: raise ValueError
+
+        theta = f1(a, color, FeH)
 
     elif index == 'J-H':
         if extrapolation:
-            choose = 10
+            a = coeff[10]
         else:
-            if   0.00<=color<=0.90 and +0.2>=FeH>-0.5: choose = 10
-            elif 0.20<=color<=0.80 and -0.5>=FeH>-1.5: choose = 10
-            elif 0.30<=color<=0.70 and -1.5>=FeH>-2.5: choose = 10
-            elif 0.35<=color<=0.65 and -2.5>=FeH>-3.0: choose = 10
+            if   0.00<=color<=0.90 and +0.2>=FeH>-0.5: a = coeff[10]
+            elif 0.20<=color<=0.80 and -0.5>=FeH>-1.5: a = coeff[10]
+            elif 0.30<=color<=0.70 and -1.5>=FeH>-2.5: a = coeff[10]
+            elif 0.35<=color<=0.65 and -2.5>=FeH>-3.0: a = coeff[10]
 
             else: raise ValueError
+
+        theta = f1(a, color, FeH)
 
     elif index == 'J-K':
         if extrapolation:
-            choose = 11
+            a = coeff[11]
         else:
-            if   0.00<=color<=1.10 and +0.2>=FeH>-0.5: choose = 11
-            elif 0.20<=color<=1.00 and -0.5>=FeH>-1.5: choose = 11
-            elif 0.30<=color<=0.90 and -1.5>=FeH>-2.5: choose = 11
-            elif 0.40<=color<=0.80 and -2.5>=FeH>-3.0: choose = 11
+            if   0.00<=color<=1.10 and +0.2>=FeH>-0.5: a = coeff[11]
+            elif 0.20<=color<=1.00 and -0.5>=FeH>-1.5: a = coeff[11]
+            elif 0.30<=color<=0.90 and -1.5>=FeH>-2.5: a = coeff[11]
+            elif 0.40<=color<=0.80 and -2.5>=FeH>-3.0: a = coeff[11]
 
             else: raise ValueError
+
+        theta = f1(a, color, FeH)
 
     elif index == "V-L'":
-        if extrapolation:
-            choose = 12
+        if extrapolation or (0.40<=color<=5.00 and +0.2>=FeH>-0.5):
+            theta = 0.5641 + 0.1882*color + 1.890e-2*color**2 - 4.651e-3*color**3
         else:
-            if   0.40<=color<=5.00 and +0.2>=FeH>-0.5: choose = 12
+            raise ValueError
+
+    elif index == 'I-K':
+        if extrapolation:
+            a = coeff[13]
+        else:
+            if   0.00<=color<=1.90 and +0.2>=FeH>-0.5: a = coeff[13]
+            elif 0.50<=color<=1.60 and -0.5>=FeH>-1.5: a = coeff[13]
+            elif 0.70<=color<=1.50 and -1.5>=FeH>-2.5: a = coeff[13]
+            elif 0.80<=color<=1.20 and -2.5>=FeH>-3.0: a = coeff[13]
 
             else: raise ValueError
 
-    elif index == '(I-K)J':
-        if extrapolation:
-            choose = 13
-        else:
-            if   0.00<=color<=1.90 and +0.2>=FeH>-0.5: choose = 13
-            elif 0.50<=color<=1.60 and -0.5>=FeH>-1.5: choose = 13
-            elif 0.70<=color<=1.50 and -1.5>=FeH>-2.5: choose = 13
-            elif 0.80<=color<=1.20 and -2.5>=FeH>-3.0: choose = 13
-
-            else: raise ValueError
+        theta = f1(a, color, FeH)
 
     elif index == 'b-y':
         if extrapolation:
-            if color <=0.525: choose = 14
-            else:             choose = 15
+            if color <= 0.50:
+                a = coeff[14]
+            elif color >= 0.55:
+                a = coeff[15]
+            else:
+                d1, d2 = color-0.50, 0.55-color
+                w1, w2 = d2/(d1+d2), d1/(d1+d2)
+                a = [w1*coeff[14][i] + w2*coeff[15][i] for i in range(6)]
         else:
-            if   0.00<=color<=0.55 and +0.2>=FeH>-0.5: choose = 14
-            elif 0.30<=color<=0.55 and -0.5>=FeH>-1.5: choose = 14
-            elif 0.35<=color<=0.55 and -1.5>=FeH>-2.5: choose = 14
-            elif 0.40<=color<=0.55 and -2.5>=FeH>-3.0: choose = 14
+            if   0.00<=color<=0.50 and +0.2>=FeH>-0.5: a=coeff[14]
+            elif 0.30<=color<=0.50 and -0.5>=FeH>-1.5: a=coeff[14]
+            elif 0.35<=color<=0.50 and -1.5>=FeH>-2.5: a=coeff[14]
+            elif 0.40<=color<=0.50 and -2.5>=FeH>-3.0: a=coeff[14]
 
-            elif 0.50<=color<=1.00 and +0.2>=FeH>-0.5: choose = 15
-            elif 0.50<=color<=0.90 and -0.5>=FeH>-1.5: choose = 15
-            elif 0.50<=color<=0.80 and -1.5>=FeH>-2.5: choose = 15
-            elif 0.50<=color<=0.70 and -2.5>=FeH>-3.0: choose = 15
+            elif 0.55<=color<=1.00 and +0.2>=FeH>-0.5: a=coeff[15]
+            elif 0.55<=color<=0.90 and -0.5>=FeH>-1.5: a=coeff[15]
+            elif 0.55<=color<=0.80 and -1.5>=FeH>-2.5: a=coeff[15]
+            elif 0.55<=color<=0.70 and -2.5>=FeH>-3.0: a=coeff[15]
+
+            elif 0.50<color<0.55 and +0.2>=FeH>-3.0:
+                d1, d2 = color-0.50, 0.55-color
+                w1, w2 = d2/(d1+d2), d1/(d1+d2)
+                a = [w1*coeff[14][i] + w2*coeff[15][i] for i in range(6)]
 
             else: raise ValueError
+
+        theta = f1(a, color, FeH)
 
     elif index == 'u-b':
         if extrapolation:
-            choose = 16
+            a = coeff[16]
         else:
-            if   1.60<=color<=4.00 and +0.2>=FeH>-0.5: choose = 16
-            elif 1.60<=color<=3.70 and -0.5>=FeH>-1.5: choose = 16
-            elif 1.60<=color<=3.40 and -1.5>=FeH>-2.5: choose = 16
-            elif 1.60<=color<=2.60 and -2.5>=FeH>-3.0: choose = 16
+            if   1.60<=color<=4.00 and +0.2>=FeH>-0.5: a = coeff[16]
+            elif 1.60<=color<=3.70 and -0.5>=FeH>-1.5: a = coeff[16]
+            elif 1.60<=color<=3.40 and -1.5>=FeH>-2.5: a = coeff[16]
+            elif 1.60<=color<=2.60 and -2.5>=FeH>-3.0: a = coeff[16]
 
             else: raise ValueError
 
+        theta = f1(a, color, FeH)
+
     else:
         raise ValueError
-
-    if choose == 6:
-        theta = 0.5379 + 0.3981*color + 4.432e-2*color**2 - 2.693e-2*color**3
-    elif choose == 12:
-        theta = 0.5641 + 0.1882*color + 1.890e-2*color**2 - 4.651e-3*color**3
-    else:
-        a = eq[choose]
-        theta =  a[0] + a[1]*color + a[2]*color**2 + a[3]*color*FeH + \
-                 a[4]*FeH + a[5]*FeH**2
 
     return 5040./theta
 
