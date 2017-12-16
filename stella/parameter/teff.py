@@ -1,5 +1,6 @@
 import numpy.polynomial as poly
 from .error import ColorIndexError, ParamRangeError, MissingParamError
+from .error import ApplicableRangeError, ParamMissingError
 
 def get_Teff():
     pass
@@ -654,13 +655,13 @@ def _get_giant_Teff_Alonso1999(index, color, **kwargs):
         3:  [0.5716, 0.5404,  -6.126e-2, -4.862e-2, -1.777e-2, -7.969e-3],
         4:  [0.6177, 0.4354,  -4.025e-3,  5.204e-2, -0.1127,   -1.385e-2],
         5:  [0.4972, 0.8841,  -0.1904,   -1.197e-2, -1.025e-2, -5.500e-3],
-        # 6
+        6:  [0.5379, 0.3981,   4.432e-2, -2.693e-2],
         7:  [0.4974, 1.345,   -0.5008,   -8.134e-2,  3.705e-2, -6.184e-3],
         8:  [0.5558, 0.2105,   1.981e-3, -9.965e-3,  1.325e-2, -2.726e-3],
         9:  [0.3770, 0.3660,  -3.170e-2, -3.074e-3, -2.765e-3, -2.973e-3],
         10: [0.5977, 1.015,   -1.020e-1, -1.029e-2,  3.006e-2,  1.013e-2],
         11: [0.5816, 0.9134,  -0.1443,    0.0000,    0.0000,    0.0000  ],
-        #12
+        12: [0.5641, 0.1882,   1.890e-2, -4.651e-3],
         13: [0.5859, 0.4846,  -2.457e-2,  0.0000,    0.0000,    0.0000  ],
         14: [0.5815, 0.7263,   6.856e-2, -6.832e-2, -1.062e-2, -1.079e-2],
         15: [0.4399, 1.209,   -0.3541,    8.443e-2, -0.1063,   -1.686e-2],
@@ -698,7 +699,8 @@ def _get_giant_Teff_Alonso1999(index, color, **kwargs):
                 w1, w2 = d2/(d1+d2), d1/(d1+d2)
                 a = [w1*coeff[1][i] + w2*coeff[2][i] for i in range(6)]
 
-            else: raise ValueError
+            else:
+                raise ApplicableRangeError
 
         theta = f1(a, color, FeH)
 
@@ -728,7 +730,8 @@ def _get_giant_Teff_Alonso1999(index, color, **kwargs):
                 w1, w2 = d2/(d1+d2), d1/(d1+d2)
                 a = [w1*coeff[3][i] + w2*coeff[4][i] for i in range(6)]
 
-            else: raise ValueError
+            else:
+                raise ApplicableRangeError
 
         theta = f1(a, color, FeH)
 
@@ -741,7 +744,8 @@ def _get_giant_Teff_Alonso1999(index, color, **kwargs):
             elif 0.50<=color<=1.00 and -1.5>=FeH>-2.5: a = coeff[5]
             elif 0.55<=color<=0.85 and -2.5>=FeH>-3.0: a = coeff[5]
 
-            else: raise ValueError
+            else:
+                raise ApplicableRangeError
 
         theta = f1(a, color, FeH)
 
@@ -752,10 +756,11 @@ def _get_giant_Teff_Alonso1999(index, color, **kwargs):
             (0.85<=color<=2.20 and -1.5>=FeH>-2.5) or \
             (1.00<=color<=1.70 and -2.5>=FeH>-3.0):
 
-            theta = 0.5379 + 0.3981*color + 4.432e-2*color**2 - 2.693e-2*color**3
+            a = coeff[6]
+            theta = f2(a, color)
 
         else:
-            raise ValueError
+            raise ApplicableRangeError
 
     elif index == 'R-I':
         if extrapolation:
@@ -766,7 +771,8 @@ def _get_giant_Teff_Alonso1999(index, color, **kwargs):
             elif 0.35<=color<=0.70 and -1.5>=FeH>-2.5: a = coeff[7]
             elif 0.40<=color<=0.65 and -2.5>=FeH>-3.0: a = coeff[7]
 
-            else: raise ValueError
+            else:
+                raise ApplicableRangeError
 
         theta = f1(a, color, FeH)
 
@@ -796,7 +802,8 @@ def _get_giant_Teff_Alonso1999(index, color, **kwargs):
                 w1, w2 = d2/(d1+d2), d1/(d1+d2)
                 a = [w1*coeff[8][i] + w2*coeff[9][i] for i in range(6)]
 
-            else: raise ValueError
+            else:
+                raise ApplicableRangeError
 
         theta = f1(a, color, FeH)
 
@@ -809,7 +816,8 @@ def _get_giant_Teff_Alonso1999(index, color, **kwargs):
             elif 0.30<=color<=0.70 and -1.5>=FeH>-2.5: a = coeff[10]
             elif 0.35<=color<=0.65 and -2.5>=FeH>-3.0: a = coeff[10]
 
-            else: raise ValueError
+            else:
+                raise ApplicableRangeError
 
         theta = f1(a, color, FeH)
 
@@ -822,15 +830,17 @@ def _get_giant_Teff_Alonso1999(index, color, **kwargs):
             elif 0.30<=color<=0.90 and -1.5>=FeH>-2.5: a = coeff[11]
             elif 0.40<=color<=0.80 and -2.5>=FeH>-3.0: a = coeff[11]
 
-            else: raise ValueError
+            else:
+                raise ApplicableRangeError
 
         theta = f1(a, color, FeH)
 
     elif index == "V-L'":
         if extrapolation or (0.40<=color<=5.00 and +0.2>=FeH>-0.5):
-            theta = 0.5641 + 0.1882*color + 1.890e-2*color**2 - 4.651e-3*color**3
+            a = coeff[12]
+            theta = f2(a, color)
         else:
-            raise ValueError
+            raise ApplicableRangeError
 
     elif index == 'I-K':
         if extrapolation:
@@ -841,7 +851,8 @@ def _get_giant_Teff_Alonso1999(index, color, **kwargs):
             elif 0.70<=color<=1.50 and -1.5>=FeH>-2.5: a = coeff[13]
             elif 0.80<=color<=1.20 and -2.5>=FeH>-3.0: a = coeff[13]
 
-            else: raise ValueError
+            else:
+                raise ApplicableRangeError
 
         theta = f1(a, color, FeH)
 
@@ -871,7 +882,8 @@ def _get_giant_Teff_Alonso1999(index, color, **kwargs):
                 w1, w2 = d2/(d1+d2), d1/(d1+d2)
                 a = [w1*coeff[14][i] + w2*coeff[15][i] for i in range(6)]
 
-            else: raise ValueError
+            else:
+                raise ApplicableRangeError
 
         theta = f1(a, color, FeH)
 
@@ -884,12 +896,13 @@ def _get_giant_Teff_Alonso1999(index, color, **kwargs):
             elif 1.60<=color<=3.40 and -1.5>=FeH>-2.5: a = coeff[16]
             elif 1.60<=color<=2.60 and -2.5>=FeH>-3.0: a = coeff[16]
 
-            else: raise ValueError
+            else:
+                raise ApplicableRangeError
 
         theta = f1(a, color, FeH)
 
     else:
-        raise ValueError
+        raise ParamMissingError
 
     return 5040./theta
 

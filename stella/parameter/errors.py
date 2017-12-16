@@ -16,6 +16,18 @@ class ParamRangeError(Exception):
         return 'Parameter (%s) = %g is not in the range of %s'%(
                 self.param, self.value, self.ref)
 
+class ApplicableRangeError(Exception):
+    def __init__(self):
+        pass
+    def __str__(self):
+        return 'Input parameters excess the applicable range.'
+
+class ParamMissingError(Exception):
+    def __init__(self):
+        pass
+    def __str__(self):
+        return 'Missing Input parameters.'
+
 class MissingParamError(Exception):
     def __init__(self, param, ref):
         self.param = param
