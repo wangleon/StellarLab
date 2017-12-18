@@ -1,3 +1,4 @@
+import math
 import numpy.polynomial as poly
 from .error import ColorIndexError, ParamRangeError, MissingParamError
 from .error import ApplicableRangeError, ParamMissingError
@@ -629,12 +630,18 @@ def _get_giant_Teff_Alonso1999(index, color, **kwargs):
 
     Args:
         index (string): Name of color index.
-        color (float): Value of color index.
-        FeH (float): Metallicity [Fe/H].
+        color (float, tuple or list): Value of color index and its uncertainty.
+            If *float* is given, the uncertainty is set to be zero.
+        FeH (float, tuple or list): Metallicity [Fe/H] and its uncertainty.
+            If *float* is given, the uncertainty is set to be zero.
         extrapolation (bool): Extend the applicable ranges if *True*. Default is
             *False*.
+
     Returns:
-        float: Effective temperature (|Teff|) in K.
+        tuple: A tuple containing:
+
+            * *float*: Effective temperature (|Teff|) in K.
+            * *float*: Standard deviation of |Teff| in K.
 
     See Also:
         * :func:`_get_dwarf_Teff_Alonso1996`
@@ -645,8 +652,22 @@ def _get_giant_Teff_Alonso1999(index, color, **kwargs):
         * `Alonso et al., 2001, A&A, 376, 1039 <http://adsabs.harvard.edu/abs/2001A&A...376.1039A>`_
 
     '''
+    if isinstance(color, tuple) or isinstance(color, list):
+        color, color_err = color[0], color[1]
+    else:
+        color, color_err = color, 0
 
-    FeH = kwargs.pop('FeH', 0.0)
+    try:
+        FeH = kwargs.pop('FeH')
+    except KeyError:
+        print('missing FeH')
+        raise
+
+    if isinstance(FeH, tuple) or isinstance(FeH, list):
+        FeH, FeH_err = FeH[0], FeH[1]
+    else:
+        FeH, FeH_err = FeH, 0
+
     extrapolation = kwargs.pop('extrapolation', False)
 
     coeff = {
@@ -667,87 +688,117 @@ def _get_giant_Teff_Alonso1999(index, color, **kwargs):
         15: [0.4399, 1.209,   -0.3541,    8.443e-2, -0.1063,   -1.686e-2],
         16: [0.5883, 0.2008,  -5.931e-3,  5.319e-3, -1.000e-1, -1.542e-2],
         }
+    dtheta = {1:0.023,  2:0.020,  3:0.020,  4:0.024,  5:0.021,  6:0.017,
+              7:0.022,  8:0.005,  9:0.005,  10:0.023, 11:0.020, 12:0.009,
+              13:0.018, 14:0.013, 15:0.018, 16:0.021}
 
     f1 = lambda a, color, FeH: a[0] + a[1]*color + a[2]*color**2 + \
                                a[3]*color*FeH + a[4]*FeH + a[5]*FeH**2
+    f1_dc = lambda a, color, FeH: a[1] + 2*a[2]*color + a[3]*FeH
+    f1_dm = lambda a, color, FeH: a[3]*color + a[4] + 2*a[5]*FeH
 
     f2 = lambda a, color: a[0] + a[1]*color + a[2]*color**2 + a[3]*color**3
+    f2_dc = lambda a, color: a[1] + 2*a[2]*color + 3*a[3]*color**2
 
     # determine equation
     if index == 'U-V':
         if extrapolation:
             if color <= 1.20:
                 a = coeff[1]
+                d0 = dtheta[1]
             elif color >= 1.50:
                 a = coeff[2]
+                d0 =dtheta[2]
             else:
                 d1, d2 = color-1.20, 1.50-color
                 w1, w2 = d2/(d1+d2), d1/(d1+d2)
                 a = [w1*coeff[1][i] + w2*coeff[2][i] for i in range(6)]
+                d0 = w1*dtheta[1] + w2*dtheta[2]
+        elif (0.40<=color<=1.20 and +0.2>=FeH>-0.5) or \
+             (0.35<=color<=1.20 and -0.5>=FeH>-1.5) or \
+             (0.40<=color<=1.20 and -1.5>=FeH>-2.5) or \
+             (0.50<=color<=1.20 and -2.5>=FeH>-3.0):
+            a = coeff[1]
+            d0 = dtheta[1]
+
+        elif (1.50<=color<=3.50 and +0.2>=FeH>-0.5) or \
+             (1.50<=color<=3.50 and -0.5>=FeH>-1.5) or \
+             (1.50<=color<=3.25 and -1.5>=FeH>-2.5):
+            a = coeff[2]
+            d0 = dtheta[2]
+
+        elif 1.20 < color < 1.50 and +0.2>=FeH>-2.5:
+            d1, d2 = color-1.20, 1.50-color
+            w1, w2 = d2/(d1+d2), d1/(d1+d2)
+            a = [w1*coeff[1][i] + w2*coeff[2][i] for i in range(6)]
+            d0 = w1*dtheta[1] + w2*dtheta[2]
+
         else:
-            if   0.40<=color<=1.20 and +0.2>=FeH>-0.5: a = coeff[1]
-            elif 0.35<=color<=1.20 and -0.5>=FeH>-1.5: a = coeff[1]
-            elif 0.40<=color<=1.20 and -1.5>=FeH>-2.5: a = coeff[1]
-            elif 0.50<=color<=1.20 and -2.5>=FeH>-3.0: a = coeff[1]
-
-            elif 1.50<=color<=3.50 and +0.2>=FeH>-0.5: a = coeff[2]
-            elif 1.50<=color<=3.50 and -0.5>=FeH>-1.5: a = coeff[2]
-            elif 1.50<=color<=3.25 and -1.5>=FeH>-2.5: a = coeff[2]
-
-            elif 1.20 < color < 1.50 and +0.2>=FeH>-2.5:
-                d1, d2 = color-1.20, 1.50-color
-                w1, w2 = d2/(d1+d2), d1/(d1+d2)
-                a = [w1*coeff[1][i] + w2*coeff[2][i] for i in range(6)]
-
-            else:
-                raise ApplicableRangeError
+            raise ApplicableRangeError
 
         theta = f1(a, color, FeH)
+        dc = f1_dc(a, color, FeH)
+        dm = f1_dm(a, color, FeH)
+        dtheta = math.sqrt(d0**2 + (dc*color_err)**2 + (dm*FeH_err)**2)
 
     elif index == 'B-V':
         if extrapolation:
             if color <= 0.70:
                 a = coeff[3]
+                d0 = dtheta[3]
             elif color >= 0.80:
                 a = coeff[4]
+                d0 = dtheta[4]
             else:
                 d1, d2 = color-0.70, 0.80-color
                 w1, w2 = d2/(d1+d2), d1/(d1+d2)
                 a = [w1*coeff[3][i] + w2*coeff[4][i] for i in range(6)]
+                d0 = w1*dtheta[3] + w2*dtheta[4]
+        elif (0.20<=color<=0.70 and +0.2>=FeH>-0.5) or \
+             (0.35<=color<=0.70 and -0.5>=FeH>-1.5) or \
+             (0.35<=color<=0.70 and -1.5>=FeH>-2.5) or \
+             (0.50<=color<=0.70 and -2.5>=FeH>-3.0):
+            a = coeff[3]
+            d0 = dtheta[3]
+
+        elif (0.80<=color<=1.90 and +0.2>=FeH>-0.5) or \
+             (0.80<=color<=1.80 and -0.5>=FeH>-1.5) or \
+             (0.80<=color<=1.35 and -1.5>=FeH>-2.5) or \
+             (0.80<=color<=1.00 and -2.5>=FeH>-3.0):
+            a = coeff[4]
+            d0 = dtheta[4]
+
+        elif 0.70<color<0.80 and +0.2>=FeH>-3.0:
+            d1, d2 = color-0.70, 0.80-color
+            w1, w2 = d2/(d1+d2), d1/(d1+d2)
+            a = [w1*coeff[3][i] + w2*coeff[4][i] for i in range(6)]
+            d0 = w1*dtheta[3] + w2*dtheta[4]
+
         else:
-            if   0.20<=color<=0.70 and +0.2>=FeH>-0.5: a = coeff[3]
-            elif 0.35<=color<=0.70 and -0.5>=FeH>-1.5: a = coeff[3]
-            elif 0.35<=color<=0.70 and -1.5>=FeH>-2.5: a = coeff[3]
-            elif 0.50<=color<=0.70 and -2.5>=FeH>-3.0: a = coeff[3]
-
-            elif 0.80<=color<=1.90 and +0.2>=FeH>-0.5: a = coeff[4]
-            elif 0.80<=color<=1.80 and -0.5>=FeH>-1.5: a = coeff[4]
-            elif 0.80<=color<=1.35 and -1.5>=FeH>-2.5: a = coeff[4]
-            elif 0.80<=color<=1.00 and -2.5>=FeH>-3.0: a = coeff[4]
-
-            elif 0.70<color<0.80 and +0.2>=FeH>-3.0:
-                d1, d2 = color-0.70, 0.80-color
-                w1, w2 = d2/(d1+d2), d1/(d1+d2)
-                a = [w1*coeff[3][i] + w2*coeff[4][i] for i in range(6)]
-
-            else:
-                raise ApplicableRangeError
+            raise ApplicableRangeError
 
         theta = f1(a, color, FeH)
+        dc = f1_dc(a, color, FeH)
+        dm = f1_dm(a, color, FeH)
+        dtheta = math.sqrt(d0**2 + (dc*color_err)**2 + (dm*FeH_err)**2)
 
     elif index == 'V-R':
-        if extrapolation:
-            a = coeff[5]
-        else:
-            if   0.15<=color<=1.70 and +0.2>=FeH>-0.5: a = coeff[5]
-            elif 0.45<=color<=1.50 and -0.5>=FeH>-1.5: a = coeff[5]
-            elif 0.50<=color<=1.00 and -1.5>=FeH>-2.5: a = coeff[5]
-            elif 0.55<=color<=0.85 and -2.5>=FeH>-3.0: a = coeff[5]
+        if extrapolation or \
+            (0.15<=color<=1.70 and +0.2>=FeH>-0.5) or \
+            (0.45<=color<=1.50 and -0.5>=FeH>-1.5) or \
+            (0.50<=color<=1.00 and -1.5>=FeH>-2.5) or \
+            (0.55<=color<=0.85 and -2.5>=FeH>-3.0):
 
-            else:
-                raise ApplicableRangeError
+            a = coeff[5]
+            d0 = dtheta[5]
+
+        else:
+            raise ApplicableRangeError
 
         theta = f1(a, color, FeH)
+        dc = f1_dc(a, color, FeH)
+        dm = f1_dm(a, color, FeH)
+        dtheta = math.sqrt(d0**2 + (dc*color_err)**2 + (dm*FeH_err)**2)
 
     elif index == 'V-I':
         if extrapolation or \
@@ -757,10 +808,14 @@ def _get_giant_Teff_Alonso1999(index, color, **kwargs):
             (1.00<=color<=1.70 and -2.5>=FeH>-3.0):
 
             a = coeff[6]
-            theta = f2(a, color)
+            d0 = dtheta[6]
 
         else:
             raise ApplicableRangeError
+
+        theta = f2(a, color)
+        dc = f2_dc(a, color)
+        dtheta = math.sqrt(d0**2 + (dc*color_err)**2)
 
     elif index == 'R-I':
         if extrapolation or \
@@ -769,40 +824,56 @@ def _get_giant_Teff_Alonso1999(index, color, **kwargs):
             (0.35<=color<=0.70 and -1.5>=FeH>-2.5) or \
             (0.40<=color<=0.65 and -2.5>=FeH>-3.0):
             a = coeff[7]
-            theta = f1(a, color, FeH)
+            d0 = dtheta[7]
         else:
             raise ApplicableRangeError
+
+        theta = f1(a, color, FeH)
+        dc = f1_dc(a, color, FeH)
+        dm = f1_dm(a, color, FeH)
+        dtheta = math.sqrt(d0**2 + (dc*color_err)**2 + (dm*FeH_err)**2)
 
     elif index == 'V-K':
         if extrapolation:
             if color <= 2.00:
                 a = coeff[8]
+                d0 = dtheta[8]
             elif color >= 2.50:
                 a = coeff[9]
+                d0 = dtheta[9]
             else:
                 d1, d2 = color-2.00, 2.50-color
                 w1, w2 = d2/(d1+d2), d1/(d1+d2)
                 a = [w1*coeff[8][i] + w2*coeff[9][i] for i in range(6)]
+                d0 = w1*dtheta[8] + w2*dtheta[9]
+
+        elif (0.20<=color<=2.00 and +0.2>=FeH>-0.5) or \
+             (1.00<=color<=2.00 and -0.5>=FeH>-1.5) or \
+             (1.20<=color<=2.00 and -1.5>=FeH>-2.5) or \
+             (1.70<=color<=2.00 and -2.5>=FeH>-3.0):
+            a = coeff[8]
+            d0 = dtheta[8]
+
+        elif (2.50<=color<=4.90 and +0.2>=FeH>-0.5) or \
+             (2.50<=color<=4.60 and -0.5>=FeH>-1.5) or \
+             (2.50<=color<=3.40 and -1.5>=FeH>-2.5) or \
+             (2.50<=color<=2.80 and -2.5>=FeH>-3.0):
+            a = coeff[9]
+            d0 = dtheta[9]
+
+        elif 2.00<color<2.50 and +0.2>=FeH>-3.0:
+            d1, d2 = color-2.00, 2.50-color
+            w1, w2 = d2/(d1+d2), d1/(d1+d2)
+            a = [w1*coeff[8][i] + w2*coeff[9][i] for i in range(6)]
+            d0 = w1*dtheta[8] + w2*dtheta[9]
+
         else:
-            if   0.20<=color<=2.00 and +0.2>=FeH>-0.5: a = coeff[8]
-            elif 1.00<=color<=2.00 and -0.5>=FeH>-1.5: a = coeff[8]
-            elif 1.20<=color<=2.00 and -1.5>=FeH>-2.5: a = coeff[8]
-            elif 1.70<=color<=2.00 and -2.5>=FeH>-3.0: a = coeff[8]
-
-            elif 2.50<=color<=4.90 and +0.2>=FeH>-0.5: a = coeff[9]
-            elif 2.50<=color<=4.60 and -0.5>=FeH>-1.5: a = coeff[9]
-            elif 2.50<=color<=3.40 and -1.5>=FeH>-2.5: a = coeff[9]
-            elif 2.50<=color<=2.80 and -2.5>=FeH>-3.0: a = coeff[9]
-
-            elif 2.00<color<2.50 and +0.2>=FeH>-3.0:
-                d1, d2 = color-2.00, 2.50-color
-                w1, w2 = d2/(d1+d2), d1/(d1+d2)
-                a = [w1*coeff[8][i] + w2*coeff[9][i] for i in range(6)]
-
-            else:
-                raise ApplicableRangeError
+            raise ApplicableRangeError
 
         theta = f1(a, color, FeH)
+        dc = f1_dc(a, color, FeH)
+        dm = f1_dm(a, color, FeH)
+        dtheta = math.sqrt(d0**2 + (dc*color_err)**2 + (dm*FeH_err)**2)
 
     elif index == 'J-H':
         if extrapolation or \
@@ -811,9 +882,14 @@ def _get_giant_Teff_Alonso1999(index, color, **kwargs):
             (0.30<=color<=0.70 and -1.5>=FeH>-2.5) or \
             (0.35<=color<=0.65 and -2.5>=FeH>-3.0):
             a = coeff[10]
-            theta = f1(a, color, FeH)
+            d0 = dtheta[10]
         else:
             raise ApplicableRangeError
+
+        theta = f1(a, color, FeH)
+        dc = f1_dc(a, color, FeH)
+        dm = f1_dm(a, color, FeH)
+        dtheta = math.sqrt(d0**2 + (dc*color_err)**2 + (dm*FeH_err)**2)
 
     elif index == 'J-K':
         if extrapolation or \
@@ -822,16 +898,25 @@ def _get_giant_Teff_Alonso1999(index, color, **kwargs):
             (0.30<=color<=0.90 and -1.5>=FeH>-2.5) or \
             (0.40<=color<=0.80 and -2.5>=FeH>-3.0):
             a = coeff[11]
-            theta = f1(a, color, FeH)
+            d0 = dtheta[11]
         else:
             raise ApplicableRangeError
+
+        theta = f1(a, color, FeH)
+        dc = f1_dc(a, color, FeH)
+        dm = f1_dm(a, color, FeH)
+        dtheta = math.sqrt(d0**2 + (dc*color_err)**2 + (dm*FeH_err)**2)
 
     elif index == "V-L'":
         if extrapolation or (0.40<=color<=5.00 and +0.2>=FeH>-0.5):
             a = coeff[12]
-            theta = f2(a, color)
+            d0 = dtheta[12]
         else:
             raise ApplicableRangeError
+
+        theta = f2(a, color)
+        dc = f2_dc(a, color)
+        dtheta = math.sqrt(d0**2 + (dc*color_err)**2)
 
     elif index == 'I-K':
         if extrapolation or \
@@ -840,40 +925,56 @@ def _get_giant_Teff_Alonso1999(index, color, **kwargs):
             (0.70<=color<=1.50 and -1.5>=FeH>-2.5) or \
             (0.80<=color<=1.20 and -2.5>=FeH>-3.0):
             a = coeff[13]
-            theta = f1(a, color, FeH)
+            d0 = dtheta[13]
         else:
             raise ApplicableRangeError
+
+        theta = f1(a, color, FeH)
+        dc = f1_dc(a, color, FeH)
+        dm = f1_dm(a, color, FeH)
+        dtheta = math.sqrt(d0**2 + (dc*color_err)**2 + (dm*FeH_err)**2)
 
     elif index == 'b-y':
         if extrapolation:
             if color <= 0.50:
                 a = coeff[14]
+                d0 = dtheta[14]
             elif color >= 0.55:
                 a = coeff[15]
+                d0 = dtheta[15]
             else:
                 d1, d2 = color-0.50, 0.55-color
                 w1, w2 = d2/(d1+d2), d1/(d1+d2)
                 a = [w1*coeff[14][i] + w2*coeff[15][i] for i in range(6)]
+                d0 = w1*dtheta[14] + w2*dtheta[15]
+
+        elif (0.00<=color<=0.50 and +0.2>=FeH>-0.5) or \
+             (0.30<=color<=0.50 and -0.5>=FeH>-1.5) or \
+             (0.35<=color<=0.50 and -1.5>=FeH>-2.5) or \
+             (0.40<=color<=0.50 and -2.5>=FeH>-3.0):
+            a = coeff[14]
+            d0 = dtheta[14]
+
+        elif (0.55<=color<=1.00 and +0.2>=FeH>-0.5) or \
+             (0.55<=color<=0.90 and -0.5>=FeH>-1.5) or \
+             (0.55<=color<=0.80 and -1.5>=FeH>-2.5) or \
+             (0.55<=color<=0.70 and -2.5>=FeH>-3.0):
+            a = coeff[15]
+            d0 = dtheta[15]
+
+        elif 0.50<color<0.55 and +0.2>=FeH>-3.0:
+            d1, d2 = color-0.50, 0.55-color
+            w1, w2 = d2/(d1+d2), d1/(d1+d2)
+            a = [w1*coeff[14][i] + w2*coeff[15][i] for i in range(6)]
+            d0 = w1*dtheta[14] + w2*dtheta[15]
+
         else:
-            if   0.00<=color<=0.50 and +0.2>=FeH>-0.5: a=coeff[14]
-            elif 0.30<=color<=0.50 and -0.5>=FeH>-1.5: a=coeff[14]
-            elif 0.35<=color<=0.50 and -1.5>=FeH>-2.5: a=coeff[14]
-            elif 0.40<=color<=0.50 and -2.5>=FeH>-3.0: a=coeff[14]
-
-            elif 0.55<=color<=1.00 and +0.2>=FeH>-0.5: a=coeff[15]
-            elif 0.55<=color<=0.90 and -0.5>=FeH>-1.5: a=coeff[15]
-            elif 0.55<=color<=0.80 and -1.5>=FeH>-2.5: a=coeff[15]
-            elif 0.55<=color<=0.70 and -2.5>=FeH>-3.0: a=coeff[15]
-
-            elif 0.50<color<0.55 and +0.2>=FeH>-3.0:
-                d1, d2 = color-0.50, 0.55-color
-                w1, w2 = d2/(d1+d2), d1/(d1+d2)
-                a = [w1*coeff[14][i] + w2*coeff[15][i] for i in range(6)]
-
-            else:
-                raise ApplicableRangeError
+            raise ApplicableRangeError
 
         theta = f1(a, color, FeH)
+        dc = f1_dc(a, color, FeH)
+        dm = f1_dm(a, color, FeH)
+        dtheta = math.sqrt(d0**2 + (dc*color_err)**2 + (dm*FeH_err)**2)
 
     elif index == 'u-b':
         if extrapolation or \
@@ -882,15 +983,22 @@ def _get_giant_Teff_Alonso1999(index, color, **kwargs):
             (1.60<=color<=3.40 and -1.5>=FeH>-2.5) or \
             (1.60<=color<=2.60 and -2.5>=FeH>-3.0):
             a = coeff[16]
-            theta = f1(a, color, FeH)
+            d0 = dtheta[16]
         else:
             raise ApplicableRangeError
 
+        theta = f1(a, color, FeH)
+        dc = f1_dc(a, color, FeH)
+        dm = f1_dm(a, color, FeH)
+        dtheta = math.sqrt(d0**2 + (dc*color_err)**2 + (dm*FeH_err)**2)
 
     else:
         raise ParamMissingError
 
-    return 5040./theta
+    teff = 5040./theta
+    teff_err = teff*dtheta/theta
+
+    return teff, teff_err
 
 def _get_dwarf_Teff_Ramirez2005(index, color, **kwargs):
     '''Convert color and [Fe/H] to *T*:sub:`eff` for dwarfs using the
