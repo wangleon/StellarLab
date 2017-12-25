@@ -445,7 +445,8 @@ def _get_giant_Teff_Alonso1999(index, color, **kwargs):
     The most precise calibration relation is that of |Teff| v.s. (*V* − *K*),
     with the standard deviations on |Teff| of only 25 K (for *V* − *K* > 2.0),
     or 40 K (for *V* − *K* < 2.5).
-    The relations of |Teff| v.s. (*V* − *I*) and (*V* − *L'*) are free of [Fe/H].
+    The relations of |Teff| v.s. (*V* − *I*), (*J* − *K*), (*V* − *L'*), and
+    (*I* − *K*) are free of [Fe/H].
 
     The applicable ranges of color indices and metallicities, numbers of sample
     stars, and standard deviations of |Teff| are:
@@ -629,7 +630,9 @@ def _get_giant_Teff_Alonso1999(index, color, **kwargs):
          - 110
 
     Args:
-        index (string): Name of color index.
+        index (string): Name of color index. Available values include *"U-V"*,
+            *"B-V"*, *"V-R"*, *"V-I"*, *"R-I"*, *"V-K"*, *"J-H"*, *"J-K"*,
+            *"V-L'"*, *"I-K"*, *"b-y"*, and *"u-b"*.
         color (float, tuple or list): Value of color index and its uncertainty.
             If *float* is given, the uncertainty is set to be zero.
         FeH (float, tuple or list): Metallicity [Fe/H] and its uncertainty.
@@ -640,8 +643,8 @@ def _get_giant_Teff_Alonso1999(index, color, **kwargs):
     Returns:
         tuple: A tuple containing:
 
-            * *float*: Effective temperature (|Teff|) in K.
-            * *float*: Standard deviation of |Teff| in K.
+            * *float*: Effective temperature (|Teff|) in Kelvin.
+            * *float*: Standard deviation of |Teff| in Kelvin.
 
     See Also:
         * :func:`_get_dwarf_Teff_Alonso1996`
@@ -652,23 +655,28 @@ def _get_giant_Teff_Alonso1999(index, color, **kwargs):
         * `Alonso et al., 2001, A&A, 376, 1039 <http://adsabs.harvard.edu/abs/2001A&A...376.1039A>`_
 
     '''
+    extrapolation = kwargs.pop('extrapolation', False)
+
     if isinstance(color, tuple) or isinstance(color, list):
         color, color_err = color[0], color[1]
     else:
         color, color_err = color, 0
 
-    try:
-        FeH = kwargs.pop('FeH')
-    except KeyError:
-        print('missing FeH')
-        raise
-
-    if isinstance(FeH, tuple) or isinstance(FeH, list):
-        FeH, FeH_err = FeH[0], FeH[1]
+    if extrapolation and index in ['V-I', 'J-K', "V-L'", 'I-K']:
+        # relations of V-I, J-K, V-L' and I-K are free of [Fe/H]
+        pass
     else:
-        FeH, FeH_err = FeH, 0
+        try:
+            FeH = kwargs.pop('FeH')
+        except KeyError:
+            print('missing FeH')
+            raise
 
-    extrapolation = kwargs.pop('extrapolation', False)
+        if isinstance(FeH, tuple) or isinstance(FeH, list):
+            FeH, FeH_err = FeH[0], FeH[1]
+        else:
+            FeH, FeH_err = FeH, 0
+
 
     coeff = {
         1:  [0.6388, 0.4065,  -0.1117,   -2.308e-3, -7.783e-2, -1.200e-2],
@@ -801,6 +809,8 @@ def _get_giant_Teff_Alonso1999(index, color, **kwargs):
         dtheta = math.sqrt(d0**2 + (dc*color_err)**2 + (dm*FeH_err)**2)
 
     elif index == 'V-I':
+        # relation of V-I is free of [Fe/H].
+        # FeH is only used for applicable range if extrapolation is False
         if extrapolation or \
             (0.20<=color<=2.90 and +0.2>=FeH>-0.5) or \
             (0.80<=color<=2.00 and -0.5>=FeH>-1.5) or \
@@ -892,6 +902,8 @@ def _get_giant_Teff_Alonso1999(index, color, **kwargs):
         dtheta = math.sqrt(d0**2 + (dc*color_err)**2 + (dm*FeH_err)**2)
 
     elif index == 'J-K':
+        # relation of J-K is free of [Fe/H].
+        # FeH is only used for applicable range if extrapolation is False
         if extrapolation or \
             (0.00<=color<=1.10 and +0.2>=FeH>-0.5) or \
             (0.20<=color<=1.00 and -0.5>=FeH>-1.5) or \
@@ -902,12 +914,13 @@ def _get_giant_Teff_Alonso1999(index, color, **kwargs):
         else:
             raise ApplicableRangeError
 
-        theta = f1(a, color, FeH)
-        dc = f1_dc(a, color, FeH)
-        dm = f1_dm(a, color, FeH)
-        dtheta = math.sqrt(d0**2 + (dc*color_err)**2 + (dm*FeH_err)**2)
+        theta = f1(a, color, 0.0)
+        dc = f1_dc(a, color, 0.0)
+        dtheta = math.sqrt(d0**2 + (dc*color_err)**2)
 
     elif index == "V-L'":
+        # relation of V-L' is free of [Fe/H].
+        # FeH is only used for applicable range if extrapolation is False
         if extrapolation or (0.40<=color<=5.00 and +0.2>=FeH>-0.5):
             a = coeff[12]
             d0 = dtheta[12]
@@ -919,6 +932,8 @@ def _get_giant_Teff_Alonso1999(index, color, **kwargs):
         dtheta = math.sqrt(d0**2 + (dc*color_err)**2)
 
     elif index == 'I-K':
+        # relation of I-K is free of [Fe/H].
+        # FeH is only used for applicable range if extrapolation is False
         if extrapolation or \
             (0.00<=color<=1.90 and +0.2>=FeH>-0.5) or \
             (0.50<=color<=1.60 and -0.5>=FeH>-1.5) or \
@@ -929,10 +944,9 @@ def _get_giant_Teff_Alonso1999(index, color, **kwargs):
         else:
             raise ApplicableRangeError
 
-        theta = f1(a, color, FeH)
-        dc = f1_dc(a, color, FeH)
-        dm = f1_dm(a, color, FeH)
-        dtheta = math.sqrt(d0**2 + (dc*color_err)**2 + (dm*FeH_err)**2)
+        theta = f1(a, color, 0.0)
+        dc = f1_dc(a, color, 0.0)
+        dtheta = math.sqrt(d0**2 + (dc*color_err)**2)
 
     elif index == 'b-y':
         if extrapolation:

@@ -5,16 +5,14 @@ import numpy.polynomial as poly
 from .errors import ColorIndexError, ParamRangeError, MissingParamError
 
 def get_BC(**kwargs):
-    '''Get *B*C using a variety of calibration relations.
+    '''Get bolometric correction (BC) using a variety of calibration relations.
 
-    Notes
-    -----
     Available calibration relations:
 
-    * `Alonso1995`: returns *BC* in *V* and *K* bands using (*V* − *K*) and
-        [Fe/H] for dwarfs.
-    * `Alonso1999`: returns *BC* using *T*:sub:`eff` and [Fe/H] for giants.
-    * `Masana2006`:
+        * `Alonso1995`: returns *BC* in *V* and *K* bands using (*V* − *K*) and
+          [Fe/H] for dwarfs.
+        * `Alonso1999`: returns *BC* using *T*:sub:`eff` and [Fe/H] for giants.
+        * `Masana2006`:
     '''
 
     ref = kwargs.pop('ref', None)
