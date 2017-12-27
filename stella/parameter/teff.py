@@ -132,6 +132,9 @@ def _BV_to_Teff_Flower1996(BV, is_supergiant=False):
 def _fitfunc1(a, color, FeH, err):
     '''Fitting function of *θ* = 5040/|Teff| vs color index and [Fe/H].
 
+    This function calculates *θ* as a function of (color, [Fe/H]) using the
+    following relation:
+
     .. math::
         \\theta = a_0 + a_1X + a_2X^2 + a_3X\mathrm{[Fe/H]} + a_4\mathrm{[Fe/H]}
         + a_5\mathrm{[Fe/H]}^2
@@ -161,6 +164,29 @@ def _fitfunc1(a, color, FeH, err):
     dtheta = math.sqrt(err**2 + (dc*color_err)**2 + (dm*FeH_err)**2)
     return theta, dtheta
 
+def _fitfunc2(a, color, err):
+    '''Fitting function of *θ* = 5040/|Teff| vs color index.
+
+    This function calculates *θ* as a function of color using the following
+    relation:
+
+    .. math::
+        \\theta = a_0 + a_1X + a_2X^2 + a_3X^3
+
+    Args:
+        a (list or tuple): Coefficients.
+        color (tuple): Value of color index and its uncertainty.
+        err (float): Standard deviation of *θ*.
+    Returns:
+        tuple: A tuple containing:
+
+            * *float*: *θ* = 5040/|Teff|
+            * *float*: Δ\ *θ*
+    '''
+    theta = a[0] + a[1]*color + a[2]*color**2 + a[3]*color**3
+    dc = a[1] + 2*a[2]*color + 3*a[3]*color**2
+    dtheta = math.sqrt(err**2 + (dc*color_err)**2)
+    return theta, dtheta
 
 def _get_dwarf_Teff_Alonso1996(index, color, **kwargs):
     '''Convert color and [Fe/H] to |Teff| for dwarfs and subdwarfs using the
@@ -334,10 +360,20 @@ def _get_dwarf_Teff_Alonso1996(index, color, **kwargs):
     else:
         color, color_err = color, 0
 
-    if isinstance(FeH, tuple) or isinstance(FeH, list):
-        FeH, FeH_err = FeH[0], FeH[1]
+    if extrapolation and index in ['J-K']:
+        # relation of J-K is freeof [Fe/H]
+        pass
     else:
-        FeH, FeH_err = FeH, 0
+        try:
+            FeH = kwargs.pop('FeH')
+        except KeyError:
+            print('missing FeH')
+            raise
+
+        if isinstance(FeH, tuple) or isinstance(FeH, list):
+            FeH, FeH_err = FeH[0], FeH[1]
+        else:
+            FeH, FeH_err = FeH, 0
 
     if not extrapolation:
         if FeH < -3.5 or FeH > +0.5:
@@ -396,7 +432,10 @@ def _get_dwarf_Teff_Alonso1996(index, color, **kwargs):
             (-1.5 <= FeH < -0.5 and 0.60 <= color <= 1.30) or \
             (-2.5 <= FeH < -1.5 and 0.70 <= color <= 1.30) or \
             (-3.5 <= FeH < -2.5 and 0.65 <= color <= 1.20):
-            theta = 0.424 + 0.610*color - 0.096*color**2
+
+            a = [0.424, 0.610, -0.096, 0.0]
+            d0 = 0.021
+            theta, dtheta = _fitfun2(a, (color, color_err), d0)
         else:
             raise ApplicableRangeError
 
@@ -461,7 +500,9 @@ def _get_dwarf_Teff_Alonso1996(index, color, **kwargs):
             (-2.5 <= FeH < -1.5 and 0.25 <= color <= 0.75) or \
             (-3.5 <= FeH < -2.5 and 0.20 <= color <= 0.60):
 
-            theta = 0.582 + 0.799*color + 0.085*color**2
+            a = [0.582, 0.799, 0.085, 0.0]
+            d0 = 0.025
+            theta, dtheta = _fitfun2(a, (color, color_err), d0)
         else:
             raise ApplicableRangeError
 
@@ -735,7 +776,6 @@ def _get_giant_Teff_Alonso1999(index, color, **kwargs):
         else:
             FeH, FeH_err = FeH, 0
 
-
     coeff = {
         1:  [0.6388, 0.4065,  -0.1117,   -2.308e-3, -7.783e-2, -1.200e-2],
         2:  [0.8323, 9.374e-2, 1.184e-2,  2.351e-2, -0.1392,   -1.944e-2],
@@ -757,9 +797,6 @@ def _get_giant_Teff_Alonso1999(index, color, **kwargs):
     dtheta = {1:0.023,  2:0.020,  3:0.020,  4:0.024,  5:0.021,  6:0.017,
               7:0.022,  8:0.005,  9:0.005,  10:0.023, 11:0.020, 12:0.009,
               13:0.018, 14:0.013, 15:0.018, 16:0.021}
-
-    f2 = lambda a, color: a[0] + a[1]*color + a[2]*color**2 + a[3]*color**3
-    f2_dc = lambda a, color: a[1] + 2*a[2]*color + 3*a[3]*color**2
 
     # determine equation
     if index == 'U-V':
@@ -846,11 +883,10 @@ def _get_giant_Teff_Alonso1999(index, color, **kwargs):
 
             a = coeff[5]
             d0 = dtheta[5]
+            theta, dtheta = _fitfunc1(a, (color, color_err), (FeH, FeH_err), d0)
 
         else:
             raise ApplicableRangeError
-
-        theta, dtheta = _fitfunc1(a, (color, color_err), (FeH, FeH_err), d0)
 
     elif index == 'V-I':
         # relation of V-I is free of [Fe/H].
@@ -863,13 +899,10 @@ def _get_giant_Teff_Alonso1999(index, color, **kwargs):
 
             a = coeff[6]
             d0 = dtheta[6]
+            theta, dtheta = _fitfunc2(a, (color, color_err), d0)
 
         else:
             raise ApplicableRangeError
-
-        theta = f2(a, color)
-        dc = f2_dc(a, color)
-        dtheta = math.sqrt(d0**2 + (dc*color_err)**2)
 
     elif index == 'R-I':
         if extrapolation or \
@@ -879,10 +912,9 @@ def _get_giant_Teff_Alonso1999(index, color, **kwargs):
             (0.40<=color<=0.65 and -2.5>=FeH>-3.0):
             a = coeff[7]
             d0 = dtheta[7]
+            theta, dtheta = _fitfunc1(a, (color, color_err), (FeH, FeH_err), d0)
         else:
             raise ApplicableRangeError
-
-        theta, dtheta = _fitfunc1(a, (color, color_err), (FeH, FeH_err), d0)
 
     elif index == 'V-K':
         if extrapolation:
@@ -931,10 +963,9 @@ def _get_giant_Teff_Alonso1999(index, color, **kwargs):
             (0.35<=color<=0.65 and -2.5>=FeH>-3.0):
             a = coeff[10]
             d0 = dtheta[10]
+            theta, dtheta = _fitfunc1(a, (color, color_err), (FeH, FeH_err), d0)
         else:
             raise ApplicableRangeError
-
-        theta, dtheta = _fitfunc1(a, (color, color_err), (FeH, FeH_err), d0)
 
     elif index == 'J-K':
         # relation of J-K is free of [Fe/H].
@@ -946,10 +977,9 @@ def _get_giant_Teff_Alonso1999(index, color, **kwargs):
             (0.40<=color<=0.80 and -2.5>=FeH>-3.0):
             a = coeff[11]
             d0 = dtheta[11]
+            theta, dtheta = _fitfunc1(a, (color, color_err), (0.0, 0.0), d0)
         else:
             raise ApplicableRangeError
-
-        theta, dtheta = _fitfunc1(a, (color, color_err), (0.0, 0.0), d0)
 
     elif index == "V-L'":
         # relation of V-L' is free of [Fe/H].
@@ -957,12 +987,9 @@ def _get_giant_Teff_Alonso1999(index, color, **kwargs):
         if extrapolation or (0.40<=color<=5.00 and +0.2>=FeH>-0.5):
             a = coeff[12]
             d0 = dtheta[12]
+            theta, dtheta = _fitfunc2(a, (color, color_err), d0)
         else:
             raise ApplicableRangeError
-
-        theta = f2(a, color)
-        dc = f2_dc(a, color)
-        dtheta = math.sqrt(d0**2 + (dc*color_err)**2)
 
     elif index == 'I-K':
         # relation of I-K is free of [Fe/H].
@@ -974,10 +1001,9 @@ def _get_giant_Teff_Alonso1999(index, color, **kwargs):
             (0.80<=color<=1.20 and -2.5>=FeH>-3.0):
             a = coeff[13]
             d0 = dtheta[13]
+            theta, dtheta = _fitfunc1(a, (color, color_err), (0.0, 0.0), d0)
         else:
             raise ApplicableRangeError
-
-        theta, dtheta = _fitfunc1(a, (color, color_err), (0.0, 0.0), d0)
 
     elif index == 'b-y':
         if extrapolation:
@@ -1026,10 +1052,9 @@ def _get_giant_Teff_Alonso1999(index, color, **kwargs):
             (1.60<=color<=2.60 and -2.5>=FeH>-3.0):
             a = coeff[16]
             d0 = dtheta[16]
+            theta, dtheta = _fitfunc1(a, (color, color_err), (FeH, FeH_err), d0)
         else:
             raise ApplicableRangeError
-
-        theta, dtheta = _fitfunc1(a, (color, color_err), (FeH, FeH_err), d0)
 
     else:
         raise ParamMissingError
