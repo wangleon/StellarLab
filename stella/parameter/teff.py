@@ -138,6 +138,27 @@ def _fitfunc1(a, color, FeH, err):
     .. math::
         \\theta = a_0 + a_1X + a_2X^2 + a_3X\mathrm{[Fe/H]} + a_4\mathrm{[Fe/H]}
         + a_5\mathrm{[Fe/H]}^2
+    
+    where *X* denotes the value of color index.
+    The partial deviatives of *θ* with respect to *X* and [Fe/H] are:
+
+    .. math::
+        \\frac{\partial\,\\theta}{\partial\,X} = a_1 + 2a_2X
+            + a_3\mathrm{[Fe/H]} \\\\
+        \\frac{\partial\,\\theta}{\partial\,\mathrm{[Fe/H]}} = a_3X + a_4
+            + 2a_5\mathrm{[Fe/H]}
+    
+    The uncertainty of *θ* are calculated as the quadratic sum of uncertainties
+    caused by Δ\ *X* and Δ[Fe/H], and the standard deviation of fitted
+    relation:
+
+    .. math::
+        \Delta\\theta = \sqrt{
+            \left(\\frac{\partial\,\\theta}{\partial\,X}\Delta X\\right)^2 +
+            \left(\\frac{\partial\,\\theta}{\partial\,\mathrm{[Fe/H]}}
+            \Delta\mathrm{[Fe/H]}\\right)^2 +
+            \sigma^2(\\theta)
+        }
 
     Args:
         a (list or tuple): Coefficients.
@@ -149,9 +170,6 @@ def _fitfunc1(a, color, FeH, err):
 
             * *float*: *θ* = 5040/|Teff|
             * *float*: Δ\ *θ*
-
-    * *float*: ∂\ *θ*/∂\ *c* 
-    * *float*: ∂\ *θ*/∂([Fe/H])
 
     '''
     color, color_err = color
@@ -172,6 +190,21 @@ def _fitfunc2(a, color, err):
 
     .. math::
         \\theta = a_0 + a_1X + a_2X^2 + a_3X^3
+
+    where *X* denotes the value of color index.
+    The partial deviatives of *θ* with respect to *X* is:
+
+    .. math::
+        \\frac{\partial\,\\theta}{\partial\,X} = a_1 + 2a_2X + 3a_3X^2
+    
+    The uncertainty of *θ* are calculated as the quadratic sum of uncertainties
+    caused by Δ\ *X* and the standard deviation of fitted relation:
+
+    .. math::
+        \Delta\\theta = \sqrt{
+            \left(\\frac{\partial\,\\theta}{\partial\,X}\Delta X\\right)^2 +
+            \sigma^2(\\theta)
+        }
 
     Args:
         a (list or tuple): Coefficients.
