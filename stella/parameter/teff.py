@@ -337,12 +337,17 @@ def _get_dwarf_Teff_Alonso1996(index, color, **kwargs):
         index (string): Name of color index. Available values include *"B-V"*,
             *"R-I"*, *"V-R"*, *"V-I"*, *"V-K"*, *"b-y"*, *"beta"*, *"J-K"*, and
             *"J-H"*.
-        color (float): Value of color index.
-        FeH (float): Metallicity [Fe/H].
+        color (float, tuple or list): Value of color index and its uncertainty.
+            If *float* is given, the uncertainty is set to be zero.
+        FeH (float, tuple or list): Metallicity [Fe/H] and its uncertainty.
+            If *float* is given, the uncertainty is set to be zero.
         extrapolation (bool): Extend the applicable ranges if *True*. Default is
             *False*.
     Returns:
-        float: Effective temperature (|Teff|) in K.
+        tuple: A tuple containing:
+
+            * *float*: Effective temperature (|Teff|) in Kelvin.
+            * *float*: Standard deviation of |Teff| in Kelvin.
 
     See Also:
         * :func:`_get_giant_Teff_Alonso1999`
@@ -1282,12 +1287,17 @@ def _get_dwarf_Teff_Ramirez2005(index, color, **kwargs):
 
     Args:
         index (string): Name of color index.
-        color (float): Value of color index.
-        FeH (float): Metallicity [Fe/H].
+        color (float, tuple or list): Value of color index and its uncertainty.
+            If *float* is given, the uncertainty is set to be zero.
+        FeH (float, tuple or list): Metallicity [Fe/H] and its uncertainty.
+            If *float* is given, the uncertainty is set to be zero.
         extrapolation (bool): Extend the applicable ranges if *True*. Default is
             *False*.
     Returns:
-        float: Effective temperature (|Teff|) in K.
+        tuple: A tuple containing:
+
+            * *float*: Effective temperature (|Teff|) in Kelvin.
+            * *float*: Standard deviation of |Teff| in Kelvin.
 
     References:
         * `Ramírez & Meléndez, 2005, ApJ, 626, 465 <http://adsabs.harvard.edu/abs/2005ApJ...626..465R>`_
@@ -1327,8 +1337,7 @@ def _get_dwarf_Teff_Ramirez2005(index, color, **kwargs):
     else:
         raise ColorIndexError(index, reference)
 
-    theta = a[0] + a[1]*color + a[2]*color**2 + a[3]*color*FeH \
-            + a[4]*FeH + a[5]*FeH**2
+    theta, dtheta = _fitfunc1(a, (color, color_err), (FeH, FeH_err), 0.0)
 
     if index == 'B-V':
         P1 = [-261.548, 684.977, -470.049, 79.8977]
