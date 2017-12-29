@@ -1214,31 +1214,31 @@ def _get_dwarf_Teff_Ramirez2005(index, color, **kwargs):
            −4.0 < [Fe/H] < −2.5
          - 308
          - 66
-       * - (*V* − *R*)
-         - 0.204 < (*V* − *R*) < 0.880 |br|
-           0.284 < (*V* − *R*) < 0.546 |br|
-           0.264 < (*V* − *R*) < 0.532 |br|
-           0.240 < (*V* − *R*) < 0.336
+       * - (*V* − *R*:sub:`c`)
+         - 0.204 < (*V* − *R*:sub:`c`) < 0.880 |br|
+           0.284 < (*V* − *R*:sub:`c`) < 0.546 |br|
+           0.264 < (*V* − *R*:sub:`c`) < 0.532 |br|
+           0.240 < (*V* − *R*:sub:`c`) < 0.336
          - −0.5 < [Fe/H] < +0.5  |br|
            −1.5 < [Fe/H] < −0.5  |br|
            −2.5 < [Fe/H] < −1.5  |br|
            −4.0 < [Fe/H] < −2.5
          - 133
          - 84
-       * - (*V* − *I*)
-         - 0.491 < (*V* − *I*) < 1.721 |br|
-           0.597 < (*V* − *I*) < 1.052 |br|
-           0.547 < (*V* − *I*) < 1.026
+       * - (*V* − *I*:sub:`c`)
+         - 0.491 < (*V* − *I*:sub:`c`) < 1.721 |br|
+           0.597 < (*V* − *I*:sub:`c`) < 1.052 |br|
+           0.547 < (*V* − *I*:sub:`c`) < 1.026
          - −0.5 < [Fe/H] < +0.5  |br|
            −1.5 < [Fe/H] < −0.5  |br|
            −2.5 < [Fe/H] < −1.5
          - 127
          - 68
-       * - (*R* − *I*)
-         - 0.242 < (*R* − *I*) < 0.838 |br|
-           0.300 < (*R* − *I*) < 0.718 |br|
-           0.283 < (*R* − *I*) < 0.551 |br|
-           0.290 < (*R* − *I*) < 0.364
+       * - (*R*:sub:`c` − *I*:sub:`c`)
+         - 0.242 < (*R*:sub:`c` − *I*:sub:`c`) < 0.838 |br|
+           0.300 < (*R*:sub:`c` − *I*:sub:`c`) < 0.718 |br|
+           0.283 < (*R*:sub:`c` − *I*:sub:`c`) < 0.551 |br|
+           0.290 < (*R*:sub:`c` − *I*:sub:`c`) < 0.364
          - −0.5 < [Fe/H] < +0.5  |br|
            −1.5 < [Fe/H] < −0.5  |br|
            −2.5 < [Fe/H] < −1.5  |br|
@@ -1294,22 +1294,22 @@ def _get_dwarf_Teff_Ramirez2005(index, color, **kwargs):
            −4.0 < [Fe/H] < −2.5
          - 364
          - 57
-       * - (*V* − *K*)
-         - 0.896 < (*V* − *K*) < 3.360 |br|
-           1.060 < (*V* − *K*) < 2.665 |br|
-           1.101 < (*V* − *K*) < 2.670 |br|
-           1.126 < (*V* − *K*) < 2.596
+       * - (*V* − *K*:sub:`s`)
+         - 0.896 < (*V* − *K*:sub:`s`) < 3.360 |br|
+           1.060 < (*V* − *K*:sub:`s`) < 2.665 |br|
+           1.101 < (*V* − *K*:sub:`s`) < 2.670 |br|
+           1.126 < (*V* − *K*:sub:`s`) < 2.596
          - −0.5 < [Fe/H] < +0.5  |br|
            −1.5 < [Fe/H] < −0.5  |br|
            −2.5 < [Fe/H] < −1.5  |br|
            −4.0 < [Fe/H] < −2.5
          - 397
          - 50
-       * - (*V*:sub:`T` − *K*)
-         - 0.942 < (*V*:sub:`T` − *K*) < 3.284 |br|
-           1.078 < (*V*:sub:`T` − *K*) < 2.561 |br|
-           1.237 < (*V*:sub:`T` − *K*) < 2.406 |br|
-           1.170 < (*V*:sub:`T` − *K*) < 1.668
+       * - (*V*:sub:`T` − *K*:sub:`s`)
+         - 0.942 < (*V*:sub:`T` − *K*:sub:`s`) < 3.284 |br|
+           1.078 < (*V*:sub:`T` − *K*:sub:`s`) < 2.561 |br|
+           1.237 < (*V*:sub:`T` − *K*:sub:`s`) < 2.406 |br|
+           1.170 < (*V*:sub:`T` − *K*:sub:`s`) < 1.668
          - −0.5 < [Fe/H] < +0.5  |br|
            −1.5 < [Fe/H] < −0.5  |br|
            −2.5 < [Fe/H] < −1.5  |br|
@@ -1319,9 +1319,9 @@ def _get_dwarf_Teff_Ramirez2005(index, color, **kwargs):
 
     Args:
         index (string): Name of color index. Accepted names include *"B-V"*,
-            *"b-y"*, *"Y-V"*, *"V-S"*, *"B2-V1"*, *"B2-G"*, *"t"*, *"V-R"*,
-            *"V-I"*, *"R-I"*, *"C42-C45"*, *"C42-C48"*, *"BT-VT"*, *"V-J"*,
-            *"V-H"*, *"V-K"*, *"VT-K"*.
+            *"b-y"*, *"Y-V"*, *"V-S"*, *"B2-V1"*, *"B2-G"*, *"t"*, *"V-Rc"*,
+            *"V-Ic"*, *"Rc-Ic"*, *"C42-C45"*, *"C42-C48"*, *"BT-VT"*, *"V-J"*,
+            *"V-H"*, *"V-Ks"*, *"VT-Ks"*.
         color (float, tuple or list): Value of color index and its uncertainty.
             If *float* is given, the uncertainty is set to be zero.
         FeH (float, tuple or list): Metallicity [Fe/H] and its uncertainty.
@@ -1368,16 +1368,16 @@ def _get_dwarf_Teff_Ramirez2005(index, color, **kwargs):
             'B2-V1':   [0.6019, 0.7663, -0.0713, -0.0339, -0.0382, -0.0137],
             'B2-G':    [0.8399, 0.4909, -0.0666, -0.0360, -0.0468, -0.0124],
             't':       [0.7696, 0.5927,  0.3439, -0.0437, -0.0143, -0.0088],
-            'V-R':     [0.4333, 1.4399, -0.5419, -0.0481, -0.0239, -0.0125],
-            'V-I':     [0.3295, 0.9516, -0.2290, -0.0316,  0.0003, -0.0081],
-            'R-I':     [0.2919, 2.1141, -1.0723, -0.0756,  0.0267, -0.0041],
+            'V-Rc':    [0.4333, 1.4399, -0.5419, -0.0481, -0.0239, -0.0125],
+            'V-Ic':    [0.3295, 0.9516, -0.2290, -0.0316,  0.0003, -0.0081],
+            'Rc-Ic':   [0.2919, 2.1141, -1.0723, -0.0756,  0.0267, -0.0041],
             'C42-C45': [0.5153, 0.5963, -0.0572, -0.0573, -0.0221, -0.0018],
             'C42-C48': [0.1601, 0.4533, -0.0135, -0.0471,  0.0305, -0.0020],
             'BT-VT':   [0.5619, 0.4462, -0.0029,  0.0003, -0.0746, -0.0190],
             'V-J':     [0.4050, 0.4792, -0.0617, -0.0392,  0.0401, -0.0023],
             'V-H':     [0.4931, 0.3056, -0.0241, -0.0396,  0.0678,  0.0020],
-            'V-K':     [0.4942, 0.2809, -0.0180, -0.0294,  0.0444, -0.0008],
-            'VT-K':    [0.4886, 0.2773, -0.0195, -0.0300,  0.0467, -0.0008],
+            'V-Ks':    [0.4942, 0.2809, -0.0180, -0.0294,  0.0444, -0.0008],
+            'VT-Ks':   [0.4886, 0.2773, -0.0195, -0.0300,  0.0467, -0.0008],
             }
 
     std_teff = {
@@ -1388,16 +1388,16 @@ def _get_dwarf_Teff_Ramirez2005(index, color, **kwargs):
                 'B2-V1':   74,
                 'B2-G':    66,
                 't':       66,
-                'V-R':     84,
-                'V-I':     68,
-                'R-I':     76,
+                'V-Rc':    84,
+                'V-Ic':    68,
+                'Rc-Ic':   76,
                 'C42-C45': 70,
                 'C42-C48': 70,
                 'BT-VT':  104,
                 'V-J':     62,
                 'V-H':     57,
-                'V-K':     50,
-                'VT-K':    59,
+                'V-Ks':    50,
+                'VT-Ks':   59,
             }
 
     if index in coef:
@@ -1407,7 +1407,7 @@ def _get_dwarf_Teff_Ramirez2005(index, color, **kwargs):
 
     theta, _ = _fitfunc1(a, (color, 0.0), (FeH, 0.0), 0.0)
     teff = 5040./theta
-    d0 = theta*std_teff[index]/teff
+    d0 = theta*std_teff[index]/teff*theta
     theta, dtheta = _fitfunc1(a, (color, color_err), (FeH, FeH_err), d0)
 
     if index == 'B-V':
@@ -1529,7 +1529,7 @@ def _get_dwarf_Teff_Ramirez2005(index, color, **kwargs):
             elif -4.0 < FeH <=-2.5 and  0.020 <= color <= 0.295: P = P4
             else:
                 raise ApplicableRangeError
-    elif index == 'V-R':
+    elif index == 'V-Rc':
         P1 = [-2666.55, 27264.5, -103923.0, 174663.0, -104940.0, -23249.4, 32644.9]
         P2 = [4.20153]
         P3 = [123.940, -342.217]
@@ -1546,7 +1546,7 @@ def _get_dwarf_Teff_Ramirez2005(index, color, **kwargs):
             elif -4.0 < FeH <=-2.5 and 0.240 <= color <= 0.336: P = P4
             else:
                 raise ApplicableRangeError
-    elif index == 'V-I':
+    elif index == 'V-Ic':
         P1 = [-2757.79, 9961.33, -10546.6, -1746.05, 10512.3, -6653.57, 1301.21]
         P2 = [-22.9008, 40.2078]
         P3 = [-667.732, 1709.88, -1069.62]
@@ -1560,7 +1560,7 @@ def _get_dwarf_Teff_Ramirez2005(index, color, **kwargs):
             elif -2.5 < FeH <=-1.5 and 0.547 <= color <= 1.026: P = P3
             else:
                 raise ApplicableRangeError
-    elif index == 'R-I':
+    elif index == 'Rc-Ic':
         P1 = [-3326.97, 26263.8, -75355.8, 94246.5, -43334.8]
         P2 = [12.4740]
         P3 = [-5837.31, 41439.2, -94729.8, 69584.8]
@@ -1653,7 +1653,7 @@ def _get_dwarf_Teff_Ramirez2005(index, color, **kwargs):
             elif -4.0 < FeH <=-2.5 and 1.093 <= color <= 2.388: P = P4
             else:
                 raise ApplicableRangeError
-    elif index == 'V-K':
+    elif index == 'V-Ks':
         P1 = [-1425.36, 3218.36, -2566.54, 859.644, -102.554]
         P2 = [2.35133]
         P3 = [-1849.46, 4577.00, -4284.02, 1770.38, -268.589]
@@ -1670,7 +1670,7 @@ def _get_dwarf_Teff_Ramirez2005(index, color, **kwargs):
             elif -4.0 < FeH <=-2.5 and 1.126 <= color <= 2.596: P = P4
             else:
                 raise ApplicableRangeError
-    elif index == 'VT-K':
+    elif index == 'VT-Ks':
         P1 = [-1581.85, 3273.10, -2395.38, 736.352, -80.8177]
         P2 = [68.1279, -130.968, 52.8391]
         P3 = [-2384.82, 4196.14, -2557.04, 595.365, -31.9955]
