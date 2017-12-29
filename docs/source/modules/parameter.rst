@@ -13,6 +13,7 @@ Effective Temperature
 .. autosummary::
    color_to_Teff
    _fitfunc1
+   _fitfunc2
    _BV_to_Teff_Flower1996
    _get_dwarf_Teff_Alonso1996
    _get_giant_Teff_Alonso1999
