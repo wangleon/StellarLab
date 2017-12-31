@@ -1119,10 +1119,11 @@ def _get_dwarf_Teff_Ramirez2005(index, color, **kwargs):
     (*b* − *y*) in Strömgren system,
     (*Y* − *V*) and (*V* − *S*) in Vilnius system,
     (*B*:sub:`2` − *V*:sub:`1`), (*B*:sub:`2` − *G*), and *t* in Geneva system,
-    (*V* − *R*), (*V* − *I*), and (*R* − *I*) in Johnson-Cousins system,
+    (*V* − *R*:sub:`c`), (*V* − *I*:sub:`c`), and (*R*:sub:`c` − *I*:sub:`c`) in
+    Johnson-Cousins system,
     *C*\ (42 − 45) and *C*\ (42 − 48) in DDO system,
-    (*V* − *J*), (*V* − *H*), and (*V* − *K*) in Johnson-2MASS system,
-    and (*V*:sub:`T` − *K*) in Tycho-2MASS system.
+    (*V* − *J*), (*V* − *H*), and (*V* − *K*:sub:`s`) in Johnson-2MASS system,
+    and (*V*:sub:`T` − *K*:sub:`s`) in Tycho-2MASS system.
 
     The applicable ranges of color indices and metallicities for dwarfs, numbers
     of sample stars, and standard deviations of |Teff| are summarized as below
@@ -1345,8 +1346,6 @@ def _get_dwarf_Teff_Ramirez2005(index, color, **kwargs):
         color, color_err = color[0], color[1]
     else:
         color, color_err = color, 0
-
-    reference = 'Ramirez et al., 2005, ApJ, 626, 465'
 
     try:
         FeH = kwargs.pop('FeH')
@@ -1926,54 +1925,95 @@ def _get_giant_Teff_Ramirez2005(index, color, **kwargs):
          - 39
 
     Args:
-        index (string): Name of color index.
-        color (float): Value of color index.
-        FeH (float): Metallicity [Fe/H].
+        index (string): Name of color index. Accepted names include *"B-V"*,
+            *"b-y"*, *"Y-V"*, *"V-S"*, *"B2-V1"*, *"B2-G"*, *"t"*, *"V-Rc"*,
+            *"V-Ic"*, *"Rc-Ic"*, *"C42-C45"*, *"C42-C48"*, *"BT-VT"*, *"V-J"*,
+            *"V-H"*, *"V-Ks"*, *"VT-Ks"*.
+        color (float, tuple or list): Value of color index and its uncertainty.
+            If *float* is given, the uncertainty is set to be zero.
+        FeH (float, tuple or list): Metallicity [Fe/H] and its uncertainty.
+            If *float* is given, the uncertainty is set to be zero.
         extrapolation (bool): Extend the applicable ranges if *True*. Default is
             *False*.
     Returns:
-        float: Effective temperature (|Teff|) in K.
+        tuple: A tuple containing:
+
+            * *float*: Effective temperature (|Teff|) in Kelvin.
+            * *float*: Standard deviation of |Teff| in Kelvin.
 
     References:
         * `Ramírez & Meléndez, 2005, ApJ, 626, 465 <http://adsabs.harvard.edu/abs/2005ApJ...626..465R>`_
 
     '''
-    reference = 'Ramirez et al., 2005, ApJ, 626, 465'
+    extrapolation = kwargs.pop('extrapolation',False)
+
+    if isinstance(color, tuple) or isinstance(color, list):
+        color, color_err = color[0], color[1]
+    else:
+        color, color_err = color, 0
 
     try:
         FeH = kwargs.pop('FeH')
     except KeyError:
-        raise MissingParamError('[Fe/H]', reference)
+        print('missing FeH')
+        raise
 
-    extrapolation = kwargs.pop('extrapolation',False)
+    if isinstance(FeH, tuple) or isinstance(FeH, list):
+        FeH, FeH_err = FeH[0], FeH[1]
+    else:
+        FeH, FeH_err = FeH, 0
 
     # coeffs in table 3
-    coef = {}
-    coef['B-V']    = [0.5737, 0.4882, -0.0149,  0.0563, -0.1160, -0.0114]
-    coef['b-y']    = [0.5515, 0.9085, -0.1494,  0.0616, -0.0668, -0.0083]
-    coef['Y-V']    = [0.3672, 1.0467, -0.1995,  0.0650, -0.0913, -0.0133]
-    coef['V-S']    = [0.3481, 1.1188, -0.2068,  0.0299, -0.0481, -0.0083]
-    coef['B2-V1']  = [0.6553, 0.6278, -0.0629,  0.0627, -0.0816, -0.0084]
-    coef['B2-G']   = [0.8492, 0.4344, -0.0365,  0.0466, -0.0696, -0.0107]
-    coef['t']      = [0.7460, 0.8151, -0.1943,  0.0855, -0.0421, -0.0034]
-    coef['V-RC']   = [0.3849, 1.6205, -0.6395,  0.1060, -0.0875, -0.0089]
-    coef['V-IC']   = [0.3575, 0.9069, -0.2025,  0.0395, -0.0551, -0.0061]
-    coef['RC-IC']  = [0.4351, 1.6549, -0.7215, -0.0610,  0.0332, -0.0023]
-    coef['C42-45'] = [0.4783, 0.7748, -0.1361, -0.0712, -0.0117,  0.0071]
-    coef['C42-48'] = [0.0023, 0.6401, -0.0632, -0.0023, -0.0706, -0.0070]
-    coef['BT-VT']  = [0.5726, 0.4461, -0.0324,  0.0518, -0.1170, -0.0094]
-    coef['V-J']    = [0.2943, 0.5604, -0.0677,  0.0179, -0.0532, -0.0088]
-    coef['V-H']    = [0.4354, 0.3405, -0.0263, -0.0012, -0.0049, -0.0027]
-    coef['V-Ks']   = [0.4405, 0.3272, -0.0252, -0.0016, -0.0053, -0.0040]
-    coef['VT-Ks']  = [0.4813, 0.2871, -0.0203, -0.0045,  0.0062, -0.0019]
+    coef = {
+            'B-V':     [0.5737, 0.4882, -0.0149,  0.0563, -0.1160, -0.0114],
+            'b-y':     [0.5515, 0.9085, -0.1494,  0.0616, -0.0668, -0.0083],
+            'Y-V':     [0.3672, 1.0467, -0.1995,  0.0650, -0.0913, -0.0133],
+            'V-S':     [0.3481, 1.1188, -0.2068,  0.0299, -0.0481, -0.0083],
+            'B2-V1':   [0.6553, 0.6278, -0.0629,  0.0627, -0.0816, -0.0084],
+            'B2-G':    [0.8492, 0.4344, -0.0365,  0.0466, -0.0696, -0.0107],
+            't':       [0.7460, 0.8151, -0.1943,  0.0855, -0.0421, -0.0034],
+            'V-Rc':    [0.3849, 1.6205, -0.6395,  0.1060, -0.0875, -0.0089],
+            'V-Ic':    [0.3575, 0.9069, -0.2025,  0.0395, -0.0551, -0.0061],
+            'Rc-Ic':   [0.4351, 1.6549, -0.7215, -0.0610,  0.0332, -0.0023],
+            'C42-C45': [0.4783, 0.7748, -0.1361, -0.0712, -0.0117,  0.0071],
+            'C42-C48': [0.0023, 0.6401, -0.0632, -0.0023, -0.0706, -0.0070],
+            'BT-VT':   [0.5726, 0.4461, -0.0324,  0.0518, -0.1170, -0.0094],
+            'V-J':     [0.2943, 0.5604, -0.0677,  0.0179, -0.0532, -0.0088],
+            'V-H':     [0.4354, 0.3405, -0.0263, -0.0012, -0.0049, -0.0027],
+            'V-Ks':    [0.4405, 0.3272, -0.0252, -0.0016, -0.0053, -0.0040],
+            'VT-Ks':   [0.4813, 0.2871, -0.0203, -0.0045,  0.0062, -0.0019],
+            }
+
+    std_teff = {
+                'B-V':     51,
+                'b-y':     68,
+                'Y-V':     78,
+                'V-S':     69,
+                'B2-V1':   45,
+                'B2-G':    39,
+                't':       44,
+                'V-Rc':    41,
+                'V-Ic':    40,
+                'Rc-Ic':   62,
+                'C42-C45': 57,
+                'C42-C48': 49,
+                'BT-VT':   82,
+                'V-J':     38,
+                'V-H':     32,
+                'V-Ks':    28,
+                'VT-Ks':   39,
+            }
+
 
     if index in coef.keys():
         a = coef[index]
     else:
-        raise ColorIndexError(index, reference)
+        raise ParamMissingError
 
-    theta = a[0] + a[1]*color + a[2]*color**2 + a[3]*color*FeH \
-            + a[4]*FeH + a[5]*FeH**2
+    theta, _ = _fitfunc1(a, (color, 0.0), (FeH, 0.0), 0.0)
+    teff = 5040./theta
+    d0 = theta*std_teff[index]/teff*theta
+    theta, dtheta = _fitfunc1(a, (color, color_err), (FeH, FeH_err), d0)
 
     if index == 'B-V':
         P = [112.116, -372.622, 67.1254, 395.333, -203.471]
@@ -1991,7 +2031,7 @@ def _get_giant_Teff_Ramirez2005(index, color, **kwargs):
             elif -2.5 < FeH <=-1.5 and 0.605 <= color <= 1.352: P = P3
             elif -4.0 < FeH <=-2.5 and 0.680 <= color <= 1.110: P = P4
             else:
-                raise ParamRangeError(index, color, reference)
+                raise ApplicableRangeError
     elif index == 'b-y':
         P = [-124.159, 553.827, -490.703]
         P = [888.088, -2879.23, 2097.89]
@@ -2008,7 +2048,7 @@ def _get_giant_Teff_Ramirez2005(index, color, **kwargs):
             elif -2.5 < FeH <=-1.5 and 0.388 <= color <= 0.702: P = P3
             elif -4.0 < FeH <=-2.5 and 0.404 <= color <= 0.683: P = P4
             else:
-                raise ParamRangeError(index, color, reference)
+                raise ApplicableRangeError
     elif index == 'Y-V':
         P1 = [-308.851, 1241.57, -1524.60, 593.157]
         P2 = [-36.6533, 383.901, -458.085]
@@ -2025,7 +2065,7 @@ def _get_giant_Teff_Ramirez2005(index, color, **kwargs):
             elif -2.5 < FeH <=-1.5 and 0.544 <= color <= 0.817: P = P3
             elif -4.0 < FeH <=-2.5 and 0.510 <= color <= 0.830: P = P4
             else:
-                raise ParamRangeError(index, color, reference)
+                raise ApplicableRangeError
     elif index == 'V-S':
         P1 = [-1605.54, 9118.16, -17672.6, 14184.1, -4023.76]
         P2 = [187.841, -270.092]
@@ -2042,7 +2082,7 @@ def _get_giant_Teff_Ramirez2005(index, color, **kwargs):
             elif -2.5 < FeH <=-1.5 and 0.529 <= color <= 0.990: P = P3
             elif -4.0 < FeH <=-2.5 and 0.573 <= color <= 0.790: P = P4
             else:
-                raise ParamRangeError(index, color, reference)
+                raise ApplicableRangeError
     elif index == 'B2-V1':
         P1 = [-15.0383, 50.8876, -32.3978]
         P2 = [80.1344, -147.055]
@@ -2059,7 +2099,7 @@ def _get_giant_Teff_Ramirez2005(index, color, **kwargs):
             elif -2.5 < FeH <=-1.5 and  0.307 <= color <= 0.958: P = P3
             elif -4.0 < FeH <=-2.5 and  0.407 <= color <= 0.648: P = P4
             else:
-                raise ParamRangeError(index, color, reference)
+                raise ApplicableRangeError
     elif index == 'B2-G':
         P1 = [-0.52642, 10.4471, -7.53155]
         P2 = [26.1904, -89.2171]
@@ -2076,7 +2116,7 @@ def _get_giant_Teff_Ramirez2005(index, color, **kwargs):
             elif -2.5 < FeH <=-1.5 and  0.132 <= color <= 0.991: P = P3
             elif -4.0 < FeH <=-2.5 and  0.104 <= color <= 0.437: P = P4
             else:
-                raise ParamRangeError(index, color, reference)
+                raise ApplicableRangeError
     elif index == 't':
         P = [-46.1506, -60.1641, 643.522, -599.555]
         P = [27.8739, -84.1166]
@@ -2093,8 +2133,8 @@ def _get_giant_Teff_Ramirez2005(index, color, **kwargs):
             elif -2.5 < FeH <=-1.5 and 0.166 <= color <= 0.619: P = P3
             elif -4.0 < FeH <=-2.5 and 0.215 <= color <= 0.511: P = P4
             else:
-                raise ParamRangeError(index, color, reference)
-    elif index == 'V-RC':
+                raise ApplicableRangeError
+    elif index == 'V-Rc':
         P1 = [-8.51797, 15.6675]
         P2 = [-10.7764]
         P3 = [61.9821, -78.7382]
@@ -2110,8 +2150,8 @@ def _get_giant_Teff_Ramirez2005(index, color, **kwargs):
             elif -2.5 < FeH <=-1.5 and 0.429 <= color <= 0.598: P = P3
             elif -4.0 < FeH <=-2.5 and 0.394 <= color <= 0.550: P = P4
             else:
-                raise ParamRangeError(index, color, reference)
-    elif index == 'V-IC':
+                raise ApplicableRangeError
+    elif index == 'V-Ic':
         P1 = [0.42933]
         P2 = [-0.14180]
         P3 = [9.31011]
@@ -2127,8 +2167,8 @@ def _get_giant_Teff_Ramirez2005(index, color, **kwargs):
             elif -2.5 < FeH <=-1.5 and 0.870 <= color <= 1.303: P = P3
             elif -4.0 < FeH <=-2.5 and 0.812 <= color <= 1.095: P = P4
             else:
-                raise ParamRangeError(index, color, reference)
-    elif index == 'RC-IC':
+                raise ApplicableRangeError
+    elif index == 'Rc-Ic':
         P1 = [61.3557, -116.711]
         P2 = [-16.8645]
         P3 = [32.0870]
@@ -2144,8 +2184,8 @@ def _get_giant_Teff_Ramirez2005(index, color, **kwargs):
             elif -2.5 < FeH <=-1.5 and 0.434 <= color <= 0.725: P = P3
             elif -4.0 < FeH <=-2.5 and 0.364 <= color <= 0.545: P = P4
             else:
-                raise ParamRangeError(index, color, reference)
-    elif index == 'C42-45':
+                raise ApplicableRangeError
+    elif index == 'C42-C45':
         P = [-68.3798, 109.259, -34.4503]
         P = [-0.62507]
         P = [-40.0150, 35.6803]
@@ -2161,8 +2201,8 @@ def _get_giant_Teff_Ramirez2005(index, color, **kwargs):
             elif -2.5 < FeH <=-1.5 and 0.441 <= color <= 0.894: P = P3
             elif -4.0 < FeH <=-2.5 and 0.490 <= color <= 0.640: P = P4
             else:
-                raise ParamRangeError(index, color, reference)
-    elif index == 'C42-48':
+                raise ApplicableRangeError
+    elif index == 'C42-C48':
         P1 = [1006.40, -549.012, -649.212, 534.912, -100.038]
         P2 = [-6.92065]
         P3 = [-113.222, 57.3030]
@@ -2178,7 +2218,7 @@ def _get_giant_Teff_Ramirez2005(index, color, **kwargs):
             elif -2.5 < FeH <=-1.5 and 1.466 <= color <= 2.260: P = P3
             elif -4.0 < FeH <=-2.5 and 1.571 <= color <= 1.799: P = P4
             else:
-                raise ParamRangeError(index, color, reference)
+                raise ApplicableRangeError
     elif index == 'BT-VT':
         P1 = [346.881, -1690.16, 2035.65, -797.248, 70.7799]
         P2 = [196.416, -372.164, 126.196]
@@ -2195,7 +2235,7 @@ def _get_giant_Teff_Ramirez2005(index, color, **kwargs):
             elif -2.5 < FeH <=-1.5 and 0.534 <= color <= 1.356: P = P3
             elif -4.0 < FeH <=-2.5 and 0.465 <= color <= 1.026: P = P4
             else:
-                raise ParamRangeError(index, color, reference)
+                raise ApplicableRangeError
     elif index == 'V-J':
         P = [-122.595, 76.4847]
         P = [-10.3848]
@@ -2212,7 +2252,7 @@ def _get_giant_Teff_Ramirez2005(index, color, **kwargs):
             elif -2.5 < FeH <=-1.5 and 1.033 <= color <= 2.679: P = P3
             elif -4.0 < FeH <=-2.5 and 0.977 <= color <= 2.048: P = P4
             else:
-                raise ParamRangeError(index, color, reference)
+                raise ApplicableRangeError
     elif index == 'V-H':
         P1 = [-377.022, 334.733, -69.8093]
         P2 = [71.7949, -55.5383, 9.61821]
@@ -2229,7 +2269,7 @@ def _get_giant_Teff_Ramirez2005(index, color, **kwargs):
             elif -2.5 < FeH <=-1.5 and 1.273 <= color <= 3.416: P = P3
             elif -4.0 < FeH <=-2.5 and 1.232 <= color <= 2.625: P = P4
             else:
-                raise ParamRangeError(index, color, reference)
+                raise ApplicableRangeError
     elif index == 'V-Ks':
         P1 = [-72.6664, 36.5361]
         P2 = [86.0358, -65.4928, 10.8901]
@@ -2246,7 +2286,7 @@ def _get_giant_Teff_Ramirez2005(index, color, **kwargs):
             elif -2.5 < FeH <=-1.5 and 1.334 <= color <= 3.549: P = P3
             elif -4.0 < FeH <=-2.5 and 1.258 <= color <= 2.768: P = P4
             else:
-                raise ParamRangeError(index, color, reference)
+                raise ApplicableRangeError
     elif index == 'VT-Ks':
         P1 = [-37.2128, 31.2900, -6.72743]
         P2 = [-193.512, 166.183, -33.2781]
@@ -2263,20 +2303,21 @@ def _get_giant_Teff_Ramirez2005(index, color, **kwargs):
             elif -2.5 < FeH <=-1.5 and 1.339 <= color <= 3.750: P = P3
             elif -4.0 < FeH <=-2.5 and 1.668 <= color <= 2.722: P = P4
             else:
-                raise ParamRangeError(index, color, reference)
+                raise ApplicableRangeError
     else:
-        raise ColorIndexError(index, reference)
+        raise ParamMissingError
 
-    Teff = 5040./theta
+    teff = 5040./theta
+    teff_err = teff*dtheta/theta
 
     poly = P[-1]
     for i in range(len(P)-1):
         # P=[x,x,x,x], i=0, 1, 2, 3
         # res = ((P[3]*x+P[2])*x+P[1])*x+P[0]
         poly = poly*color + P[-(i+2)]
-    Teff += poly
+    teff += poly
 
-    return Teff
+    return teff, teff_err
 
 def _get_dwarf_Teff_Masana2006(index, color, **kwargs):
     '''Convert color, [Fe/H] and log\ *g* to |Teff| for dwarfs using the
