@@ -1334,6 +1334,8 @@ def _get_dwarf_Teff_Ramirez2005(index, color, **kwargs):
 
             * *float*: Effective temperature (|Teff|) in Kelvin.
             * *float*: Standard deviation of |Teff| in Kelvin.
+    See also:
+        :func:`_get_giant_Teff_Ramirez2005`
 
     References:
         * `Ramírez & Meléndez, 2005, ApJ, 626, 465 <http://adsabs.harvard.edu/abs/2005ApJ...626..465R>`_
@@ -1406,7 +1408,7 @@ def _get_dwarf_Teff_Ramirez2005(index, color, **kwargs):
 
     theta, _ = _fitfunc1(a, (color, 0.0), (FeH, 0.0), 0.0)
     teff = 5040./theta
-    d0 = theta*std_teff[index]/teff*theta
+    d0 = theta*std_teff[index]/teff
     theta, dtheta = _fitfunc1(a, (color, color_err), (FeH, FeH_err), d0)
 
     if index == 'B-V':
@@ -1941,6 +1943,9 @@ def _get_giant_Teff_Ramirez2005(index, color, **kwargs):
             * *float*: Effective temperature (|Teff|) in Kelvin.
             * *float*: Standard deviation of |Teff| in Kelvin.
 
+    See also:
+        :func:`_get_dwarf_Teff_Ramirez2005`
+
     References:
         * `Ramírez & Meléndez, 2005, ApJ, 626, 465 <http://adsabs.harvard.edu/abs/2005ApJ...626..465R>`_
 
@@ -2012,7 +2017,7 @@ def _get_giant_Teff_Ramirez2005(index, color, **kwargs):
 
     theta, _ = _fitfunc1(a, (color, 0.0), (FeH, 0.0), 0.0)
     teff = 5040./theta
-    d0 = theta*std_teff[index]/teff*theta
+    d0 = theta*std_teff[index]/teff
     theta, dtheta = _fitfunc1(a, (color, color_err), (FeH, FeH_err), d0)
 
     if index == 'B-V':
@@ -2465,58 +2470,94 @@ def _get_dwarf_Teff_GB2009(index, color, **kwargs):
 
     Args:
         index (string): Name of color index. Available values include *"B-V"*,
-            *"V-R"*, *"V-I"*, *"V-J"*, *"V-H"*, *"V-Ks"*, and *"J-Ks"*.
+            *"V-Rc"*, *"V-Ic"*, *"V-J"*, *"V-H"*, *"V-Ks"*, and *"J-Ks"*.
         color (float): Value of color index.
         FeH (float): Metallicity [Fe/H].
         extrapolation (bool): Extend the applicable ranges if *True*. Default is
             *False*.
     Returns:
-        float: Effective temperature (|Teff|) in K.
+        tuple: A tuple containing:
+
+            * *float*: Effective temperature (|Teff|) in Kelvin.
+            * *float*: Standard deviation of |Teff| in Kelvin.
+
     See also:
         :func:`_get_giant_Teff_GB2009`
+
     References:
         * `González Hernández & Bonifacio, 2009, A&A, 497, 497 <http://adsabs.harvard.edu/abs/2009A&A...497..497G>`_
     '''
+    extrapolation = kwargs.pop('extrapolation',False)
 
-    reference = 'Gonzalez et al., 2009, A&A, 497, 497'
+    if isinstance(color, tuple) or isinstance(color, list):
+        color, color_err = color[0], color[1]
+    else:
+        color, color_err = color, 0
 
     try:
         FeH = kwargs.pop('FeH')
     except KeyError:
-        raise MissingParamError('[Fe/H]', reference)
+        print('missing FeH')
+        raise
 
-    extrapolation = kwargs.pop('extrapolation',False)
+    if isinstance(FeH, tuple) or isinstance(FeH, list):
+        FeH, FeH_err = FeH[0], FeH[1]
+    else:
+        FeH, FeH_err = FeH, 0
 
-    FeH_range = {}; color_range = {}
-    FeH_range['B-V'] = [-3.5,0.5]; color_range['B-V'] = [0.2,1.3]
-    FeH_range['V-R'] = [-3.1,0.3]; color_range['V-R'] = [0.2,0.8]
-    FeH_range['V-I'] = [-3.1,0.3]; color_range['V-I'] = [0.5,1.4]
-    FeH_range['V-J'] = [-3.5,0.5]; color_range['V-J'] = [0.5,2.3]
-    FeH_range['V-H'] = [-3.5,0.5]; color_range['V-H'] = [0.6,2.8]
-    FeH_range['V-Ks']= [-3.5,0.5]; color_range['V-Ks']= [0.7,3.0]
-    FeH_range['J-Ks']= [-3.5,0.5]; color_range['J-Ks']= [0.1,0.8]
-
-    coef = {}
-    coef['B-V'] = [0.5725, 0.4722,  0.0086, -0.0628, -0.0038, -0.0051]
-    coef['V-R'] = [0.4451, 1.4561, -0.6893, -0.0944,  0.0161, -0.0038]
-    coef['V-I'] = [0.4025, 0.8324, -0.2041, -0.0555,  0.0410, -0.0003]
-    coef['V-J'] = [0.4997, 0.3504, -0.0230, -0.0295,  0.0468,  0.0037]
-    coef['V-H'] = [0.5341, 0.2517, -0.0100, -0.0236,  0.0523,  0.0044]
-    coef['V-Ks']= [0.5201, 0.2511, -0.0118, -0.0186,  0.0408,  0.0033]
-    coef['J-Ks']= [0.6524, 0.5813,  0.1225, -0.0646,  0.0370,  0.0016]
+    FeH_range = {
+            'B-V':  (-3.5, 0.5),
+            'V-Rc': (-3.1, 0.3),
+            'V-Ic': (-3.1, 0.3),
+            'V-J':  (-3.5, 0.5),
+            'V-H':  (-3.5, 0.5),
+            'V-Ks': (-3.5, 0.5),
+            'J-Ks': (-3.5, 0.5),
+            }
+    color_range = {
+            'B-V':  (0.2, 1.3),
+            'V-Rc': (0.2, 0.8),
+            'V-Ic': (0.5, 1.4),
+            'V-J':  (0.5, 2.3),
+            'V-H':  (0.6, 2.8),
+            'V-Ks': (0.7, 3.0),
+            'J-Ks': (0.1, 0.8),
+            }
+    coef = {
+            'B-V':  [0.5725, 0.4722,  0.0086, -0.0628, -0.0038, -0.0051],
+            'V-Rc': [0.4451, 1.4561, -0.6893, -0.0944,  0.0161, -0.0038],
+            'V-Ic': [0.4025, 0.8324, -0.2041, -0.0555,  0.0410, -0.0003],
+            'V-J':  [0.4997, 0.3504, -0.0230, -0.0295,  0.0468,  0.0037],
+            'V-H':  [0.5341, 0.2517, -0.0100, -0.0236,  0.0523,  0.0044],
+            'V-Ks': [0.5201, 0.2511, -0.0118, -0.0186,  0.0408,  0.0033],
+            'J-Ks': [0.6524, 0.5813,  0.1225, -0.0646,  0.0370,  0.0016],
+        }
+    std_teff = {
+            'B-V':  76,
+            'V-Rc': 45,
+            'V-Ic': 52,
+            'V-J':  36,
+            'V-H':  30,
+            'V-Ks': 32,
+            'J-Ks': 139,
+        }
 
     if extrapolation:
-        b = coef[index]
+        a = coef[index]
     else:
         if FeH_range[index][0] <= FeH <= FeH_range[index][1] and \
            color_range[index][0] <= color <= color_range[index][1]:
-            b = coef[index]
+            a = coef[index]
         else:
-            raise ParamRangeError(index, color, reference)
+            raise ApplicableRangeError
 
-    theta = b[0] + b[1]*color + b[2]*color**2 + b[3]*color*FeH \
-            + b[4]*FeH + b[5]*FeH**2
-    return 5040./theta
+    theta, _ = _fitfunc1(a, (color, 0.0), (FeH, 0.0), 0.0)
+    teff = 5040./theta
+    d0 = theta*std_teff[index]/teff
+    theta, dtheta = _fitfunc1(a, (color, color_err), (FeH, FeH_err), d0)
+    teff_err = teff*dtheta/theta
+
+    return teff, teff_err
 
 def _get_giant_Teff_GB2009(index, color, **kwargs):
     '''Convert color to |Teff| for giants using the calibration relations given
