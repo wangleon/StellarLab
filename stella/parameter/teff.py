@@ -2330,22 +2330,31 @@ def _get_dwarf_Teff_Masana2006(index, color, **kwargs):
         * `Masana et al. 2006, A&A, 450, 735 <http://adsabs.harvard.edu/abs/2006A&A...450..735M>`_
 
     '''
-    reference = 'Masana et al., 2006, A&A, 450, 735'
+    extrapolation = kwargs.pop('extrapolation',False)
 
-    if index != 'V-Ks':
-        raise ColorIndexError(index, reference)
+    if isinstance(color, tuple) or isinstance(color, list):
+        color, color_err = color[0], color[1]
+    else:
+        color, color_err = color, 0
 
     try:
-        FeH  = kwargs.pop('FeH')
+        FeH = kwargs.pop('FeH')
     except KeyError:
-        raise MissingParamError('[Fe/H]', reference)
+        print('missing FeH')
+        raise
+
+    if isinstance(FeH, tuple) or isinstance(FeH, list):
+        FeH, FeH_err = FeH[0], FeH[1]
+    else:
+        FeH, FeH_err = FeH, 0
+
+    if index != 'V-Ks':
+        raise ParamMissingError
 
     try:
         logg = kwargs.pop('logg')
     except KeyError:
-        raise MissingParamError('logg', reference)
-
-    extrapolation = kwargs.pop('extrapolation',False)
+        raise ParamMissingError
 
     if extrapolation or \
        (-3.0 <= FeH < -1.5 and 1.0  <= color <= 2.9) or \
@@ -2354,19 +2363,24 @@ def _get_dwarf_Teff_Masana2006(index, color, **kwargs):
        ( 0.5 <= FeH <= 0.5 and 0.35 <= color <= 2.8):
         if (extrapolation and color < 1.15) or \
             (not extrapolation and 0.35<color<1.15 and 3.25<=logg<=4.75):
-            theta = 0.5961 + 0.1567*color + 0.0309*color**2 \
-                    + 0.009*FeH + 0.0022*FeH**2 \
-                    +0.0021*color*FeH - 0.0067*logg
+            a = [0.5961, 0.1567, 0.0309, 0.0021, 0.009, 0.0022]
+            d0 = 0.0028
+            theta, dtheta = _fitfunc1(a, (color, color_err), (FeH, FeH_err), d0)
+            theta += -0.0067*logg
         elif (extrapolation and color>=1.15) or \
             (not extrapolation and 1.15<=color<3.0 and 3.75<=logg<=4.75):
-            theta = 0.5135 + 0.2687*color - 0.0174*color**2 \
-                    + 0.0298*FeH - 0.0009*FeH**2 \
-                    - 0.0184*color*FeH - 0.0028*logg
+            a = [0.5135, 0.2687, -0.0174, -0.0184, 0.0298, -0.0009]
+            d0 = 0.0026
+            theta, dtheta = _fitfunc1(a, (color, color_err), (FeH, FeH_err), d0)
+            theta += -0.0028*logg
         else:
-            raise ParamRangeError('V-Ks', color, reference)
-        return 5040./theta
+            raise ApplicableRangeError
     else:
-        raise ParamRangeError('V-Ks', color, reference)
+        raise ApplicableRangeError
+
+    teff = 5040./theta
+    teff_err = teff*dtheta/theta
+    return teff, teff_err
 
 def _get_dwarf_Teff_GB2009(index, color, **kwargs):
     '''Convert color to |Teff| for dwarfs using the calibration relations given
@@ -2491,7 +2505,7 @@ def _get_dwarf_Teff_GB2009(index, color, **kwargs):
 
     theta, _ = _fitfunc1(a, (color, 0.0), (FeH, 0.0), 0.0)
     teff = 5040./theta
-    d0 = theta*std_teff[index]/teff
+    d0 = theta*std_teff/teff
     theta, dtheta = _fitfunc1(a, (color, color_err), (FeH, FeH_err), d0)
     teff_err = teff*dtheta/theta
 
@@ -2677,7 +2691,7 @@ def _get_dwarf_Teff_Onehag2009(index, color, **kwargs):
 
         if not extrapolation:
             
-            if (-3.00 <= Feh <= 0.50 and 0.20 <= color <= 0.70 and \
+            if (-3.00 <= FeH <= 0.50 and 0.20 <= color <= 0.70 and \
                  0.10 <= c1 <= 0.55):
                 pass
             else:
@@ -2750,10 +2764,11 @@ def _get_giant_Teff_Onehag2009(index, color, **kwargs):
     extrapolation = kwargs.pop('extrapolation',False)
 
     if index == 'b-y':
-        coef = {}
-        coef[1] = [0.6732,0.0859, 1.1455,-1.080e-2,-0.132e-2,-0.082e-2]
-        coef[2] = [0.1983,2.0931,-0.9978, 4.709e-2,-2.66e-2, -0.104e-2]
-        coef[3] = [0.4522,1.1745,-0.3093,-0.1693,   2.165e-2,-1.679e-2]
+        coef = {
+            1: [0.6732, 0.0859,  1.1455, -1.080e-2, -0.132e-2, -0.082e-2],
+            2: [0.1983, 2.0931, -0.9978,  4.709e-2, -2.66e-2,  -0.104e-2],
+            3: [0.4522, 1.1745, -0.3093, -0.1693,    2.165e-2, -1.679e-2],
+        }
         if extrapolation:
             if color <= 0.424: choose = 1
             elif FeH <= -0.5:  choose = 2
