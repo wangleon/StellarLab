@@ -2523,7 +2523,7 @@ def _get_dwarf_Teff_GB2009(index, color, **kwargs):
             'V-Ks': (0.7, 3.0),
             'J-Ks': (0.1, 0.8),
             }
-    coef = {
+    coeff = {
             'B-V':  [0.5725, 0.4722,  0.0086, -0.0628, -0.0038, -0.0051],
             'V-Rc': [0.4451, 1.4561, -0.6893, -0.0944,  0.0161, -0.0038],
             'V-Ic': [0.4025, 0.8324, -0.2041, -0.0555,  0.0410, -0.0003],
@@ -2543,11 +2543,11 @@ def _get_dwarf_Teff_GB2009(index, color, **kwargs):
         }
 
     if extrapolation:
-        a = coef[index]
+        a = coeff[index]
     else:
         if FeH_range[index][0] <= FeH <= FeH_range[index][1] and \
            color_range[index][0] <= color <= color_range[index][1]:
-            a = coef[index]
+            a = coeff[index]
         else:
             raise ApplicableRangeError
 
@@ -2617,57 +2617,91 @@ def _get_giant_Teff_GB2009(index, color, **kwargs):
 
     Args:
         index (string): Name of color index. Available values include *"B-V"*,
-            *"V-R"*, *"V-J"*, *"V-H"*, *"V-Ks"*, and *"J-Ks"*.
+            *"V-Rc"*, *"V-J"*, *"V-H"*, *"V-Ks"*, and *"J-Ks"*.
         color (float): Value of color index.
         FeH (float): Metallicity [Fe/H].
         extrapolation (bool): Extend the applicable ranges if *True*. Default is
             *False*.
     Returns:
-        float: Effective temperature (|Teff|) in K.
+        tuple: A tuple containing:
+
+            * *float*: Effective temperature (|Teff|) in Kelvin.
+            * *float*: Standard deviation of |Teff| in Kelvin.
+
     See also:
-        :func:`_get_dwarf_Teff_GB2009`
+        :func:`_get_giant_Teff_GB2009`
+
     References:
         * `González Hernández & Bonifacio, 2009, A&A, 497, 497 <http://adsabs.harvard.edu/abs/2009A&A...497..497G>`_
 
     '''
+    extrapolation = kwargs.pop('extrapolation',False)
 
-    reference = 'Gonzalez et al., 2009, A&A, 497, 497'
+    if isinstance(color, tuple) or isinstance(color, list):
+        color, color_err = color[0], color[1]
+    else:
+        color, color_err = color, 0
 
     try:
         FeH = kwargs.pop('FeH')
     except KeyError:
-        raise MissingParamError('[Fe/H]', reference)
+        print('missing FeH')
+        raise
 
-    extrapolation = kwargs.pop('extrapolation',False)
+    if isinstance(FeH, tuple) or isinstance(FeH, list):
+        FeH, FeH_err = FeH[0], FeH[1]
+    else:
+        FeH, FeH_err = FeH, 0
 
-    FeH_range = {}; color_range = {}
-    FeH_range['B-V'] = [-4.0,0.2]; color_range['B-V'] = [0.3,1.4]
-    FeH_range['V-R'] = [-4.0,0.1]; color_range['V-R'] = [0.3,0.7]
-    FeH_range['V-J'] = [-4.0,0.2]; color_range['V-J'] = [1.0,2.4]
-    FeH_range['V-H'] = [-4.0,0.2]; color_range['V-H'] = [0.8,3.1]
-    FeH_range['V-Ks']= [-4.0,0.2]; color_range['V-Ks']= [1.1,3.4]
-    FeH_range['J-Ks']= [-4.0,0.2]; color_range['J-Ks']= [0.1,0.9]
-
-    coef = {}
-    coef['B-V'] = [0.4967, 0.7260, -0.1563,  0.0255, -0.0585, -0.0061]
-    coef['V-R'] = [0.4530, 1.4347, -0.5883, -0.0156, -0.0096, -0.0039]
-    coef['V-J'] = [0.4629, 0.4124, -0.0417, -0.0012,  0.0094,  0.0013]
-    coef['V-H'] = [0.5321, 0.2649, -0.0146, -0.0069,  0.0211,  0.0009]
-    coef['V-Ks']= [0.5293, 0.2489, -0.0119, -0.0042,  0.0135,  0.0010]
-    coef['J-Ks']= [0.6517, 0.6312,  0.0168, -0.0381,  0.0256,  0.0013]
+    FeH_range = {
+            'B-V':  (-4.0,0.2),
+            'V-Rc': (-4.0,0.1),
+            'V-J':  (-4.0,0.2),
+            'V-H':  (-4.0,0.2),
+            'V-Ks': (-4.0,0.2),
+            'J-Ks': (-4.0,0.2),
+            }
+    color_range = {
+            'B-V':  (0.3, 1.4),
+            'V-Rc': (0.3, 0.7),
+            'V-J':  (1.0, 2.4),
+            'V-H':  (0.8, 3.1),
+            'V-Ks': (1.1, 3.4),
+            'J-Ks': (0.1, 0.9),
+            }
+    coeff = {
+            'B-V':  [0.4967, 0.7260, -0.1563,  0.0255, -0.0585, -0.0061],
+            'V-Rc': [0.4530, 1.4347, -0.5883, -0.0156, -0.0096, -0.0039],
+            'V-J':  [0.4629, 0.4124, -0.0417, -0.0012,  0.0094,  0.0013],
+            'V-H':  [0.5321, 0.2649, -0.0146, -0.0069,  0.0211,  0.0009],
+            'V-Ks': [0.5293, 0.2489, -0.0119, -0.0042,  0.0135,  0.0010],
+            'J-Ks': [0.6517, 0.6312,  0.0168, -0.0381,  0.0256,  0.0013],
+            }
+    std_teff = {
+            'B-V':  57,
+            'V-Rc': 85,
+            'V-J':  18,
+            'V-H':  23,
+            'V-Ks': 23,
+            'J-Ks': 94,
+            }
 
     if extrapolation:
-        b = coef[index]
+        a = coeff[index]
     else:
         if FeH_range[index][0] <= FeH <= FeH_range[index][1] and \
            color_range[index][0] <= color <= color_range[index][1]:
-            b = coef[index]
+            a = coeff[index]
         else:
-            raise ParamRangeError(index, color, reference)
+            raise ApplicableRangeError
 
-    theta = b[0] + b[1]*color + b[2]*color**2 + b[3]*color*FeH \
-            + b[4]*FeH + b[5]*FeH**2
-    return 5040./theta
+    theta, _ = _fitfunc1(a, (color, 0.0), (FeH, 0.0), 0.0)
+    teff = 5040./theta
+    d0 = theta*std_teff[index]/teff
+    theta, dtheta = _fitfunc1(a, (color, color_err), (FeH, FeH_err), d0)
+    teff_err = teff*dtheta/theta
+
+    return teff, teff_err
 
 def _get_dwarf_Teff_Onehag2009(index, color, **kwargs):
     '''Convert color and [Fe/H] to |Teff| for dwarfs using the calibration
