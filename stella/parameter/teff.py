@@ -2891,7 +2891,7 @@ def _get_dwarf_Teff_Casagrande2010(index, color, **kwargs):
          - 201
          - 62
        * - (*R*:sub:`c` − *I*:sub:`c`)
-         - 0.23 ≤ (*R* − *I*) ≤ 0.68
+         - 0.23 ≤ (*R*:sub:`c` − *I*:sub:`c`) ≤ 0.68
          - −5.0 ≤ [Fe/H] ≤ 0.3
          - 211
          - 82
@@ -2910,13 +2910,13 @@ def _get_dwarf_Teff_Casagrande2010(index, color, **kwargs):
          - −5.0 ≤ [Fe/H] ≤ 0.4
          - 401
          - 33
-       * - (*V* − *K*)
-         - 0.78 ≤ (*V* − *K*) ≤ 3.15
+       * - (*V* − *K*:sub:`s`)
+         - 0.78 ≤ (*V* − *K*:sub:`s`) ≤ 3.15
          - −5.0 ≤ [Fe/H] ≤ 0.4
          - 401
          - 25
-       * - (*J* − *K*)
-         - 0.07 ≤ (*J* − *K*) ≤ 0.80
+       * - (*J* − *K*:sub:`s`)
+         - 0.07 ≤ (*J* − *K*:sub:`s`) ≤ 0.80
          - −5.0 ≤ [Fe/H] ≤ 0.4
          - 412
          - 132
@@ -2935,8 +2935,8 @@ def _get_dwarf_Teff_Casagrande2010(index, color, **kwargs):
          - −2.7 ≤ [Fe/H] ≤ 0.4
          - 263
          - 26
-       * - (*V*:sub:`T` − *K*)
-         - 0.99 ≤ (*V*:sub:`T` − *K*) ≤ 3.29
+       * - (*V*:sub:`T` − *K*:sub:`s`)
+         - 0.99 ≤ (*V*:sub:`T` − *K*:sub:`s`) ≤ 3.29
          - −2.4 ≤ [Fe/H] ≤ 0.4
          - 258
          - 18
@@ -2947,71 +2947,119 @@ def _get_dwarf_Teff_Casagrande2010(index, color, **kwargs):
          - 62
 
     Args:
-        index (string): Name of color index.
+        index (string): Name of color index. Available values include *"B-V"*,
+            *"V-Rc"*, *"Rc-Ic"*, *"V-Ic"*, *"V-J"*, *"V-H"*, *"V-Ks"*, *"J-Ks"*,
+            *"BT-VT"*, *"VT-J"*, *"VT-H"*, *"VT-Ks"*, and *"b-y"*.
         color (float): Value of color index.
         FeH (float): Metallicity [Fe/H].
         extrapolation (bool): Extend the applicable ranges if *True*. Default is
             *False*.
     Returns:
-        float: Effective temperature (|Teff|) in K.
+        tuple: A tuple containing:
+
+            * *float*: Effective temperature (|Teff|) in Kelvin.
+            * *float*: Standard deviation of |Teff| in Kelvin.
     References:
         * `Casagrande et al., 2010, A&A, 512, 54 <http://adsabs.harvard.edu/abs/2010A&A...512A..54C>`_
 
     '''
-    reference = 'Casagrande, 2010, A&A, 512, A54'
-
-    try:
-        FeH  = kwargs.pop('FeH')
-    except KeyError:
-        raise MissingParamError('[Fe/H]', reference)
-
-    FeH_range = {}; color_range = {}
-    FeH_range['B-V']   = [-5.0,0.4]; color_range['B-V']   = [0.18,1.29]
-    FeH_range['V-RC']  = [-5.0,0.3]; color_range['V-RC']  = [0.24,0.80]
-    FeH_range['RC-IC'] = [-5.0,0.3]; color_range['RC-IC'] = [0.23,0.68]
-    FeH_range['V-IC']  = [-5.0,0.3]; color_range['V-IC']  = [0.46,1.47]
-    FeH_range['V-J']   = [-5.0,0.4]; color_range['V-J']   = [0.61,2.44]
-    FeH_range['V-H']   = [-5.0,0.4]; color_range['V-H']   = [0.67,3.01]
-    FeH_range['V-Ks']  = [-5.0,0.4]; color_range['V-Ks']  = [0.78,3.15]
-    FeH_range['J-Ks']  = [-5.0,0.4]; color_range['J-Ks']  = [0.07,0.80]
-    FeH_range['BT-VT'] = [-2.7,0.4]; color_range['BT-VT'] = [0.19,1.49]
-    FeH_range['VT-J']  = [-2.7,0.4]; color_range['VT-J']  = [0.77,2.56]
-    FeH_range['VT-H']  = [-2.7,0.4]; color_range['VT-H']  = [0.77,3.16]
-    FeH_range['VT-Ks'] = [-2.4,0.4]; color_range['VT-Ks'] = [0.99,3.29]
-    FeH_range['b-y']   = [-3.7,0.5]; color_range['b-y']   = [0.18,0.72]
-
-    coef = {}
-    coef['B-V']   = [0.5665,0.4809,-0.0060,-0.0613,-0.0042,-0.0055]
-    coef['V-RC']  = [0.4386,1.4614,-0.7014,-0.0807, 0.0142,-0.0015]
-    coef['RC-IC'] = [0.3296,1.9716,-1.0225,-0.0298, 0.0329, 0.0035]
-    coef['V-IC']  = [0.4033,0.8171,-0.1987,-0.0409, 0.0319, 0.0012]
-    coef['V-J']   = [0.4669,0.3849,-0.0350,-0.0140, 0.0225, 0.0011]
-    coef['V-H']   = [0.5251,0.2553,-0.0119,-0.0187, 0.0410, 0.0025]
-    coef['V-Ks']  = [0.5057,0.2600,-0.0146,-0.0131, 0.0288, 0.0016]
-    coef['J-Ks']  = [0.6393,0.6104, 0.0920,-0.0330, 0.0291, 0.0020]
-    coef['BT-VT'] = [0.5839,0.4000,-0.0067,-0.0282,-0.0346,-0.0087]
-    coef['VT-J']  = [0.4525,0.3797,-0.0357,-0.0082, 0.0123,-0.0009]
-    coef['VT-H']  = [0.5286,0.2354,-0.0073,-0.0182, 0.0401, 0.0021]
-    coef['VT-Ks'] = [0.4892,0.2634,-0.0165,-0.0121, 0.0249,-0.0001]
-    coef['b-y']   = [0.5796,0.4812, 0.5747,-0.0633, 0.0042,-0.0055]
-
     extrapolation = kwargs.pop('extrapolation',False)
 
-    if index not in coef:
-        raise ColorIndexError(index, reference)
+    if isinstance(color, tuple) or isinstance(color, list):
+        color, color_err = color[0], color[1]
+    else:
+        color, color_err = color, 0
+
+    try:
+        FeH = kwargs.pop('FeH')
+    except KeyError:
+        print('missing FeH')
+        raise
+
+    if isinstance(FeH, tuple) or isinstance(FeH, list):
+        FeH, FeH_err = FeH[0], FeH[1]
+    else:
+        FeH, FeH_err = FeH, 0
+
+    FeH_range = {
+        'B-V'  : (-5.0, 0.4),
+        'V-Rc' : (-5.0, 0.3),
+        'Rc-Ic': (-5.0, 0.3),
+        'V-Ic' : (-5.0, 0.3),
+        'V-J'  : (-5.0, 0.4),
+        'V-H'  : (-5.0, 0.4),
+        'V-Ks' : (-5.0, 0.4),
+        'J-Ks' : (-5.0, 0.4),
+        'BT-VT': (-2.7, 0.4),
+        'VT-J' : (-2.7, 0.4),
+        'VT-H' : (-2.7, 0.4),
+        'VT-Ks': (-2.4, 0.4),
+        'b-y'  : (-3.7, 0.5),
+        }    
+    color_range = {
+        'B-V'  : (0.18, 1.29),
+        'V-Rc' : (0.24, 0.80),
+        'Rc-Ic': (0.23, 0.68),
+        'V-Ic' : (0.46, 1.47),
+        'V-J'  : (0.61, 2.44),
+        'V-H'  : (0.67, 3.01),
+        'V-Ks' : (0.78, 3.15),
+        'J-Ks' : (0.07, 0.80),
+        'BT-VT': (0.19, 1.49),
+        'VT-J' : (0.77, 2.56),
+        'VT-H' : (0.77, 3.16),
+        'VT-Ks': (0.99, 3.29),
+        'b-y'  : (0.18, 0.72),
+        }
+    coeff = {
+        'B-V'  : [0.5665,0.4809,-0.0060,-0.0613,-0.0042,-0.0055],
+        'V-Rc' : [0.4386,1.4614,-0.7014,-0.0807, 0.0142,-0.0015],
+        'Rc-Ic': [0.3296,1.9716,-1.0225,-0.0298, 0.0329, 0.0035],
+        'V-Ic' : [0.4033,0.8171,-0.1987,-0.0409, 0.0319, 0.0012],
+        'V-J'  : [0.4669,0.3849,-0.0350,-0.0140, 0.0225, 0.0011],
+        'V-H'  : [0.5251,0.2553,-0.0119,-0.0187, 0.0410, 0.0025],
+        'V-Ks' : [0.5057,0.2600,-0.0146,-0.0131, 0.0288, 0.0016],
+        'J-Ks' : [0.6393,0.6104, 0.0920,-0.0330, 0.0291, 0.0020],
+        'BT-VT': [0.5839,0.4000,-0.0067,-0.0282,-0.0346,-0.0087],
+        'VT-J' : [0.4525,0.3797,-0.0357,-0.0082, 0.0123,-0.0009],
+        'VT-H' : [0.5286,0.2354,-0.0073,-0.0182, 0.0401, 0.0021],
+        'VT-Ks': [0.4892,0.2634,-0.0165,-0.0121, 0.0249,-0.0001],
+        'b-y'  : [0.5796,0.4812, 0.5747,-0.0633, 0.0042,-0.0055],
+        }
+    std_teff = {
+        'B-V'  :  73,
+        'V-Rc' :  62,
+        'Rc-Ic':  82,
+        'V-Ic' :  59,
+        'V-J'  :  42,
+        'V-H'  :  33,
+        'V-Ks' :  25,
+        'J-Ks' : 132,
+        'BT-VT':  79,
+        'VT-J' :  43,
+        'VT-H' :  26,
+        'VT-Ks':  18,
+        'b-y'  :  62,
+        }
 
     if extrapolation or \
        (FeH_range[index][0]   <=  FeH  <= FeH_range[index][1] and \
         color_range[index][0] <= color <= color_range[index][1]):
-        a = coef[index]
+        a = coeff[index]
     else:
-        raise ParamRangeError(index, color, reference)
+        raise ApplicableRangeError
 
-    theta = a[0] + a[1]*color + a[2]*color**2 + a[3]*color*FeH \
-            + a[4]*FeH + a[5]*FeH**2
+    theta, _ = _fitfunc1(a, (color, 0.0), (FeH, 0.0), 0.0)
+
     if index == 'b-y':
         M = [-1.9, 130.4, 125.7, 27.4]
         C = [-1003.7, 7325.9, -17207.4, 12977.7]
         for i in range(4):
             theta = theta +  M[i]*FeH**i + C[i]*color**i
-    return 5040./theta
+
+    teff = 5040./theta
+    d0 = theta*std_teff[index]/teff
+    theta, dtheta = _fitfunc1(a, (color, color_err), (FeH, FeH_err), d0)
+    teff_err = teff*dtheta/theta
+
+    return teff, teff_err
