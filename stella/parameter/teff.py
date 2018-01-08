@@ -2629,7 +2629,7 @@ def _get_giant_Teff_GB2009(index, color, **kwargs):
             * *float*: Standard deviation of |Teff| in Kelvin.
 
     See also:
-        :func:`_get_giant_Teff_GB2009`
+        :func:`_get_dwarf_Teff_GB2009`
 
     References:
         * `González Hernández & Bonifacio, 2009, A&A, 497, 497 <http://adsabs.harvard.edu/abs/2009A&A...497..497G>`_
