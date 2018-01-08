@@ -2505,51 +2505,28 @@ def _get_dwarf_Teff_GB2009(index, color, **kwargs):
     else:
         FeH, FeH_err = FeH, 0
 
-    FeH_range = {
-            'B-V':  (-3.5, 0.5),
-            'V-Rc': (-3.1, 0.3),
-            'V-Ic': (-3.1, 0.3),
-            'V-J':  (-3.5, 0.5),
-            'V-H':  (-3.5, 0.5),
-            'V-Ks': (-3.5, 0.5),
-            'J-Ks': (-3.5, 0.5),
-            }
-    color_range = {
-            'B-V':  (0.2, 1.3),
-            'V-Rc': (0.2, 0.8),
-            'V-Ic': (0.5, 1.4),
-            'V-J':  (0.5, 2.3),
-            'V-H':  (0.6, 2.8),
-            'V-Ks': (0.7, 3.0),
-            'J-Ks': (0.1, 0.8),
-            }
-    coeff = {
-            'B-V':  [0.5725, 0.4722,  0.0086, -0.0628, -0.0038, -0.0051],
-            'V-Rc': [0.4451, 1.4561, -0.6893, -0.0944,  0.0161, -0.0038],
-            'V-Ic': [0.4025, 0.8324, -0.2041, -0.0555,  0.0410, -0.0003],
-            'V-J':  [0.4997, 0.3504, -0.0230, -0.0295,  0.0468,  0.0037],
-            'V-H':  [0.5341, 0.2517, -0.0100, -0.0236,  0.0523,  0.0044],
-            'V-Ks': [0.5201, 0.2511, -0.0118, -0.0186,  0.0408,  0.0033],
-            'J-Ks': [0.6524, 0.5813,  0.1225, -0.0646,  0.0370,  0.0016],
-        }
-    std_teff = {
-            'B-V':  76,
-            'V-Rc': 45,
-            'V-Ic': 52,
-            'V-J':  36,
-            'V-H':  30,
-            'V-Ks': 32,
-            'J-Ks': 139,
+    param = {
+        # FeH_range, color_range, coeff, std_teff
+        'B-V' : ((-3.5, 0.5), (0.2, 1.3), [0.5725, 0.4722,  0.0086, -0.0628, -0.0038, -0.0051],  76),
+        'V-Rc': ((-3.1, 0.3), (0.2, 0.8), [0.4451, 1.4561, -0.6893, -0.0944,  0.0161, -0.0038],  45),
+        'V-Ic': ((-3.1, 0.3), (0.5, 1.4), [0.4025, 0.8324, -0.2041, -0.0555,  0.0410, -0.0003],  52),
+        'V-J' : ((-3.5, 0.5), (0.5, 2.3), [0.4997, 0.3504, -0.0230, -0.0295,  0.0468,  0.0037],  36),
+        'V-H' : ((-3.5, 0.5), (0.6, 2.8), [0.5341, 0.2517, -0.0100, -0.0236,  0.0523,  0.0044],  30),
+        'V-Ks': ((-3.5, 0.5), (0.7, 3.0), [0.5201, 0.2511, -0.0118, -0.0186,  0.0408,  0.0033],  32),
+        'J-Ks': ((-3.5, 0.5), (0.1, 0.8), [0.6524, 0.5813,  0.1225, -0.0646,  0.0370,  0.0016], 139),
         }
 
-    if extrapolation:
-        a = coeff[index]
+    if index not in param:
+        raise ParamMissingError
+
+    FeH_range, color_range, a, std_teff = param[index]
+
+    if extrapolation or \
+        (FeH_range[0] <= FeH <= FeH_range[1] and \
+         color_range[0] <= color <= color_range[1]):
+        pass
     else:
-        if FeH_range[index][0] <= FeH <= FeH_range[index][1] and \
-           color_range[index][0] <= color <= color_range[index][1]:
-            a = coeff[index]
-        else:
-            raise ApplicableRangeError
+        raise ApplicableRangeError
 
     theta, _ = _fitfunc1(a, (color, 0.0), (FeH, 0.0), 0.0)
     teff = 5040./theta
@@ -2653,51 +2630,31 @@ def _get_giant_Teff_GB2009(index, color, **kwargs):
     else:
         FeH, FeH_err = FeH, 0
 
-    FeH_range = {
-            'B-V':  (-4.0,0.2),
-            'V-Rc': (-4.0,0.1),
-            'V-J':  (-4.0,0.2),
-            'V-H':  (-4.0,0.2),
-            'V-Ks': (-4.0,0.2),
-            'J-Ks': (-4.0,0.2),
-            }
-    color_range = {
-            'B-V':  (0.3, 1.4),
-            'V-Rc': (0.3, 0.7),
-            'V-J':  (1.0, 2.4),
-            'V-H':  (0.8, 3.1),
-            'V-Ks': (1.1, 3.4),
-            'J-Ks': (0.1, 0.9),
-            }
-    coeff = {
-            'B-V':  [0.4967, 0.7260, -0.1563,  0.0255, -0.0585, -0.0061],
-            'V-Rc': [0.4530, 1.4347, -0.5883, -0.0156, -0.0096, -0.0039],
-            'V-J':  [0.4629, 0.4124, -0.0417, -0.0012,  0.0094,  0.0013],
-            'V-H':  [0.5321, 0.2649, -0.0146, -0.0069,  0.0211,  0.0009],
-            'V-Ks': [0.5293, 0.2489, -0.0119, -0.0042,  0.0135,  0.0010],
-            'J-Ks': [0.6517, 0.6312,  0.0168, -0.0381,  0.0256,  0.0013],
-            }
-    std_teff = {
-            'B-V':  57,
-            'V-Rc': 85,
-            'V-J':  18,
-            'V-H':  23,
-            'V-Ks': 23,
-            'J-Ks': 94,
-            }
+    param = {
+        # FeH_range, color_range, coeff, std_teff
+        'B-V' : ((-4.0, 0.2), (0.3, 1.4), [0.4967, 0.7260, -0.1563,  0.0255, -0.0585, -0.0061], 57),
+        'V-Rc': ((-4.0, 0.1), (0.3, 0.7), [0.4530, 1.4347, -0.5883, -0.0156, -0.0096, -0.0039], 85),
+        'V-J' : ((-4.0, 0.2), (1.0, 2.4), [0.4629, 0.4124, -0.0417, -0.0012,  0.0094,  0.0013], 18),
+        'V-H' : ((-4.0, 0.2), (0.8, 3.1), [0.5321, 0.2649, -0.0146, -0.0069,  0.0211,  0.0009], 23),
+        'V-Ks': ((-4.0, 0.2), (1.1, 3.4), [0.5293, 0.2489, -0.0119, -0.0042,  0.0135,  0.0010], 23),
+        'J-Ks': ((-4.0, 0.2), (0.1, 0.9), [0.6517, 0.6312,  0.0168, -0.0381,  0.0256,  0.0013], 94),
+        }
 
-    if extrapolation:
-        a = coeff[index]
+    if index not in param:
+        raise ParamMissingError
+
+    FeH_range, color_range, a, std_teff = param[index]
+
+    if extrapolation or \
+        (FeH_range[0] <= FeH <= FeH_range[1] and \
+         color_range[0] <= color <= color_range[1]):
+        pass
     else:
-        if FeH_range[index][0] <= FeH <= FeH_range[index][1] and \
-           color_range[index][0] <= color <= color_range[index][1]:
-            a = coeff[index]
-        else:
-            raise ApplicableRangeError
+        raise ApplicableRangeError
 
     theta, _ = _fitfunc1(a, (color, 0.0), (FeH, 0.0), 0.0)
     teff = 5040./theta
-    d0 = theta*std_teff[index]/teff
+    d0 = theta*std_teff/teff
     theta, dtheta = _fitfunc1(a, (color, color_err), (FeH, FeH_err), d0)
     teff_err = teff*dtheta/theta
 
@@ -2998,11 +2955,14 @@ def _get_dwarf_Teff_Casagrande2010(index, color, **kwargs):
         'b-y'  : ((-3.7, 0.5), (0.18, 0.72), [0.5796, 0.4812,  0.5747, -0.0633,  0.0042, -0.0055],  62),
         }
 
+    if index not in param:
+        raise ParamMissingError
+
     FeH_range, color_range, a, std_teff = param[index]
 
     if extrapolation or \
-       (FeH_range[0]   <=  FeH  <= FeH_range[1] and \
-        color_range[0] <= color <= color_range[1]):
+        (FeH_range[0] <= FeH <= FeH_range[1] and \
+         color_range[0] <= color <= color_range[1]):
         pass
     else:
         raise ApplicableRangeError
