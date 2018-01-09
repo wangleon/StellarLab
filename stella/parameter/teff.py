@@ -2318,9 +2318,11 @@ def _get_dwarf_Teff_Masana2006(index, color, **kwargs):
            −3.0 ≤ [M/H] < −1.5
 
     Args:
-        index (string): Name of color index. Must be *"V-Ks"*
-        color (float): Value of color index.
-        FeH (float): Metallicity [M/H].
+        index (string): Name of color index. Must be *"V-Ks"*.
+        color (float, tuple or list): Value of color index and its uncertainty.
+            If *float* is given, the uncertainty is set to be zero.
+        FeH (float, tuple or list): Metallicity [Fe/H] and its uncertainty.
+            If *float* is given, the uncertainty is set to be zero.
         logg (float): Surface gravity (log\ *g*).
         extrapolation (bool): Extend the applicable ranges if *True*. Default is
             *False*.
@@ -2446,8 +2448,10 @@ def _get_dwarf_Teff_GB2009(index, color, **kwargs):
     Args:
         index (string): Name of color index. Available values include *"B-V"*,
             *"V-Rc"*, *"V-Ic"*, *"V-J"*, *"V-H"*, *"V-Ks"*, and *"J-Ks"*.
-        color (float): Value of color index.
-        FeH (float): Metallicity [Fe/H].
+        color (float, tuple or list): Value of color index and its uncertainty.
+            If *float* is given, the uncertainty is set to be zero.
+        FeH (float, tuple or list): Metallicity [Fe/H] and its uncertainty.
+            If *float* is given, the uncertainty is set to be zero.
         extrapolation (bool): Extend the applicable ranges if *True*. Default is
             *False*.
     Returns:
@@ -2570,8 +2574,10 @@ def _get_giant_Teff_GB2009(index, color, **kwargs):
     Args:
         index (string): Name of color index. Available values include *"B-V"*,
             *"V-Rc"*, *"V-J"*, *"V-H"*, *"V-Ks"*, and *"J-Ks"*.
-        color (float): Value of color index.
-        FeH (float): Metallicity [Fe/H].
+        color (float, tuple or list): Value of color index and its uncertainty.
+            If *float* is given, the uncertainty is set to be zero.
+        FeH (float, tuple or list): Metallicity [Fe/H] and its uncertainty.
+            If *float* is given, the uncertainty is set to be zero.
         extrapolation (bool): Extend the applicable ranges if *True*. Default is
             *False*.
     Returns:
@@ -2660,10 +2666,13 @@ def _get_dwarf_Teff_Onehag2009(index, color, **kwargs):
 
     Args:
         index (string): Name of color index. Available values include *"b-y"*,
-            *"Hbeta"*.
-        color (float): Value of color index (*b* − *y* or H\ :sub:`β`).
-        c1 (float): color index of *c*:sub:`1`.
-        FeH (float): Metallicity [Fe/H].
+            and *"Hbeta"*.
+        color (float, tuple or list): Value of color index and its uncertainty.
+            If *float* is given, the uncertainty is set to be zero.
+        c1 (float): color index of *c*:sub:`1`. Must be given if **index** =
+            *"b-y"*.
+        FeH (float, tuple or list): Metallicity [Fe/H] and its uncertainty.
+            If *float* is given, the uncertainty is set to be zero.
         extrapolation (bool): Extend the applicable ranges if *True*. Default is
             *False*.
     Returns:
@@ -2760,8 +2769,10 @@ def _get_giant_Teff_Onehag2009(index, color, **kwargs):
 
     Args:
         index (string): Name of color index. Must be *"b-y"*.
-        color (float): Value of color index (*b* − *y*).
-        FeH (float): Metallicity [Fe/H].
+        color (float, tuple or list): Value of color index and its uncertainty.
+            If *float* is given, the uncertainty is set to be zero.
+        FeH (float, tuple or list): Metallicity [Fe/H] and its uncertainty.
+            If *float* is given, the uncertainty is set to be zero.
         extrapolation (bool): Extend the applicable ranges if *True*. Default is
             *False*.
     Returns:
@@ -2917,8 +2928,10 @@ def _get_dwarf_Teff_Casagrande2010(index, color, **kwargs):
         index (string): Name of color index. Available values include *"B-V"*,
             *"V-Rc"*, *"Rc-Ic"*, *"V-Ic"*, *"V-J"*, *"V-H"*, *"V-Ks"*, *"J-Ks"*,
             *"BT-VT"*, *"VT-J"*, *"VT-H"*, *"VT-Ks"*, and *"b-y"*.
-        color (float): Value of color index.
-        FeH (float): Metallicity [Fe/H].
+        color (float, tuple or list): Value of color index and its uncertainty.
+            If *float* is given, the uncertainty is set to be zero.
+        FeH (float, tuple or list): Metallicity [Fe/H] and its uncertainty.
+            If *float* is given, the uncertainty is set to be zero.
         extrapolation (bool): Extend the applicable ranges if *True*. Default is
             *False*.
     Returns:
