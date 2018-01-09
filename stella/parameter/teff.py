@@ -2667,56 +2667,73 @@ def _get_dwarf_Teff_Onehag2009(index, color, **kwargs):
         extrapolation (bool): Extend the applicable ranges if *True*. Default is
             *False*.
     Returns:
-        float: Effective temperature (|Teff|) in K.
+        tuple: A tuple containing:
+
+            * *float*: Effective temperature (|Teff|) in Kelvin.
+            * *float*: Standard deviation of |Teff| in Kelvin.
+
     See also:
         :func:`_get_giant_Teff_Onehag2009`
     References:
         * `Önehag et al., 2009, A&A, 498, 527 <http://adsabs.harvard.edu/abs/2009A&A...498..527O>`_
     '''
-    reference = 'Onehag et al., 2009, A&A, 498, 527'
+    extrapolation = kwargs.pop('extrapolation',False)
+
+    if isinstance(color, tuple) or isinstance(color, list):
+        color, color_err = color[0], color[1]
+    else:
+        color, color_err = color, 0
 
     try:
         FeH = kwargs.pop('FeH')
     except KeyError:
-        raise MissingParamError('[Fe/H]', reference)
+        print('missing FeH')
+        raise
 
-    extrapolation = kwargs.pop('extrapolation',False)
+    if isinstance(FeH, tuple) or isinstance(FeH, list):
+        FeH, FeH_err = FeH[0], FeH[1]
+    else:
+        FeH, FeH_err = FeH, 0
 
     if index == 'b-y':
 
         try:
             c1 = kwargs.pop('c1')
         except KeyError:
-            raise MissingParamError('c1', reference)
+            print('missing c1')
+            raise ParamMissingEfrror
 
-        if not extrapolation:
-            
-            if (-3.00 <= FeH <= 0.50 and 0.20 <= color <= 0.70 and \
-                 0.10 <= c1 <= 0.55):
-                pass
-            else:
-                raise ParamRangeError(index, color, reference)
+        if extrapolation or \
+            (-3.00 <= FeH <= 0.50 and 0.20 <= color <= 0.70 and \
+             0.10 <= c1 <= 0.55):
+            pass
+        else:
+            raise ApplicableRangeError
 
-        theta = 0.415 + 1.313*color - 0.477*color**2 + 0.188*color*c1 \
-                - 0.037*color*FeH - 0.003*FeH - 0.006*FeH**2
+        a = [0.415, 1.313, -0.477, -0.037, -0.003, -0.006]
+        theta, dtheta = _fitfunc1(a, (color, color_err), (FeH, FeH_err), 0.0)
+        theta += 0.188*color*c1
 
     elif index == 'Hbeta':
-        if not extrapolation:
+        if extrapolation or \
+            (2.44 <= color <= 2.74 and -0.5 <= FeH <= 0.5) or \
+            (2.50 <= color <= 2.70 and -1.5 < FeH <= -0.5) or \
+            (2.50 <= color <= 2.63 and -2.5 < FeH <= -1.5) or \
+            (2.51 <= color <= 2.62 and -3.5 < FeH <= -2.5):
+            pass
+        else:
+            raise ApplicableRangeError
 
-            if ((2.44 <= color <= 2.74 and -0.5 <= FeH <= 0.5) or \
-                (2.50 <= color <= 2.70 and -1.5 < FeH <= -0.5) or \
-                (2.50 <= color <= 2.63 and -2.5 < FeH <= -1.5) or \
-                (2.51 <= color <= 2.62 and -3.5 < FeH <= -2.5)):
-                pass
-            else:
-                raise ParamRangeError(index, color, reference)
+        a = [28.60, -19.79, 3.504, 0.422, -1.068, 0.002]
+        theta, dtheta = _fitfunc1(a, (color, color_err), (FeH, FeH_err), 0.0)
 
-        theta = 28.60 - 19.79*color + 3.504*color**2 \
-                + 0.422*color*FeH - 1.068*FeH + 0.002*FeH**2
     else:
-        raise ColorIndexError(index, reference)
+        raise ParamMissingError
 
-    return 5040./theta
+    teff = 5040./theta
+    teff_err = teff*dtheta/theta
+
+    return teff, teff_err
 
 def _get_giant_Teff_Onehag2009(index, color, **kwargs):
     '''Convert color and [Fe/H] to *T*:sub:`eff` for giants using the
@@ -2754,21 +2771,35 @@ def _get_giant_Teff_Onehag2009(index, color, **kwargs):
     References:
         * `Önehag et al., 2009, A&A, 498, 527 <http://adsabs.harvard.edu/abs/2009A&A...498..527O>`_
     '''
-    reference = 'Onehag et al., 2009, A&A, 498, 527'
+    extrapolation = kwargs.pop('extrapolation',False)
 
     try:
         FeH = kwargs.pop('FeH')
     except KeyError:
         raise MissingParamError('[Fe/H]', reference)
 
-    extrapolation = kwargs.pop('extrapolation',False)
+    if isinstance(color, tuple) or isinstance(color, list):
+        color, color_err = color[0], color[1]
+    else:
+        color, color_err = color, 0
+
+    try:
+        FeH = kwargs.pop('FeH')
+    except KeyError:
+        print('missing FeH')
+        raise
+
+    if isinstance(FeH, tuple) or isinstance(FeH, list):
+        FeH, FeH_err = FeH[0], FeH[1]
+    else:
+        FeH, FeH_err = FeH, 0
 
     if index == 'b-y':
-        coef = {
+        coeff = {
             1: [0.6732, 0.0859,  1.1455, -1.080e-2, -0.132e-2, -0.082e-2],
             2: [0.1983, 2.0931, -0.9978,  4.709e-2, -2.66e-2,  -0.104e-2],
             3: [0.4522, 1.1745, -0.3093, -0.1693,    2.165e-2, -1.679e-2],
-        }
+            }
         if extrapolation:
             if color <= 0.424: choose = 1
             elif FeH <= -0.5:  choose = 2
@@ -2778,15 +2809,18 @@ def _get_giant_Teff_Onehag2009(index, color, **kwargs):
             elif 0.424 <= color <= 0.712 and -5.0 <= FeH <= -0.5: choose = 2
             elif 0.428 <= color <= 0.794 and -0.5 <  FeH <=  0.5: choose = 3
             else:
-                raise ParamRangeError(index, color, reference)
+                raise ApplicableRangeError
 
-        a = coef[choose]
-        theta = a[0] + a[1]*color + a[2]*color**2 \
-                + a[3]*color*FeH + a[4]*FeH + a[5]*FeH**2
+        a = coeff[choose]
+        theta, dtheta = _fitfunc1(a, (color, color_err), (FeH, FeH_err), 0.0)
+
     else:
-        raise ColorIndexError(index, reference)
+        raise ParamMissingError
 
-    return 5040./theta
+    teff = 5040./theta
+    teff_err = teff*dtheta/theta
+
+    return teff, teff_err
 
 def _get_dwarf_Teff_Casagrande2010(index, color, **kwargs):
     '''Convert color and [Fe/H] to |Teff| for dwarfs using the calibration
