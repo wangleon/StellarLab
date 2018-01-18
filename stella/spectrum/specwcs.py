@@ -1,6 +1,6 @@
 import numpy as np
+import numpy.polynomial as poly
 import astropy.io.fits as fits
-
 
 class MultiSpecItem(object):
     '''Class for MultiSpec format
@@ -66,9 +66,8 @@ class MultiSpecItem(object):
                     self.order[func] = int(g[12+pos])
                     self.pmin[func]  = float(g[13+pos])
                     self.pmax[func]  = float(g[14+pos])
-                    self.c[func]     = []
-                    for j in range(self.order[func]):
-                        self.c[func].append(float(g[15+pos+j]))
+                    self.c[func]     = [float(g[15+pos+j])
+                                        for j in range(self.order[func])]
                     pos += 3+3+self.order[func]
                 func += 1
 
@@ -79,7 +78,7 @@ class MultiSpecItem(object):
 
         Args:
             head (string): WAT2 string.
-        Returns
+        Returns:
             dict: A dict containing :class:`MultiSpecItem` instances.
         '''
         string = ''
@@ -104,8 +103,7 @@ class MultiSpecItem(object):
 
     def get_wv(self):
         '''Get wavelength for a record in multispec.
-        Args:
-            No args
+
         Returns:
             :class:`numpy.array`: An array of wavelengths
         '''
@@ -116,8 +114,8 @@ class MultiSpecItem(object):
         elif self.dtype == 2:
             # nonlinear coordiante
             p = np.arange(self.pmin[0], self.pmax[0]+1e-6)
-            n = (p - (self.pmax[0] + self.pmin[0])/2.0)/((
-                      self.pmax[0] - self.pmin[0])/2.0)
+            n = (p - (self.pmax[0] + self.pmin[0])/2.0)/(
+                     (self.pmax[0] - self.pmin[0])/2.0)
             wv  = np.zeros_like(n)
             for func in self.ftype.keys():
                 if int(self.ftype[func])==1:
@@ -133,6 +131,75 @@ class MultiSpecItem(object):
         return wv
 
 def load_multispec(filename):
+    '''Read the *Multispec* spectral world coordinate system.
+
+    The dispersion functions are specified by strings with identifiers
+    *"specN"*, where *N* is the phyiscal image line.
+    The strings contain a series of fields::
+
+        specN = ap beam dtype w1 dw nw z aplow aphigh [functions_i]
+
+    where
+
+        * **ap** - the aperture number.
+        * **beam** - the beam number.
+        * **dtype** - the dispersion type with the following meanings:
+
+            ===== ===================================================================================
+            Value Meaning
+            ===== ===================================================================================
+            -1    coordinates are not dispersion coordinates or spectrum is not dispersion calibrated
+            0     linear dispersion sampling
+            1     log-linear dispersion sampling
+            2     nonlinear dispersion
+            ===== ===================================================================================
+
+        * **w1** - the dispersion coordinate of the first physical pixel.
+        * **dw** - the average dispersion interval per physical pixel.
+        * **nw** - the number of valid pixels.
+        * **z** - the Doppler factor applied to all dispersion coordinates by
+          multiplying by 1/(1 + *z*). 0 means no Doppler correction.
+        * **aplow** - the lower limit of the extracted apertures.
+        * **aphigh** - the upper limit of the extracted apertures.
+        * **[functions_i]** - zero or more function descriptions. There are no
+          such descriptions for linear or log-linear dispersion coordinate
+          systems.
+          For the nonlinear dispersion systems, the descriptions have the
+          following fileds::
+
+              function_i = wt_i w0_i ftype_i [parameters] [coefficients]
+
+          where
+
+          * **wt_i** - weight.
+          * **w0_i** - zero point offset.
+          * **ftype_i** - the function type codes with the following meanings:
+
+            ===== =========================
+            Value Meaning
+            ===== =========================
+            1     Chebyshev polynomial
+            2     Legendre polynomial
+            3     Cubic spline
+            4     Linear spline
+            5     Pixel coordinate array
+            6     Sampled coordinate array
+            ===== =========================
+
+          * **[parameters]** - the parameters of the dispersion function 
+          * **[coefficients]** - the coefficients of the dispersion function
+
+          The final wavelength is the weighted sum of *nfunc* individual
+          dispersion functions *W*:sub:`i`\ (*p*):
+
+          .. math::
+
+              w=\sum_{i=1}^{\mathrm{nfunc}}\left(\\frac{w_{t,i}(w_{0,i}+W_i(p))}{1+z}\\right)
+
+
+
+
+    '''
 
     data, head = fits.getdata(filename,header=True)
     multispec_items = MultiSpecItem.get_wat2(head)
@@ -148,7 +215,7 @@ def load_multispec(filename):
         elif multispec_items[N].dtype==2:
             pmin = multispec_items[N].pmin[0]
             pmax = multispec_items[N].pmax[0]
-            flux = data[N-1,int(pmin)-1:int(pmax)-int(pmin)+1]
+            flux = data[N-1,int(pmin)-1:int(pmax)]
 
         wave_group[order] = wave
         flux_group[order] = flux
