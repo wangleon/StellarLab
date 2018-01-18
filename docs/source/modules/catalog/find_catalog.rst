@@ -11,8 +11,9 @@ Summary
     find_KIC
     find_TYC2
 
-Functions in stella.catalog.find_catalog module
--------------------------------------------------
+Functions
+---------
 .. automodule:: stella.catalog.find_catalog
     :members:
+    :private-members:
 

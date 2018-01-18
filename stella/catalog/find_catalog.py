@@ -385,3 +385,47 @@ def find_KIC(name, output='dict'):
         return structitem_to_dict(item)
     else:
         return None
+
+def find_Kepler_cands_r2(koi):
+
+    filename = os.path.join(os.getenv('STELLA_DATA'),
+                'catalog/journals/ApJ.736.19.table2.dat')
+    infile = open(filename)
+    planet_lst = {}
+    for row in infile:
+        _koi = int(row[12:16])
+        if _koi == koi:
+            planet_id  = float(row[12:19])
+            Tdur       = float(row[20:27])
+            depth      = float(row[28:34])
+            period     = float(row[60:73])
+            period_err = float(row[74:86])
+            rR         = float(row[111:118])
+            rR_err     = float(row[119:126])
+            aR         = float(row[87:98])
+            aR_err     = float(row[99:110])
+            b          = float(row[127:133])
+            try:
+                b_err  = float(row[134:139])
+            except:
+                b_err  = None
+            a          = float(row[146:151])
+            planet_data = {
+                'Tdur'  : Tdur,
+                'depth' : depth,
+                'P'     : period,   'e_P'   : period_err,
+                'r/R*'  : rR,       'e_r/R*': rR_err,
+                'a/R*'  : aR,       'e_a/R*': aR_err,
+                'b'     : b,        'e_b'   : b_err,
+                'a'     : a,
+                }
+            planet_lst[planet_id] = planet_data
+
+        elif _koi > koi:
+            break
+        else:
+            continue
+    infile.close()
+
+    return planet_lst
+
