@@ -77,35 +77,35 @@ def find_HIP(name, epoch=2000.0, output='dict'):
     For more details, see :ref:`Hipparcos Catalogue<catalog_hip>`.
 
     .. csv-table:: Descriptions of returned parameters
-        :header: "Key", "Type", "Unit", "Description"
+        :header: Key, Type, Unit, Description
         :widths: 30, 30, 30, 100
 
-        "HIP",      "integer32", "",       "HIP number"
-        "RAdeg",    "float64",   "deg",    "Right ascension (*α*) in ICRS at given epoch"
-        "DEdeg",    "float64",   "deg",    "Declination (*δ*) in ICRS at at given epoch"
-        "Vmag",     "float32",   "mag",    "*V* magnitude in Johnson system"
-        "Plx",      "float32",   "mas",    "Parallax"
-        "e_Plx",    "float32",   "mas",    "Error in parallax"
-        "pmRA",     "float32",   "mas/yr", "Proper motion in Right ascension with cos(*δ*) factor"
-        "pmDE",     "float32",   "mas/yr", "Proper motion in Declination"
-        "e_pmRA",   "float32",   "mas/yr", "Error in proper motion in RA"
-        "e_pmDE",   "float32",   "mas/yr", "Error in proper motion in Dec"
-        "BTmag",    "float32",   "mag",    "Mean *B*:sub:`T` magnitude"
-        "e_BTmag",  "float32",   "mag",    "Error in *B*:sub:`T` magnitude"
-        "VTmag",    "float32",   "mag",    "Mean *V*:sub:`T` magnitude"
-        "e_VTmag",  "float32",   "mag",    "Error in *V*:sub:`T` magnitude"
-        "B-V",      "float32",   "mag",    "*B* − *V* color in Johnson system"
-        "e_B-V",    "float32",   "mag",    "Error in *B* − *V* color"
-        "r_B-V",    "character", "",       "Source of *B* − *V* color"
-        "V-I",      "float32",   "mag",    "*V* − *I* color in Cousin system"
-        "e_V-I",    "float32",   "mag",    "Error in *V* − *I* color"
-        "r_V-I",    "character", "",       "Source of *V* − *I* color"
-        "Hpmag",    "float32",   "mag",    "Median magnitude in Hipparcos system"
-        "e_Hpmag",  "float32",   "mag",    "Error in *Hp* magnitude"
-        "Hpscat",   "float32",   "mag",    "Scatter on *Hp* magnitude"
-        "o_Hpmag",  "integer16", "",       "Number of observations for *Hp* magnitude"
-        "SpType",   "string",    "mag",    "Spectral type"
-        "r_SpType", "character", "",       "Source of Spectral type"
+        HIP,      integer32, ,       HIP number
+        RAdeg,    float64,   deg,    Right ascension (*α*) in ICRS at given epoch
+        DEdeg,    float64,   deg,    Declination (*δ*) in ICRS at at given epoch
+        Vmag,     float32,   mag,    *V* magnitude in Johnson system
+        Plx,      float32,   mas,    Parallax
+        e_Plx,    float32,   mas,    Error in parallax
+        pmRA,     float32,   mas/yr, Proper motion in Right ascension with cos(*δ*) factor
+        pmDE,     float32,   mas/yr, Proper motion in Declination
+        e_pmRA,   float32,   mas/yr, Error in proper motion in RA
+        e_pmDE,   float32,   mas/yr, Error in proper motion in Dec
+        BTmag,    float32,   mag,    Mean *B*:sub:`T` magnitude
+        e_BTmag,  float32,   mag,    Error in *B*:sub:`T` magnitude
+        VTmag,    float32,   mag,    Mean *V*:sub:`T` magnitude
+        e_VTmag,  float32,   mag,    Error in *V*:sub:`T` magnitude
+        B-V,      float32,   mag,    *B* − *V* color in Johnson system
+        e_B-V,    float32,   mag,    Error in *B* − *V* color
+        r_B-V,    character, ,       Source of *B* − *V* color
+        V-I,      float32,   mag,    *V* − *I* color in Cousin system
+        e_V-I,    float32,   mag,    Error in *V* − *I* color
+        r_V-I,    character, ,       Source of *V* − *I* color
+        Hpmag,    float32,   mag,    Median magnitude in Hipparcos system
+        e_Hpmag,  float32,   mag,    Error in *Hp* magnitude
+        Hpscat,   float32,   mag,    Scatter on *Hp* magnitude
+        o_Hpmag,  integer16, ,       Number of observations for *Hp* magnitude
+        SpType,   string,    mag,    Spectral type
+        r_SpType, character, ,       Source of Spectral type
 
     Args:
         name (string or integer): Name or number of star.
@@ -146,24 +146,24 @@ def find_HIP2(name, epoch=2000.0, output='dict'):
     For more details, see :ref:`Hipparcos Catalogue New Reduction <catalog_hip2>`
     
     .. csv-table:: Descriptions of returned parameters
-        :header: "Key", "Type", "Unit", "Description"
+        :header: Key, Type, Unit, Description
         :widths: 30, 30, 30, 100
 
-        "HIP",      "integer32", "",       "HIP number"
-        "RAdeg",    "float64",   "deg",    "Right ascension (*α*) in ICRS at given epoch"
-        "DEdeg",    "float64",   "deg",    "Declination (*δ*) in ICRS at at given epoch"
-        "Plx",      "float32",   "mas",    "Parallax"
-        "e_Plx",    "float32",   "mas",    "Error in parallax"
-        "pmRA",     "float32",   "mas/yr", "Proper motion in Right ascension with cos(*δ*) factor"
-        "pmDE",     "float32",   "mas/yr", "Proper motion in Declination"
-        "e_pmRA",   "float32",   "mas/yr", "Error in proper motion in RA"
-        "e_pmDE",   "float32",   "mas/yr", "Error in proper motion in Dec"
-        "B-V",      "float32",   "mag",    "*B* − *V* color in Johnson system"
-        "e_B-V",    "float32",   "mag",    "Error in *B* − *V* color"
-        "V-I",      "float32",   "mag",    "*V* − *I* color in Cousin system"
-        "Hpmag",    "float32",   "mag",    "Median magnitude in Hipparcos system"
-        "e_Hpmag",  "float32",   "mag",    "Error in *Hp* magnitude"
-        "Hpscat",   "float32",   "mag",    "Scatter on *Hp* magnitude"
+        HIP,     integer32, ,       HIP number
+        RAdeg,   float64,   deg,    Right ascension (*α*) in ICRS at given epoch
+        DEdeg,   float64,   deg,    Declination (*δ*) in ICRS at at given epoch
+        Plx,     float32,   mas,    Parallax
+        e_Plx,   float32,   mas,    Error in parallax
+        pmRA,    float32,   mas/yr, Proper motion in Right ascension with cos(*δ*) factor
+        pmDE,    float32,   mas/yr, Proper motion in Declination
+        e_pmRA,  float32,   mas/yr, Error in proper motion in RA
+        e_pmDE,  float32,   mas/yr, Error in proper motion in Dec
+        B-V,     float32,   mag,    *B* − *V* color in Johnson system
+        e_B-V,   float32,   mag,    Error in *B* − *V* color
+        V-I,     float32,   mag,    *V* − *I* color in Cousin system
+        Hpmag,   float32,   mag,    Median magnitude in Hipparcos system
+        e_Hpmag, float32,   mag,    Error in *Hp* magnitude
+        Hpscat,  float32,   mag,    Scatter on *Hp* magnitude
 
     Args:
         name (string or integer): Name or number of star.
@@ -204,30 +204,30 @@ def find_TYC2(name, epoch=2000.0, output='dict'):
     For more details, see :ref:`Tycho-2 Catalogue<catalog_tyc2>`.
 
     .. csv-table:: Descriptions of returned parameters
-        :header: "Key", "Type", "Unit", "Description"
+        :header: Key, Type, Unit, Description
         :widths: 30, 30, 30, 180
 
-        "TYC",      "integer32", "",       "HYC number"
-        "RAdeg",    "float64",   "deg",    "Right ascension (*α*) in ICRS at given epoch"
-        "DEdeg",    "float64",   "deg",    "Declination (*δ*) in ICRS at at given epoch"
-        "pmRA",     "float32",   "mas/yr", "Proper motion in Right ascension with cos(*δ*) factor"
-        "pmDE",     "float32",   "mas/yr", "Proper motion in Declination"
-        "e_RA",     "integer16", "mas",    "Error in RA with cos(*δ*) factor at mean epoch (−1 if blank)"
-        "e_DE",     "integer16", "mas",    "Error in Dec at mean epoch (−1 if blank)"
-        "e_pmRA",   "float32",   "mas/yr", "Error in proper motion in RA"
-        "e_pmDE",   "float32",   "mas/yr", "Error in proper motion in Dec"
-        "epoch_RA", "float32",   "yr",     "Mean epoch of RA in Julian year"
-        "epoch_DE", "float32",   "yr",     "Mean epoch of Dec in Julian year"
-        "num",      "integer16", "",       "Number of positions used (−1 if blank)"
-        "q_RA",     "float32",   "",       "Goodness of fit for mean RA (truncated to 9.9 if >9.9)"
-        "q_DE",     "float32",   "",       "Goodness of fit for mean Dec (truncated to 9.9 if >9.9)"
-        "q_pmRA",   "float32",   "",       "Goodness of fit for pmRA (truncated to 9.9 if >9.9)"
-        "q_pmDE",   "float32",   "",       "Goodness of fit for pmDE (truncated to 9.9 if >9.9)"
-        "BTmag",    "float32",   "mag",    "Mean *B*:sub:`T` magnitude"
-        "e_BTmag",  "float32",   "mag",    "Error in *B*:sub:`T` magnitude"
-        "VTmag",    "float32",   "mag",    "Mean *V*:sub:`T` magnitude"
-        "e_VTmag",  "float32",   "mag",    "Error in *V*:sub:`T` magnitude"
-        "prox",     "float32",   "arcsec", "Proximity, or distance to the nearest entry (truncated to 99.9 if >99.9)"
+        TYC,      integer32, ,       HYC number
+        RAdeg,    float64,   deg,    Right ascension (*α*) in ICRS at given epoch
+        DEdeg,    float64,   deg,    Declination (*δ*) in ICRS at at given epoch
+        pmRA,     float32,   mas/yr, Proper motion in Right ascension with cos(*δ*) factor
+        pmDE,     float32,   mas/yr, Proper motion in Declination
+        e_RA,     integer16, mas,    Error in RA with cos(*δ*) factor at mean epoch (−1 if blank)
+        e_DE,     integer16, mas,    Error in Dec at mean epoch (−1 if blank)
+        e_pmRA,   float32,   mas/yr, Error in proper motion in RA
+        e_pmDE,   float32,   mas/yr, Error in proper motion in Dec
+        epoch_RA, float32,   yr,     Mean epoch of RA in Julian year
+        epoch_DE, float32,   yr,     Mean epoch of Dec in Julian year
+        num,      integer16, ,       Number of positions used (−1 if blank)
+        q_RA,     float32,   ,       Goodness of fit for mean RA (truncated to 9.9 if >9.9)
+        q_DE,     float32,   ,       Goodness of fit for mean Dec (truncated to 9.9 if >9.9)
+        q_pmRA,   float32,   ,       Goodness of fit for pmRA (truncated to 9.9 if >9.9)
+        q_pmDE,   float32,   ,       Goodness of fit for pmDE (truncated to 9.9 if >9.9)
+        BTmag,    float32,   mag,    Mean *B*:sub:`T` magnitude
+        e_BTmag,  float32,   mag,    Error in *B*:sub:`T` magnitude
+        VTmag,    float32,   mag,    Mean *V*:sub:`T` magnitude
+        e_VTmag,  float32,   mag,    Error in *V*:sub:`T` magnitude
+        prox,     float32,   arcsec, "Proximity, or distance to the nearest entry (truncated to 99.9 if >99.9)"
 
     Args:
         name (string or tuple): Name or nunmber tuple of star.
@@ -313,33 +313,33 @@ def find_KIC(name, output='dict'):
     For more details, see :ref:`Kepler Input Catalog<catalog_kic>`.
 
     .. csv-table:: Descriptions of returned parameters
-        :header: "Key", "Type", "Unit", "Description"
+        :header: Key, Type, Unit, Description
         :widths: 30, 30, 30, 120
 
-        "KIC",    "integer32", "",       "KIC number"
-        "RAdeg",  "float64",   "deg",    "Right ascension (*α*) at J2000"
-        "DEdeg",  "float64",   "deg",    "Declination (*δ*) at J2000"
-        "pmRA",   "float32",   "mas/yr", "Proper motion in Right ascension with cos(*δ*) factor"
-        "pmDE",   "float32",   "mas/yr", "Proper motion in Declination"
-        "Plx",    "float32",   "mas",    "Parallax"
-        "umag",   "float32",   "mag",    "*u* magnitude in SDSS system"
-        "gmag",   "float32",   "mag",    "*g* magnitude in SDSS system"
-        "rmag",   "float32",   "mag",    "*r* magnitude in SDSS system"
-        "imag",   "float32",   "mag",    "*i* magnitude in SDSS system"
-        "zmag",   "float32",   "mag",    "*z* magnitude in SDSS system"
-        "grmag",  "float32",   "mag",    "Magnitude in GRed band"
-        "d51mag", "float32",   "mag",    "Magnitude in DDO-51 filter"
-        "kepmag", "float32",   "mag",    "Magnitude in Kepler band"
-        "flag_g", "integer16", "",       "Galaxy flag (0 for star, 1 for galaxy)"
-        "flag_v", "integer16", "",       "Variable flag (0 for normal, 1 for variable)"
-        "cq",     "string5",   "",       "Origin of Kepelr magnitude"
-        "fv",     "integer16", "",       "0 for outside Kepler FOV, 1/2 for inside, 2 for Kepler target"
-        "Teff",   "integer16", "K",      "Effective temperature"
-        "logg",   "float32",   "dex",    "Surface gravity"
-        "FeH",    "float32",   "dex",    "Metallicity"
-        "EBV",    "float32",   "mag",    "Color excess in *B* − *V*"
-        "Av",     "float32",   "mag",    "Extinction in *V* magnitude"
-        "R",      "float32",   "Rsun",   "Stellar radius"
+        KIC,    integer32, ,       KIC number
+        RAdeg,  float64,   deg,    Right ascension (*α*) at J2000
+        DEdeg,  float64,   deg,    Declination (*δ*) at J2000
+        pmRA,   float32,   mas/yr, Proper motion in Right ascension with cos(*δ*) factor
+        pmDE,   float32,   mas/yr, Proper motion in Declination
+        Plx,    float32,   mas,    Parallax
+        umag,   float32,   mag,    *u* magnitude in SDSS system
+        gmag,   float32,   mag,    *g* magnitude in SDSS system
+        rmag,   float32,   mag,    *r* magnitude in SDSS system
+        imag,   float32,   mag,    *i* magnitude in SDSS system
+        zmag,   float32,   mag,    *z* magnitude in SDSS system
+        grmag,  float32,   mag,    Magnitude in GRed band
+        d51mag, float32,   mag,    Magnitude in DDO-51 filter
+        kepmag, float32,   mag,    Magnitude in Kepler band
+        flag_g, integer16, ,       "Galaxy flag (0 for star, 1 for galaxy)"
+        flag_v, integer16, ,       "Variable flag (0 for normal, 1 for variable)"
+        cq,     string5,   ,       Origin of Kepelr magnitude
+        fv,     integer16, ,       "0 for outside Kepler FOV, 1/2 for inside, 2 for Kepler target"
+        Teff,   integer16, K,      Effective temperature
+        logg,   float32,   dex,    Surface gravity
+        FeH,    float32,   dex,    Metallicity
+        EBV,    float32,   mag,    Color excess in *B* − *V*
+        Av,     float32,   mag,    Extinction in *V* magnitude
+        R,      float32,   Rsun,   Stellar radius
 
     Args:
         name (string or integer): Name or number of star.
@@ -445,7 +445,7 @@ def find_Kepler_cands_r2(koi):
     for row in infile:
         _koi_s = int(row[12:16])
         _koi_p = float(row[12:19])
-        if (obj=='s' and _koi_s == koi) or (obj='p' and _koi_p == koi):
+        if (obj=='s' and _koi_s==koi) or (obj=='p' and _koi_p==koi):
             Tdur      = _str_to_float(row[20:27])
             depth     = _str_to_float(row[28:34])
             P         = _str_to_float(row[60:73])
@@ -486,7 +486,8 @@ def find_Kepler_cands_r2(koi):
             return None
     elif obj=='p':
         if len(planet_lst)==1:
-            return planet_lst[]
-
-    return planet_lst
-
+            return planet_lst[planet_lst.keys()[0]]
+        else:
+            return None
+    else:
+        raise ValueError
