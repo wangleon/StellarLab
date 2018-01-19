@@ -10,6 +10,7 @@ Summary
     find_HIP2
     find_KIC
     find_TYC2
+    find_Kepler_cands_r2
 
 Functions
 ---------

@@ -56,3 +56,21 @@ def _get_TYC_number(starname):
         return (tyc1, tyc2, tyc3)
     else:
         return None
+
+def _str_to_float(string):
+    '''
+    Convert string to float. Return *None* if failed.
+    '''
+    try:
+        return float(string)
+    except:
+        return None
+
+def _str_to_int(string):
+    '''
+    Convert string to integer. Return *None* if failed.
+    '''
+    try:
+        return int(string)
+    except:
+        return None
