@@ -130,7 +130,7 @@ class MultiSpecItem(object):
                 wv += self.wt[func]*wvi
         return wv
 
-def load_multispec(filename):
+def load_multispec(filename, key='beam'):
     '''Read the *Multispec* spectral world coordinate system.
 
     The dispersion functions are specified by strings with identifiers
@@ -197,19 +197,36 @@ def load_multispec(filename):
               w=\sum_{i=1}^{\mathrm{nfunc}}\left(\\frac{w_{t,i}(w_{0,i}+W_i(p))}{1+z}\\right)
 
 
+    Args:
+        filename (string): The name of file to read.
+        key (string): Key of the returned dict. Either "beam" or "ap".
+    Returns:
+        dict: A dict containing wavelength and flux of each order as tuples.
+    Examples:
 
+        .. code:: python
 
+           import matplotlib.pyplot as plot
+           from stella.spectrum import specwcs
+           res = specwcs.load_multispec('HD2796.fits')
+           # 'HD2796.fits' is a multi_spec fits
+
+           fig = plt.figure()
+           ax = fig.gca()
+           for order, (wave, flux) in sorted(res.items()):
+               ax.plot(wave, flux, '-')
+           plt.show()
     '''
 
     data, head = fits.getdata(filename,header=True)
     multispec_items = MultiSpecItem.get_wat2(head)
 
-    wave_group = {}
-    flux_group = {}
+    result = {}
 
     for N in multispec_items.keys():
-        order = multispec_items[N].beam
-        wave  = multispec_items[N].get_wv()
+        ap   = multispec_items[N].ap
+        beam = multispec_items[N].beam
+        wave = multispec_items[N].get_wv()
         if multispec_items[N].dtype==0:
             flux = data[N-1,:]
         elif multispec_items[N].dtype==2:
@@ -217,7 +234,11 @@ def load_multispec(filename):
             pmax = multispec_items[N].pmax[0]
             flux = data[N-1,int(pmin)-1:int(pmax)]
 
-        wave_group[order] = wave
-        flux_group[order] = flux
-
-    return wave_group, flux_group
+        if key=='beam':
+            result[beam] = (wave, flux)
+        elif key=='ap':
+            result[ap] = (wave, flux)
+        else:
+            print('Unknown key')
+            raise ValueError
+    return result
