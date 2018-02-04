@@ -5,56 +5,57 @@ import numpy as np
 import astropy.io.fits as fits
 from scipy.interpolate import RectBivariateSpline
 
-class DustMap(object):
-    """
-    Galactic dust map of Schlegel et al. 1998 [#Schlegel1998]_.
+class SFDMapClass(object):
+    '''
+    Galactic dust map of `Schlegel+ 1998
+    <http://adsabs.harvard.edu/abs/1998ApJ...500..525S>`_.
 
     Examples
     --------
     .. code-block:: python
 
-        from stella.extinction import DustMap
-        dust_map = DustMap()
-        EBV = dust_map.get_EBV(l,b)
+        from stella.extinction import SFDMap
+        EBV = SFDMap.get_EBV(l,b)
 
     where *l*, *b* are Galactic coordinate
-    """
+    '''
     def __init__(self):
 
         self.data = {'n': None, 's': None}
         self.head = {'n': None, 's': None}
 
-    def get_EBV(self, l, b, reduce=True, inlayer=False, d=None):
-        """get *E(B-V)* from the dust map.
-        They constructed a full-sky map of the Galactic dust
-        based on the observaions of IRAS and DIRBE on COBE.
+    def _read_data(self, key):
+        '''Read FITS data.
 
-        also read http://www.astro.princeton.edu/~Schlegel/dust/local/local.html
+        Args:
+            key (string): 'n' (northern hemisphere) or 's' (southern hemisphere)
+        '''
+        filename = os.path.join(os.getenv('STELLA_DATA'),
+                    'extinction/SFD_dust_4096_%sgp.fits'%key)
+        self.data[key], self.head[key] = fits.getdata(filename, header=True)
+
+    def get_EBV(self, l, b):
+        '''get *E(B-V)* from the SFD dust map.
+
+        Args:
+            l (float): Galactic longitude in degree
+            b (float): Galactic latitude in degree
+        Returns:
+            float: E(B-V)
 
         .. code-block:: python
             
-            from stella.extinction import DustMap
-            dust_map = DustMap()
-            EBV = dust_map.get_EBV(l,b)
+            from stella.extinction import SFDMap
+            EBV = SFDMap.get_EBV(l,b)
 
-        If reduce is True, the empirical correction of Bonifacio et al. 2000,
-        AJ, 120, 2065 is used to reduce the E(B-V) for E(B-V)>0.10. For more
-        info, also read Arce & Goodman, 1999, ApJ, 512, L135.
-
-        if inlayer is True and d is given, namely for stars in the reddening
-        layer, correct the E(B-V) by a factor of 1-exp(-\|Dsinb\|/h), where D is
-        the distance in unit of pc, b is the galactic latitude, and h=125pc is
-        the scale height of the reddening layer.
-        """
+        '''
         if b >= 0:
             key = 'n'
         else:
             key = 's'
 
         if self.data[key] is None:
-            filename = os.path.join(os.getenv('STELLA_DATA'),
-                       'extinction/SFD_dust_4096_%sgp.fits'%key)
-            self.data[key], self.head[key] = fits.getdata(filename,header=True)
+            self._read_data(key)
 
         data = self.data[key]
         head = self.head[key]
@@ -117,12 +118,6 @@ class DustMap(object):
         fnew = RectBivariateSpline(y, x, sdata)
         EBV = fnew(ypix, xpix)[0][0]
 
-        # reduce correction by Bonifacio et al. 2000, AJ, 120, 2065
-        if reduce and EBV > 0.1:
-            EBV = 0.10 + 0.65*(EBV - 0.10)
-
-        # for stars in reddening layer
-        if inlayer == True and d != None:
-            EBV *= 1-math.exp(-abs(d*math.sin(b/180.*math.pi))/125.)
-
         return EBV
+
+SFDMap = SFDMapClass()

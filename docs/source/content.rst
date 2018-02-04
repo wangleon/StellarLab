@@ -18,9 +18,11 @@ Modules
    :maxdepth: 2
    :glob:
    
+   modules/extinction
    modules/catalog/*
    modules/evolution/*
    modules/parameter
+   modules/spectrum
    modules/kinetics/*
    modules/utils
 
