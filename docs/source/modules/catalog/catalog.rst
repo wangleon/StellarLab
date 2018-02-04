@@ -1,5 +1,9 @@
-Find Records in Catalogues
-============================
+Catalogues
+==========
+
+.. autoclass:: stella.catalog.hip._HIP
+   :members:
+   :private-members:
 
 Summary
 --------
