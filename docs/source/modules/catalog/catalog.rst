@@ -5,6 +5,10 @@ Catalogues
    :members:
    :private-members:
 
+.. autoclass:: stella.catalog.hip2._HIP2
+   :members:
+   :private-members:
+
 Summary
 --------
 .. currentmodule:: stella.catalog.find_catalog

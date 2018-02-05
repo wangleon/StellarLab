@@ -4,4 +4,5 @@ from . import xindex
 from . import find_catalog
 
 from .hip import HIP
+from .hip2 import HIP2
 from . import kepler_planets

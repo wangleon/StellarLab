@@ -48,20 +48,21 @@ Reference System (ICRS) at epoch J1991.25.
 
 .. currentmodule:: stella.catalog
 .. autosummary::
-    find_catalog.find_HIP
+    hip._HIP.find_object
     base._get_HIP_number
 
 .. _catalog_hip2:
 
 Hipparcos Catalogue New Reduction (HIP2)
 -----------------------------------------
-This catalogue is the results of the new reduction (van Leeuwen 2007
-[#vanLeeuwen2007]_) of the astrometric data obtained by the
-*Hipparcos* satellite.
+This catalogue (`I/311
+<http://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=I/311>`_, van Leeuwen 2007
+[#vanLeeuwen2007]_) is the results of the new reduction of the astrometric data
+obtained by the *Hipparcos* satellite.
 
 .. currentmodule:: stella.catalog
 .. autosummary::
-    find_catalog.find_HIP2
+    hip2._HIP2.find_object
     base._get_HIP_number
 
 .. _catalog_tyc2:
