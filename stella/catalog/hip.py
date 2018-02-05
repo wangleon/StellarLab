@@ -4,59 +4,6 @@ from ..utils.fitsio import get_bintable_info
 from ..utils.asciitable import structitem_to_dict
 from .base import _get_HIP_number
 
-def _search_HIP_catalogue(name, filename, epoch=2000.0, output='dict'):
-    '''
-    Search data in either HIP catalogue (`I/239
-    <http://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=I/239>`_, Perryman+
-    1997) or HIP New Reduction (`I/311
-    <http://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=I/311>`_, van Leeuwen
-    2007).
-
-    Args:
-        name (string or integer): Name or number of star.
-        filename (string): Name of catalogue file. Either *"HIP.fits"* or
-            *"HIP2.fits"*.
-        epoch (float): Epoch of the output astrometric parameters.
-        output (string): Type of output results. Either *"dict"* or *"dtype"*
-            (:class:`numpy.dtype`).
-    Returns:
-        dict or :class:`numpy.dtype`: Record in catalogue.
-    '''
-
-    # check table file
-    catfile = os.path.join(os.getenv('STELLA_DATA'), 'catalog/%s'%filename)
-    if not os.path.exists(catfile):
-        raise FileNotExist(catfile)
-
-    nbyte, nrow, ncol, pos, dtype, fmtfunc = get_bintable_info(catfile)
-    infile = open(catfile,'rb')
-
-    def change_epoch(item, epoch):
-        pm_ra = item['pmRA']*1e-3/3600. # convert pm_RA from mas/yr to deg/yr
-        pm_de = item['pmDE']*1e-3/3600. # convert pm_DE from mas/yr to deg/yr
-        item['RAdeg'] += (epoch-1991.25)*pm_ra/math.cos(item['DEdeg']/180.*math.pi)
-        item['DEdeg'] += (epoch-1991.25)*pm_de
-
-    hip = _get_HIP_number(name)
-    if hip is None:
-        # return a null result
-        # hip = 672 is the common null record in both HIP and HIP New
-        infile.seek(pos+(672-1)*nbyte,0)
-        item = fmtfunc(infile.read(nbyte))
-    else:
-        infile.seek(pos+(hip-1)*nbyte,0)
-        item = fmtfunc(infile.read(nbyte))
-        change_epoch(item, epoch)
-
-    infile.close()
-
-    if output == 'dtype':
-        return item
-    elif output == 'dict':
-        return structitem_to_dict(item)
-    else:
-        return None
-
 class _HIP(object):
     '''Class for Hipparcos Catalogue (`I/239
     <http://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=I/239>`_, Perryman+
@@ -76,9 +23,7 @@ class _HIP(object):
 
     def find_object(self, name, epoch=2000.0, output='dict'):
         '''
-        Find record for an object in Hipparcos Catalogue (`I/239
-        <http://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=I/239>`_, Perryman+
-        1997).
+        Find record for an object in Hipparcos Catalogue.
     
         .. csv-table:: Descriptions of returned parameters
             :header: Key, Type, Unit, Description
