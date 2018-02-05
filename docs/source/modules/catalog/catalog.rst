@@ -9,21 +9,19 @@ Catalogues
    :members:
    :private-members:
 
+.. autoclass:: stella.catalog.tyc2._TYC2
+   :members:
+   :private-members:
+
 Summary
 --------
 .. currentmodule:: stella.catalog.find_catalog
 
 .. autosummary::
-    find_HIP
-    find_HIP2
     find_KIC
-    find_TYC2
     find_Kepler_cands_r2
 
 .. currentmodule:: stella.catalog.kepler_planets
-
-.. autosummary::
-    a
 
 Functions
 ---------

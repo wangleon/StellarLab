@@ -5,14 +5,6 @@ Catalogues
 
 Summaries
 ---------
-**Catalogue searching functions (find_catalog module)**
-
-.. currentmodule:: stella.catalog.find_catalog
-.. autosummary::
-    find_HIP
-    find_HIP2
-    find_KIC
-    find_TYC2
 
 **Star name parsing functions (name module)**
 
@@ -86,120 +78,20 @@ false or heavily disturbed.
 The table below lists the number of stars and precision of Tycho-2 within the
 given intervals of *V*:sub:`T` magnitude (from Table 2 of Høg et al. 2000).
 
-.. list-table::
-   :widths: 35 10 10 10 10 10 10 10 10 10
-   :header-rows: 1
+.. csv-table::
+   :header: Interval of *V*:sub:`T`, < 7.0, 7 ~ 8.0, 8 ~ 9.0, 9 ~ 10.0, 10 ~ 11.0, 11 ~ 12.0, > 12.0, All, < 9.0
+   :widths: 35, 10, 10, 10, 10, 10, 10, 10, 10, 10
 
-   * - Interval of *V*:sub:`T`
-     - < 7.0
-     - 7 ~ 8.0
-     - 8 ~ 9.0
-     - 9 ~ 10.0
-     - 10 ~ 11.0
-     - 11 ~ 12.0
-     - > 12.0
-     - All
-     - < 9.0
-   * - Median *V*:sub:`T`
-     - 6.39
-     - 7.63
-     - 8.62
-     - 9.61
-     - 10.61
-     - 11.54
-     - 12.28
-     - 11.41
-     - 8.34
-   * - *N* (positions)
-     - 14,145
-     - 27,770
-     - 78,296
-     - 207,569
-     - 536,565
-     - 1,127,627
-     - 547,935
-     - 2,539,913
-     - 120,211
-   * - *N*:sub:`Suppl-1`
-     - 109
-     - 49
-     - 202
-     - 1,218
-     - 6,768
-     - 7,482
-     - 1,733
-     - 17,588
-     - 360
-   * - *N* (proper motions)
-     - 13,773
-     - 27,684
-     - 78,146
-     - 207,125
-     - 533,549
-     - 1,069,268
-     - 500,918
-     - 2,430,468
-     - 119,603
-   * - Mean epoch of positions
-     - 1991.37
-     - 1991.23
-     - 1990.75
-     - 1989.25
-     - 1986.89
-     - 1982.67
-     - 1978.21
-     - 1984.34
-     - 1990.99
-   * - Median errors in Tycho positions (mas)
-     - 3.8
-     - 5.0
-     - 7.9
-     - 15.9
-     - 35.4
-     - 71.3
-     - 103.5
-     - 64.0
-     - 6.6
-   * - Median errors in positions at mean epoch (mas)
-     - 4.0
-     - 5.0
-     - 8.0
-     - 15.0
-     - 30.0
-     - 63.0
-     - 92.0
-     - 55.0
-     - 7.0
-   * - Median errors in proper motions (mas/yr)
-     - 1.0
-     - 1.2
-     - 1.3
-     - 1.5
-     - 2.0
-     - 2.5
-     - 3.0
-     - 2.4
-     - 1.2
-   * - Median errors in *B*:sub:`T` magnitudes
-     - 0.015
-     - 0.016
-     - 0.020
-     - 0.033
-     - 0.068
-     - 0.173
-     - 0.248
-     - 0.143
-     - 0.018
-   * - Median errors in *V*:sub:`T` magnitudes
-     - 0.010
-     - 0.011
-     - 0.014
-     - 0.023
-     - 0.050
-     - 0.114
-     - 0.198
-     - 0.100
-     - 0.013
+    Median *V*:sub:`T`,                             6.39,     7.63,     8.62,     9.61,      10.61,     11.54,       12.28,     11.41,       8.34
+    *N* (positions),                                "14,145", "27,770", "78,296", "207,569", "536,565", "1,127,627", "547,935", "2,539,913", "120,211"
+    *N*:sub:`Suppl-1`,                              109,      49,       202,      "1,218",   "6,768",   "7,482",     "1,733",   "17,588",    360
+    *N* (proper motions),                           "13,773", "27,684", "78,146", "207,125", "533,549", "1,069,268", "500,918", "2,430,468", "119,603"
+    Mean epoch of positions,                        1991.37,  1991.23,  1990.75,  1989.25,   1986.89,   1982.67,     1978.21,   1984.34,     1990.99
+    Median errors in Tycho positions (mas),         3.8,      5.0,      7.9,      15.9,      35.4,      71.3,        103.5,     64.0,        6.6
+    Median errors in positions at mean epoch (mas), 4.0,      5.0,      8.0,      15.0,      30.0,      63.0,        92.0,      55.0,        7.0
+    Median errors in proper motions (mas/yr),       1.0,      1.2,      1.3,      1.5,       2.0,       2.5,         3.0,       2.4,         1.2    
+    Median errors in *B*:sub:`T` magnitudes,        0.015,    0.016,    0.020,    0.033,     0.068,     0.173,       0.248,     0.143,       0.018
+    Median errors in *V*:sub:`T` magnitudes,        0.010,    0.011,    0.014,    0.023,     0.050,     0.114,       0.198,     0.100,       0.013
 
 .. figure:: images/2000A&A...355L..27H.Fig1.png
     :alt: Stellar densities in Tycho-2 Catalogue
@@ -212,7 +104,7 @@ given intervals of *V*:sub:`T` magnitude (from Table 2 of Høg et al. 2000).
 
 .. currentmodule:: stella.catalog
 .. autosummary::
-    find_catalog.find_TYC2
+    tyc._TYC2.find_object
 
 .. _catalog_kic:
 

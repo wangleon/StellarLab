@@ -16,10 +16,19 @@ class _HIP(object):
 
     def __init__(self):
         self.catfile = os.path.join(os.getenv('STELLA_DATA'), 'catalog/HIP.fits')
+        self._data_info = None
+
+    def _get_data_info(self):
+        '''Get information of FITS table.'''
         nbyte, nrow, ncol, pos, dtype, fmtfunc = get_bintable_info(self.catfile)
-        self.nbyte   = nbyte
-        self.pos     = pos
-        self.fmtfunc = fmtfunc
+        self._data_info = {
+                'nbyte'  : nbyte,
+                'nrow'   : nrow,
+                'ncol'   : ncol,
+                'pos'    : pos,
+                'dtype'  : dtype,
+                'fmtfunc': fmtfunc
+                }
 
     def find_object(self, name, epoch=2000.0, output='dict'):
         '''
@@ -70,7 +79,6 @@ class _HIP(object):
     
             .. code-block:: python
     
-                import numpy as np
                 from stella.catalog import HIP
     
                 # find the parametres for tau Cet (HIP 8102)
@@ -85,6 +93,9 @@ class _HIP(object):
             item['DEdeg'] += (epoch-1991.25)*pm_de
 
         hip = _get_HIP_number(name)
+
+        if self._data_info is None:
+            self._get_data_info()
 
         infile = open(self.catfile, 'rb')
         if hip is None:
