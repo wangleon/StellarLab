@@ -79,10 +79,10 @@ class _HIP(object):
     
             .. code-block:: python
     
-                from stella.catalog import HIP
-    
-                # find the parametres for tau Cet (HIP 8102)
-                item = HIP.find_object(8102, epoch=1991.25)
+                >>> from stella.catalog import HIP
+                >>> rec = HIP.find_object(8102, epoch=1991.25)
+                >>> rec['Vmag'], rec['B-V'], rec['Plx'], rec['e_Plx']
+                (3.490000009536743, 0.7269999980926514, 274.1700134277344, 0.800000011920929)
     
         '''
 
@@ -97,15 +97,19 @@ class _HIP(object):
         if self._data_info is None:
             self._get_data_info()
 
+        pos     = self._data_info['pos']
+        nbyte   = self._data_info['nbyte']
+        fmtfunc = self._data_info['fmtfunc']
+
         infile = open(self.catfile, 'rb')
         if hip is None:
             # return a null result
             # hip = 672 is the common null record in both HIP and HIP New
-            infile.seek(self.pos+(672-1)*self.nbyte, 0)
-            item = self.fmtfunc(infile.read(self.nbyte))
+            infile.seek(pos+(672-1)*nbyte, 0)
+            item = fmtfunc(infile.read(nbyte))
         else:
-            infile.seek(self.pos+(hip-1)*self.nbyte, 0)
-            item = self.fmtfunc(infile.read(self.nbyte))
+            infile.seek(pos+(hip-1)*nbyte, 0)
+            item = fmtfunc(infile.read(nbyte))
             change_epoch(item, epoch)
         infile.close()
 

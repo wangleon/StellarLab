@@ -104,7 +104,7 @@ given intervals of *V*:sub:`T` magnitude (from Table 2 of Høg et al. 2000).
 
 .. currentmodule:: stella.catalog
 .. autosummary::
-    tyc._TYC2.find_object
+    tyc2._TYC2.find_object
 
 .. _catalog_kic:
 

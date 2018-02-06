@@ -68,15 +68,14 @@ class _HIP2(object):
     
             .. code-block:: python
             
-                from stella.catalog import HIP2
-        
-                res1 = HIP2.find_object(8102, epoch=1991.25)
-                res2 = HIP2.find_object(8102)
-                print(res1['RAdeg'], res1['DEdeg'])
-                print(res2['RAdeg'], res2['DEdeg'])
-                # output:
-                # 26.021364586713265 -15.939555724635493
-                # 26.017014215650022 -15.937479641367434
+                >>> from stella.catalog import HIP2
+                >>> rec1 = HIP2.find_object(8102, epoch=1991.25)
+                >>> rec2 = HIP2.find_object(8102)
+                >>> rec1['RAdeg'], rec1['DEdeg']
+                (26.021364586713265, -15.939555724635493)
+                >>> rec2['RAdeg'], rec2['DEdeg']
+                (26.017014215650022, -15.937479641367434)
+
         '''
 
         def change_epoch(item, epoch):
@@ -90,15 +89,19 @@ class _HIP2(object):
         if self._data_info is None:
             self._get_data_info()
 
+        pos     = self._data_info['pos']
+        nbyte   = self._data_info['nbyte']
+        fmtfunc = self._data_info['fmtfunc']
+
         infile = open(self.catfile, 'rb')
         if hip is None:
             # return a null result
             # hip = 672 is the common null record in both HIP and HIP New
-            infile.seek(self.pos+(672-1)*self.nbyte, 0)
-            item = self.fmtfunc(infile.read(self.nbyte))
+            infile.seek(pos+(672-1)*nbyte, 0)
+            item = fmtfunc(infile.read(nbyte))
         else:
-            infile.seek(self.pos+(hip-1)*self.nbyte, 0)
-            item = self.fmtfunc(infile.read(self.nbyte))
+            infile.seek(pos+(hip-1)*nbyte, 0)
+            item = fmtfunc(infile.read(nbyte))
             change_epoch(item, epoch)
         infile.close()
 

@@ -21,7 +21,7 @@ class _TYC2(object):
 
     def _get_data_info(self):
         '''Get information of FITS table.'''
-        nbyte, nrow, ncol, pos, dtype, fmtfunc = get_bintable_info(filename)
+        nbyte, nrow, ncol, pos, dtype, fmtfunc = get_bintable_info(self.catfile)
         self._data_info = {
                 'nbyte'  : nbyte,
                 'nrow'   : nrow,
@@ -69,18 +69,15 @@ class _TYC2(object):
         Returns:
             dict or :class:`numpy.dtype`: Record in catalogue.
         Examples:
-            Find the proper motion of Barnard's star (TYC 425-2502-1)
+            Find proper motion of Barnard's star (TYC 425-2502-1)
     
             .. code-block:: python
             
-                from stella.catalog import TYC2
+                >>> from stella.catalog import TYC2
+                >>> rec = TYC2.find_object('TYC 425-2502-1')
+                >>> rec['pmRA'], rec['pmDE']
+                (-798.7999877929688, 10277.2998046875)
 
-                res = TYC2.find_object('TYC 425-2502-1')
-        
-                print(res['pmRA'], res['pmDE'])
-                # output:
-                # -798.7999877929688 10277.2998046875
-        
         '''
 
         tyc1, tyc2, tyc3 = _get_TYC_number(name)
@@ -89,12 +86,17 @@ class _TYC2(object):
 
         if self._data_info is None:
             self._get_data_info()
+
+        pos     = self._data_info['pos']
+        nbyte   = self._data_info['nbyte']
+        nrow    = self._data_info['nrow']
+        fmtfunc = self._data_info['fmtfunc']
     
         infile = open(self.catfile, 'rb')
-        i1, i2 = 0, self.nrow-1
+        i1, i2 = 0, nrow-1
         while(i2-i1 > 1):
             i3 = int((i1+i2)/2)
-            infile.seek(self.pos + i3*self.nbyte, 0)
+            infile.seek(pos + i3*nbyte, 0)
             key = struct.unpack('>i',infile.read(4))[0]
             if target < key:
                 i2 = i3
@@ -103,14 +105,14 @@ class _TYC2(object):
             else:
                 break
         infile.seek(-4,1)
-        item = self.fmtfunc(infile.read(self.nbyte))
+        item = fmtfunc(infile.read(nbyte))
         
         # looking for possible companion
-        if i3 != self.nrow - 1:
+        if i3 != nrow - 1:
             key2 = struct.unpack('>i',infile.read(4))[0]
             if key2 == key + 1:
                 infile.seek(-4,1)
-                item2 = self.fmtfunc(infile.read(self.nbyte))
+                item2 = fmtfunc(infile.read(nbyte))
                 print('Warning: There are more than 1 star matched')
                 t1 = (key2 & 0b11111111111111000000000000000000)/2**18
                 t2 = (key2 & 0b00000000000000111111111111110000)/2**4
