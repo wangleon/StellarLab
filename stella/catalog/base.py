@@ -57,20 +57,20 @@ def _get_TYC_number(starname):
     else:
         return None
 
-def _str_to_float(string):
+def _str_to_float(string, exception_value=None):
     '''
-    Convert string to float. Return *None* if failed.
+    Convert string to float. Return `exception_value` if failed.
     '''
     try:
         return float(string)
     except:
-        return None
+        return exception_value
 
-def _str_to_int(string):
+def _str_to_int(string, exception_value=None):
     '''
-    Convert string to integer. Return *None* if failed.
+    Convert string to integer. Return `exception_value` if failed.
     '''
     try:
         return int(string)
     except:
-        return None
+        return exception_value
