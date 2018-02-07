@@ -159,6 +159,7 @@ catalogue.
 .. currentmodule:: stella.catalog
 .. autosummary::
     kic._KIC.find_object
+    kic.plot_histogram
     base._get_KIC_number
 
 References
