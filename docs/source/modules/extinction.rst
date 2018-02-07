@@ -5,3 +5,6 @@ Extinction
     :members:
     :private-members:
 
+.. automodule:: stella.extinction.photometric
+    :members:
+    :private-members:

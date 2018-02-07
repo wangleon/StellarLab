@@ -2,9 +2,19 @@ import numpy as np
 from scipy.interpolate import InterpolatedUnivariateSpline
 
 def get_Stromgren_Eby(by,m1,c1,beta):
-    """
-    get E(b-y) based on the method of Olsen, 1988, *A&A*, 189, 173.
-    """
+    '''
+    Get *E*\ (*b* − *y*) using the method of `Olsen 1988
+    <http://adsabs.harvard.edu/abs/1988A&A...189..173O>`_.
+
+    Args:
+        by (float): Color index (*b* − *y*) in Strömgren system.
+        m1 (float): Color index *m*:sub:`1` = (*v* − *b*) − (*b* − *y*) in Strömgren system.
+        c1 (float): Color index *c*:sub:`1` = (*u* − *v*) − (*v* − *b*) in Strömgren system.
+        beta (float): Color index *β* = *β*:sub:`narrow` − *β*:sub:`wide` in Strömgren system.
+    Returns:
+        float: Value of *E*\ (*b* − *y*).
+    
+    '''
 
     # interpolated table from Crawford, 1975, AJ, 80, 955 table 1
     beta_lst = np.arange(2.590,2.720+1e-6, 0.01)
@@ -27,6 +37,7 @@ def get_Stromgren_Eby(by,m1,c1,beta):
         delta_m0 = m1_in - m0
         delta_c0 = c0 - c1_in
 
+        # equation (2)
         C = 4.9*delta_beta + 32.2*delta_m0 - 262.*delta_m0**2 - 1.31
 
         C = min(C, 1.6*delta_beta)
@@ -35,11 +46,13 @@ def get_Stromgren_Eby(by,m1,c1,beta):
         else:
             C = max(C, -0.05)
 
+        # equation (7)
         if delta_m0 < 0.06:
             D = (0.16 + 4.5*delta_m0 + 3.5*delta_beta)*delta_m0
         else:
             D = 0.24*delta_m0 + 0.035
 
+        # equation (7)
         by0 = 0.217 + 1.34*delta_beta + 1.6*delta_beta**2 + C*delta_c0 - D
 
         Eby = by - by0

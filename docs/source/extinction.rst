@@ -33,8 +33,21 @@ reddening layer.
     import math
     EBV *= 1-math.exp(-abs(d*math.sin(b/180.*math.pi))/125.)
 
+Photometric Extinction
+----------------------
+Olsen 1988 [#Olsen1988]_ gave the calibration relations of *E*\ (*b* − *y*) v.s.
+Strömgren *uvbyβ* colors.
+This relation is based on 1231 stars, and valid for stars with spectral types of
+F0-G2 and luminosity classses of III-V.
+
+.. currentmodule:: stella.extinction.photometric
+.. autosummary::
+   get_Stromgren_Eby
+
+
 References
 ----------
 .. [#Arce1999] Arce & Goodman, 1999, *ApJ*, 512, L135 :ads:`1999ApJ...512L.135A`
 .. [#Bonifacio2000] Bonifacio et al., 2000, *AJ*, 120, 2065 :ads:`2000AJ....120.2065B`
+.. [#Olsen1988] Olsen, 1988, *A&A*, 189, 173 :ads:`1988A%26A...189..173O`
 .. [#Schlegel1998] Schlegel et al., 1998, *ApJ*, 500, 525 :ads:`1998ApJ...500..525S`
