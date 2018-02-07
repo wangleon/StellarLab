@@ -204,7 +204,15 @@ def convert_to_fits(path):
             >>> import os
             >>> from stella.catalog.kic import convert_to_fits
             >>> astrodata = os.getenv('ASTRO_DATA')
-            >>> path = os.path.join(astrodata, '/catalog/V/133/kic/')
+            >>> path = os.path.join(astrodata, 'catalog/V/133/kic/')
+            >>> convert_to_fits(path)
+            s00.dat          1        298        298        298      0.315
+            n00.dat        299        625        327        327      0.048
+            n01.dat        626       1328        703        703      0.027
+            n02.dat       1329       3588       2260       2260      0.053
+            n10.dat       3589       3631         43         43      0.001
+            n11.dat       3632       6268       2637       2637      0.061
+            ... ...
 
     '''
     import time
@@ -322,3 +330,55 @@ def convert_to_fits(path):
     if os.path.exists(outname):
         os.remove(outname)
     hdu_lst.writeto(outname)
+
+def count_parameters(path):
+    '''Count the number of parallax, proper motion, and atmospheric parameters
+    in KIC.
+
+    Args:
+        path (string): Path to the KIC ASCII files.
+    Returns:
+        No returns.
+
+    Examples:
+
+        .. code-block:: python
+
+            >>> import os
+            >>> from stella.catalog.kic import count_parameters
+            >>> astrodata = os.getenv('ASTRO_DATA')
+            >>> path = os.path.join(astrodata, 'catalog/V/133/kic/')
+            >>> count_parameters(path)
+            N(PM)=12944973, N(Plx)=958, N(para)=2106821
+    '''
+
+    filename_lst = []
+    for direct in 'sn':
+        for i in range(90):
+            fn = os.path.join(path, '%s%02d.dat'%(direct,i))
+            if os.path.exists(fn):
+                filename_lst.append(fn)
+    if len(filename_lst)==0:
+        print('Error: Cannot find catalog file in %s'%path)
+
+    count_pm = 0
+    count_plx = 0
+    count_para = 0
+    for filename in filename_lst:
+        kic_lst = []
+        infile = open(filename)
+        for row in infile:
+            if row[0]== '#':
+                continue
+            kic = int(row[0:8])
+            kic_lst.append(kic)
+            if len(row[30:38].strip())!=0 or len(row[39:47].strip())!=0:
+                count_pm += 1
+            if len(row[48:56].strip())!=0:
+                count_plx += 1
+            if len(row)>225:
+                count_para += 1
+        infile.close()
+        #print(os.path.basename(filename), min(kic_lst), max(kic_lst))
+    print('N(PM)=%d, N(Plx)=%d, N(para)=%d'%(count_pm, count_plx, count_para))
+
