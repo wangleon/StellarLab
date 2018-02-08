@@ -5,6 +5,8 @@ from ..utils.fitsio import get_bintable_info
 from ..utils.asciitable import structitem_to_dict
 from .base import _get_KIC_number
 
+catfile = os.path.join(os.getenv('STELLA_DATA'), 'catalog/KIC.fits')
+
 class _KIC(object):
     '''Class for Kepler Input Catalog (`V/133
     <http://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=V/133>`_, Kepler
@@ -20,7 +22,7 @@ class _KIC(object):
 
     '''
     def __init__(self):
-        self.catfile = os.path.join(os.getenv('STELLA_DATA'), 'catalog/KIC.fits')
+        self.catfile = catfile
         self._data_info = None
 
     def _get_data_info(self):
@@ -117,23 +119,28 @@ class _KIC(object):
 
 KIC = _KIC()
 
-def plot_histogram():
+def plot_histogram(figfile, show=False):
     '''Plot magnitude and *T*:sub:`eff` - log\ *g* histograms of Kepler Input
     Catalogue.
+    
+    Args:
+        figfile (string): Name of the output figure
+        show (bool): If *True*, display the figure in a pop-up window
+    Returns:
+        No returns
 
     Examples:
 
         .. code-block:: python
 
             >>> from stella.catalog.kic import plot_histogram
-            >>> plot_histogram()
+            >>> plot_histogram('catalogue_stat_KIC.png')
 
     '''
     import matplotlib.pyplot as plt
     import matplotlib.ticker as tck
 
-    filename = os.path.join(os.getenv('STELLA_DATA'), 'catalog/KIC.fits')
-    data = fits.getdata(filename)
+    data = fits.getdata(catfile)
     mask = np.isnan(data['kepmag'])
     kps = data['kepmag'][~mask]
     
@@ -187,13 +194,17 @@ def plot_histogram():
     for tick in cbar.ax.get_yaxis().get_major_ticks():
         tick.label2.set_fontsize(tick_fontsize)
         tick.label2.set_family(family)
-    fig1.savefig('catalogue_stat_KIC.png')
+    fig1.savefig(figfile)
+    if show:
+        plt.show()
+    plt.close(fig1)
 
-def convert_to_fits(path):
+def convert_to_fits(path, outputfile='KIC.fits'):
     '''Convert ASCII catalog files to FITS table.
 
     Args:
-        path (string): Path to the KIC ASCII files.
+        path (string): Path to the KIC ASCII files
+        outputfile (string): Name of the output FITS file
     Returns:
         No returns.
 
@@ -203,9 +214,8 @@ def convert_to_fits(path):
 
             >>> import os
             >>> from stella.catalog.kic import convert_to_fits
-            >>> astrodata = os.getenv('ASTRO_DATA')
-            >>> path = os.path.join(astrodata, 'catalog/V/133/kic/')
-            >>> convert_to_fits(path)
+            >>> path = os.path.join(os.getenv('ASTRO_DATA'), 'catalog/V/133/kic/')
+            >>> convert_to_fits(path, 'KIC.fits')
             s00.dat          1        298        298        298      0.315
             n00.dat        299        625        327        327      0.048
             n01.dat        626       1328        703        703      0.027
@@ -326,10 +336,10 @@ def convert_to_fits(path):
     pri_hdu = fits.PrimaryHDU()
     tbl_hdu = fits.BinTableHDU(data)
     hdu_lst = fits.HDUList([pri_hdu,tbl_hdu])
-    outname = 'KIC.fits'
-    if os.path.exists(outname):
-        os.remove(outname)
-    hdu_lst.writeto(outname)
+
+    if os.path.exists(outputfile):
+        os.remove(outputfile)
+    hdu_lst.writeto(outputfile)
 
 def count_parameters(path):
     '''Count the number of parallax, proper motion, and atmospheric parameters
@@ -346,8 +356,7 @@ def count_parameters(path):
 
             >>> import os
             >>> from stella.catalog.kic import count_parameters
-            >>> astrodata = os.getenv('ASTRO_DATA')
-            >>> path = os.path.join(astrodata, 'catalog/V/133/kic/')
+            >>> path = os.path.join(os.getenv('ASTRO_DATA'), 'catalog/V/133/kic/')
             >>> count_parameters(path)
             N(PM)=12944973, N(Plx)=958, N(para)=2106821
     '''
