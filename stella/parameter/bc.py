@@ -24,6 +24,51 @@ def get_BC(**kwargs):
         bc = _get_dwarf_BC_Masana2006(**kwargs)
     return bc
 
+def _get_BC_Flower1996(teff):
+    '''Get *BC* in *V* band according to *T*:sub:`eff` using the relation given
+    by `Flower 1996 <http://adsabs.harvard.edu/abs/1996ApJ...469..355F>`_.
+
+    Args:
+        teff (integer or float): Effective temperature (*T*:sub:`eff`).
+    Returns:
+        float: *BC* in *V* band.
+
+    The coefficients given in Table 6 of `Flower 1996
+    <http://adsabs.harvard.edu/abs/1996ApJ...469..355F>`_ missed powers of ten.
+    `Torres 2010 <http://adsabs.harvard.edu/abs/2010AJ....140.1158T>`_ gave the
+    corrent version in Table 1.
+    '''
+    coeff1 = [-0.118115450538963E+06,
+               0.137145973583929E+06,
+              -0.636233812100225E+05,
+               0.147412923562646E+05,
+              -0.170587278406872E+04,
+               0.788731721804990E+02,
+             ]
+    coeff2 = [-0.370510203809015E+05,
+               0.385672629965804E+05,
+              -0.150651486316025E+05,
+               0.261724637119416E+04,
+              -0.170623810323864E+03,
+             ]
+    coeff3 = [-0.190537291496456E+05,
+               0.155144866764412E+05,
+              -0.421278819301717E+04,
+               0.381476328422343E+03,
+             ]
+    logt = math.log10(teff)
+
+    if logTeff >= 3.9:
+        coeff = coeff1
+    elif logTeff >= 3.7:
+        coeff = coeff2
+    else:
+        coeff = coeff3
+
+    p = poly.Polynomial(coeff)
+    return p(logt)
+
+
 def _get_dwarf_BC_Alonso1995(**kwargs):
     '''Get *BC* in *V* or *K* for dwarfs using the calibration relations given
     by `Alonso+ 1995 <http://adsabs.harvard.edu/abs/1995A&A...297..197A>`_.
