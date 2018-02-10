@@ -54,6 +54,18 @@ astrometric data (`I/311
     hip._HIP2.find_object
     base._get_HIP_number
 
+.. figure:: examples/catalog_HIP/histogram.png
+    :alt: HIP histograms
+    :align: center
+    :width: 900px
+    :figwidth: 900px
+    
+    Histogram of *V* magnitudes (*left*) and H-R diagram (*right*)
+
+
+
+
+
 .. _catalog_tyc2:
 
 Tycho-2 Catalogue (TYC-2)
