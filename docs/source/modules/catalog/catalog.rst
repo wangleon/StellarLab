@@ -3,13 +3,7 @@ Catalogues
 
 Hipparcos Catalogue
 -------------------
-.. autoclass:: stella.catalog.hip._HIP
-   :members:
-   :private-members:
-
-Hipparcos Catalogue New Reduction
----------------------------------
-.. autoclass:: stella.catalog.hip2._HIP2
+.. automodule:: stella.catalog.hip
    :members:
    :private-members:
 
