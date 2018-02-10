@@ -144,7 +144,7 @@ catalogue.
     Response curves of the *Kepler* telescope. From Koch et al. 2010
     [#Koch2010]_
 
-.. figure:: images/catalogue_stat_KIC.png
+.. figure:: examples/catalog_KIC/histogram.png
     :alt: KIC statistics
     :align: center
     :width: 900px
