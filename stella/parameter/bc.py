@@ -24,7 +24,7 @@ def get_BC(**kwargs):
         bc = _get_dwarf_BC_Masana2006(**kwargs)
     return bc
 
-def _get_BC_Flower1996(teff):
+def _Teff_to_BC_Flower1996(teff):
     '''Get *BC* in *V* band according to *T*:sub:`eff` using the relation given
     by `Flower 1996 <http://adsabs.harvard.edu/abs/1996ApJ...469..355F>`_.
 
@@ -58,9 +58,9 @@ def _get_BC_Flower1996(teff):
              ]
     logt = math.log10(teff)
 
-    if logTeff >= 3.9:
+    if logt >= 3.9:
         coeff = coeff1
-    elif logTeff >= 3.7:
+    elif logt >= 3.7:
         coeff = coeff2
     else:
         coeff = coeff3
