@@ -38,21 +38,11 @@ brighter than 9.
 The published astrometric solutions are given in International Celestial
 Reference System (ICRS) at epoch J1991.25.
 
-.. currentmodule:: stella.catalog
-.. autosummary::
-    hip._HIP.find_object
-    base._get_HIP_number
-
 .. _catalog_hip2:
 
 van Leeuwen 2007 [#vanLeeuwen2007]_ presents the new reduction of *Hipparcos*
 astrometric data (`I/311
 <http://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=I/311>`_).
-
-.. currentmodule:: stella.catalog
-.. autosummary::
-    hip._HIP2.find_object
-    base._get_HIP_number
 
 .. figure:: examples/catalog_HIP/histogram.png
     :alt: HIP histograms
@@ -62,7 +52,11 @@ astrometric data (`I/311
     
     Histogram of *V* magnitudes (*left*) and H-R diagram (*right*)
 
-
+.. currentmodule:: stella.catalog
+.. autosummary::
+    hip._HIP.find_object
+    hip._HIP2.find_object
+    base._get_HIP_number
 
 
 
@@ -168,7 +162,6 @@ catalogue.
 .. currentmodule:: stella.catalog
 .. autosummary::
     kic._KIC.find_object
-    kic.plot_histogram
     base._get_KIC_number
 
 References
