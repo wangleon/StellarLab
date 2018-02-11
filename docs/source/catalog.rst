@@ -164,13 +164,25 @@ catalogue.
     kic._KIC.find_object
     base._get_KIC_number
 
+.. _catalog_epic:
+
+K2 Ecliptic Plane Input Catalog (EPIC)
+--------------------------------------
+The *K2* Ecliptic Plane Input Catalog (EPIC, Huber et al. 2016 [#Huber2016]_)
+provides photometry, kinematics, and stellar parameters to support target
+selection for the *K2* mission (Howell et al. 2014 [#Howell2014]_).
+There are 138,600 targets in *K2* Campaigns 1-8, including K-M dwarfs (~41%),
+F-G dwarfs (~36%), and K giants (~21%).
+
 References
 ------------
 .. [#Brown2011] Brown et al., 2011, *AJ*, 142, 112 :ads:`2011AJ....142..112B`
 .. [#Castelli2004] Castelli & Kurucz, 2004, arXiv: astrop-h/0405087 :arXiv:`astro-ph/0405087`
 .. [#Dong2014] Dong et al., 2014, *ApJ*, 789, L3 :ads:`2014ApJ...789L...3D`
 .. [#Hog2000] Høg et al., 2000, *A&A*, 355, L27 :ads:`2000A%26A...355L..27H`
+.. [#Howell2014] Howell et al., 2014, *PASP*, 126, 398 :ads:`2014PASP..126..398H`
 .. [#Huber2014] Huber et al., 2014, *ApJS*, 211, 2 :ads:`2014ApJS..211....2H`
+.. [#Huber2016] Huber et al., 2016, *ApJS*, 224, 2 :ads:`2016ApJS..224....2H`
 .. [#Koch2010] Koch et al., 2010, *ApJ*, 713, L79 :ads:`2010ApJ...713L..79K`
 .. [#Perryman1997] Perryman et al., 1997, *A&A*, 323, L49 :ads:`1997A%26A...323L..49P`
 .. [#Pinsonneault2012] Pinsonneault et al., 2012, *ApJS*, 199, 30 :ads:`2012ApJS..199...30P`

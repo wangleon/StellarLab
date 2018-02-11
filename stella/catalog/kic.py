@@ -44,30 +44,30 @@ class _KIC(object):
             :header: Key, Type, Unit, Description
             :widths: 30, 30, 30, 120
 
-            KIC,    integer32, ,       KIC number
-            RAdeg,  float64,   deg,    Right ascension (*α*) at J2000
-            DEdeg,  float64,   deg,    Declination (*δ*) at J2000
-            pmRA,   float32,   mas/yr, Proper motion in Right ascension with cos(*δ*) factor
-            pmDE,   float32,   mas/yr, Proper motion in Declination
-            Plx,    float32,   mas,    Parallax
-            umag,   float32,   mag,    *u* magnitude in SDSS system
-            gmag,   float32,   mag,    *g* magnitude in SDSS system
-            rmag,   float32,   mag,    *r* magnitude in SDSS system
-            imag,   float32,   mag,    *i* magnitude in SDSS system
-            zmag,   float32,   mag,    *z* magnitude in SDSS system
-            grmag,  float32,   mag,    Magnitude in GRed band
-            d51mag, float32,   mag,    Magnitude in DDO-51 filter
-            kepmag, float32,   mag,    Magnitude in Kepler band
-            flag_g, integer16, ,       "Galaxy flag (0 for star, 1 for galaxy)"
-            flag_v, integer16, ,       "Variable flag (0 for normal, 1 for variable)"
-            cq,     string5,   ,       Origin of Kepelr magnitude
-            fv,     integer16, ,       "0 for outside Kepler FOV, 1/2 for inside, 2 for Kepler target"
-            Teff,   integer16, K,      Effective temperature
-            logg,   float32,   dex,    Surface gravity
-            FeH,    float32,   dex,    Metallicity
-            EBV,    float32,   mag,    Color excess in *B* − *V*
-            Av,     float32,   mag,    Extinction in *V* magnitude
-            R,      float32,   Rsun,   Stellar radius
+            KIC,    integer32, ,            KIC number
+            RAdeg,  float64,   deg,         Right ascension (*α*) at J2000
+            DEdeg,  float64,   deg,         Declination (*δ*) at J2000
+            pmRA,   float32,   mas/yr,      Proper motion in Right ascension with cos(*δ*) factor
+            pmDE,   float32,   mas/yr,      Proper motion in Declination
+            Plx,    float32,   mas,         Parallax
+            umag,   float32,   mag,         *u* magnitude in SDSS system
+            gmag,   float32,   mag,         *g* magnitude in SDSS system
+            rmag,   float32,   mag,         *r* magnitude in SDSS system
+            imag,   float32,   mag,         *i* magnitude in SDSS system
+            zmag,   float32,   mag,         *z* magnitude in SDSS system
+            grmag,  float32,   mag,         Magnitude in GRed band
+            d51mag, float32,   mag,         Magnitude in DDO-51 filter
+            kepmag, float32,   mag,         Magnitude in Kepler band
+            flag_g, integer16, ,            "Galaxy flag (0 for star, 1 for galaxy)"
+            flag_v, integer16, ,            "Variable flag (0 for normal, 1 for variable)"
+            cq,     string5,   ,            Origin of Kepelr magnitude
+            fv,     integer16, ,            "0 for outside Kepler FOV, 1/2 for inside, 2 for Kepler target"
+            Teff,   integer16, K,           Effective temperature
+            logg,   float32,   dex,         Surface gravity
+            FeH,    float32,   dex,         Metallicity
+            EBV,    float32,   mag,         Color excess in *B* − *V*
+            Av,     float32,   mag,         Extinction in *V* magnitude
+            R,      float32,   *R*:sub:`⊙`, Stellar radius
 
         Args:
             name (string or integer): Name or number of star.
