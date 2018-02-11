@@ -155,8 +155,7 @@ def get_regular_name(starname):
         return starname
 
 def _get_regular_HIP_name(starname):
-    '''
-    Private function to convert an HIP name to its regular form.
+    '''Convert an HIP name to its regular form.
     '''
 
     if isinstance(starname, str):
@@ -172,8 +171,7 @@ def _get_regular_HIP_name(starname):
     return starname
 
 def _get_regular_HD_name(starname):
-    '''
-    Private function to convert an HD name to its regular form.
+    '''Convert an HD name to its regular form.
     '''
 
     if isinstance(starname, str):
@@ -196,8 +194,7 @@ def _get_regular_HD_name(starname):
 
 
 def _get_regular_BD_name(starname):
-    '''
-    Private function to convert a BD name to its regular form.
+    '''Convert a BD name to its regular form.
     '''
 
     starname = starname.strip()
@@ -236,8 +233,7 @@ def _get_regular_BD_name(starname):
     return starname
 
 def _get_regular_CD_name(starname):
-    '''
-    Private function to convert a CD name to its regular form.
+    '''Convert a CD name to its regular form.
     '''
 
     starname = starname.strip()
@@ -264,8 +260,7 @@ def _get_regular_CD_name(starname):
 
 
 def _get_regular_G_name(starname):
-    '''
-    Private function to convert a G name to its regular form.
+    '''Convert a G name to its regular form.
     '''
 
     starname = starname.strip()
@@ -292,8 +287,7 @@ def _get_regular_G_name(starname):
     return starname
 
 def _get_regular_TYC_name(*args):
-    '''
-    Private function to convert a TYC name to its regular form.
+    '''Convert a TYC name to its regular form.
     '''
     if len(args)==1 and isinstance(args[0], str):
         starname = args[0].strip()
