@@ -19,10 +19,17 @@ Kepler Input Catalogue
    :members:
    :private-members:
 
-.. currentmodule:: stella.catalog.kepler_planets
+
+K2 Ecliptic Plane Input Catalog
+-------------------------------
+.. automodule:: stella.catalog.epic
+   :members:
+   :private-members:
 
 Functions
 ---------
+.. currentmodule:: stella.catalog.kepler_planets
+
 .. automodule:: stella.catalog.kepler_planets
     :members:
     :private-members:

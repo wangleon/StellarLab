@@ -1,7 +1,7 @@
 
 def _get_star_number1(starname, key):
     '''
-    Private function to convert star name to an integer HIP number.
+    Convert star name with the form of `SSS NNNN` to its integer number `NNNN`.
 
     Args:
         starname (integer or string): Name of a star
@@ -25,6 +25,7 @@ def _get_star_number1(starname, key):
 
 def _get_HIP_number(starname):
     '''Convert star name to an integer HIP number.
+
     Args:
         starname (string or integer): Name of the star
     Returns:
@@ -34,6 +35,7 @@ def _get_HIP_number(starname):
 
 def _get_KIC_number(starname):
     '''Convert star name to an integer KIC number.
+
     Args:
         starname (string or integer): Name of the star
     Returns:
@@ -43,6 +45,7 @@ def _get_KIC_number(starname):
 
 def _get_EPIC_number(starname):
     '''Convert star name to an integer EPIC number.
+
     Args:
         starname (string or integer): Name of the star
     Returns:
@@ -52,6 +55,7 @@ def _get_EPIC_number(starname):
 
 def _get_TYC_number(starname):
     '''Convert star name to TYC number (TYC1, TYC2, TYC3).
+
     Args:
         starname (string): Name of the star
     Returns:

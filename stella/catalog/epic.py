@@ -1,4 +1,5 @@
 import os
+import struct
 import numpy as np
 import astropy.io.fits as fits
 from ..utils.fitsio import get_bintable_info
@@ -7,7 +8,7 @@ from .base import _get_EPIC_number
 
 class _EPIC(object):
     '''Class for K2 Ecliptic Plane Input Catalog (EPIC, `Huber+ 2016
-    <http://adsabs.harvard.edu/abs/2016ApJS..224....2H>_`).
+    <http://adsabs.harvard.edu/abs/2016ApJS..224....2H>`_).
 
     For more details, see :ref:`K2 Ecliptic Plane Input Catalog<catalog_epic>`.
     '''
@@ -60,7 +61,7 @@ class _EPIC(object):
             E(B-V),   float32,   mag,         Reddening in *B* − *V*
             E_E(B-V), float32,   mag,         Upper uncertainty on *E*\ (*B* − *V*)
             e_E(B-V), float32,   mag,         Lower uncertainty on *E*\ (*B* − *V*)
-            Flag,     string3    ,            Classification Flag
+            Flag,     string3,   ,            Classification Flag
             RAdeg,    float64,   deg,         Right ascension (*α*) at J2000
             DEdeg,    float64,   deg,         Declination (*δ*) at J2000
 
@@ -75,5 +76,39 @@ class _EPIC(object):
         '''
         
         epic = _get_EPIC_number(name)
+
+        if self._data_info is None:
+            self._get_data_info()
+
+        pos     = self._data_info['pos']
+        nrow    = self._data_info['nrow']
+        nbyte   = self._data_info['nbyte']
+        fmtfunc = self._data_info['fmtfunc']
+
+        infile = open(self.catfile, 'rb')
+
+        # the EPIC numbers in the FITS file are increased monotonoically.
+        i1, i2 = 0, nrow-1
+        while(i2-i1 > 1):
+            i3 = int((i1+i2)/2)
+            infile.seek(pos + i3*nbyte, 0)
+            key = struct.unpack('>i',infile.read(4))[0]
+            if epic < key:
+                i2 = i3
+            elif epic > key:
+                i1 = i3
+            else:
+                break
+        infile.seek(-4,1)
+        item = fmtfunc(infile.read(nbyte))
+
+        infile.close()
+
+        if output == 'ndarray':
+            return item
+        elif output == 'dict':
+            return structitem_to_dict(item)
+        else:
+            return None
 
 EPIC = _EPIC()

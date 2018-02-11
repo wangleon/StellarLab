@@ -174,6 +174,19 @@ selection for the *K2* mission (Howell et al. 2014 [#Howell2014]_).
 There are 138,600 targets in *K2* Campaigns 1-8, including K-M dwarfs (~41%),
 F-G dwarfs (~36%), and K giants (~21%).
 
+.. figure:: examples/catalog_EPIC/histogram_hrd.png
+    :alt: EPIC HRD
+    :align: center
+    :width: 500px
+    :figwidth: 500px
+
+    2D histogram of EPIC stars on *T*:sub:`eff` − log\ *g* plane.
+
+.. currentmodule:: stella.catalog
+.. autosummary::
+    epic._EPIC.find_object
+    base._get_EPIC_number
+
 References
 ------------
 .. [#Brown2011] Brown et al., 2011, *AJ*, 142, 112 :ads:`2011AJ....142..112B`
