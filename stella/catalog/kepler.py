@@ -2,39 +2,64 @@ import os
 from .base import _str_to_float, _str_to_int
 
 planet_files = {
-        2: 'ApJ.736.19.table2.dat' # Borucki et al. 2011b
+        1: 'ApJ.728.117.tablea1.dat' # Borucki et al. 2011a
+        2: 'ApJ.736.19.table2.dat'   # Borucki et al. 2011b
         }
 
 
 def load_systems(release):
-    '''Return a planetary system list in given data releases.
+    '''Return a planetary system list in the given data releases.
     '''
     pass
 
 def load_planets(release):
-    '''Return a planet list in given data releases.
+    '''Return a planet list in the given data releases.
     '''
     pass
 
 def find_system(koi, release):
-    '''Find parameters of a planetary systems in given data releases.
+    '''Find parameters of a planetary system in the given data releases.
+
+    Args:
+        koi (integer): KOI number of a planetary system.
+        release (integer): List of data releases.
+    Return:
+        dict: A dict containing parameters of planets in the system.
     '''
-    pass
+    result = {}
+    for dataset in release:
+        if dataset == 1:
+        elif dataset == 2:
+            planet_file = planet_files[dataset]
+            filename = os.path.join(os.getenv('STELLA_DATA'),
+                        'catalog/Kepler/%s'%planet_file)
+            infile = open(filename)
+            for row in infile:
+                record = _parse_planet_record_r2(row)
+                if record['koi'] == koi:
+                    if record['planet_id'] not in result:
+                        result[record['planet_id']] = []
+                    result[record['planet_id']].append(record)
+                elif record['koi'] > koi:
+                    break
+            infile.close()
+    return result
 
 def find_planet(planet_id, release):
-    '''Find parameters of a planet in given data releases.
+    '''Find parameters of a planet in the given data releases.
     
     Args:
-        planet_id (float): KOI number `NNN.NN` of a planet candidate
+        planet_id (float): KOI number `NNN.NN` of a planet candidate.
+        release (integer): List of data releases.
     Return:
-        list: A list containing parameter tuple as elements
+        list: A list containing parameter tuple as elements.
     '''
     result = []
     for dataset in release:
         if dataset == 2:
             planet_file = planet_files[dataset]
             filename = os.path.join(os.getenv('STELLA_DATA'),
-                        'catalog/journals/%s'%planet_file)
+                        'catalog/Kepler/%s'%planet_file)
             infile = open(filename)
             for row in infile:
                 record = _parse_planet_record_r2(row)
@@ -44,15 +69,35 @@ def find_planet(planet_id, release):
             infile.close()
     return result
 
+def _parse_planet_record_r1(row):
+    '''Parse a planet record in the table of `Borucki+ 2011a
+    <http://adsabs.harvard.edu/abs/2011ApJ...728..117B>`_.
+
+    Args:
+        row (string): The row in Borucki et al. 2011a.
+    Returns:
+        dict: A dict containing the planet parameters.
+    '''
+    koi       = int(row[0:3])
+    planet_id = float(row[0:6])
+    r         = float(row[21:25])*11.209
+    P         = float(row[34:41])
+    rs        = float(row[53:58])
+    rR        = r*6371/rs/695700.
+    return {'koi': koi,  'planet_id': planet_id,
+            'r'  : r,
+            'P'  : P,
+            'rR' : rR,
+            }
 
 def _parse_planet_record_r2(row):
-    '''Parse a planet record in the table of `Borucki et al. 2011b
+    '''Parse a planet record in the table of `Borucki+ 2011b
     <http://adsabs.harvard.edu/abs/2011ApJ...736...19B>`_.
 
     Args:
-        row (string): The row in Borucki et al. 2011b
+        row (string): The row in Borucki et al. 2011b.
     Returns:
-        dict: A dict containing the planet parameters
+        dict: A dict containing the planet parameters.
     '''
     koi       = int(row[12:16])
     planet_id = float(row[12:19])
@@ -126,7 +171,7 @@ def find_Kepler_cands_r2(koi):
     '''
 
     filename = os.path.join(os.getenv('STELLA_DATA'),
-                'catalog/journals/ApJ.736.19.table2.dat')
+                'catalog/Kepler/ApJ.736.19.table2.dat')
     infile = open(filename)
 
     planet_lst = {}
