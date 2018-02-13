@@ -19,7 +19,7 @@ Modules
    :glob:
    
    modules/extinction
-   modules/catalog/*
+   modules/catalog
    modules/evolution/*
    modules/parameter
    modules/spectrum
