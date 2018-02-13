@@ -3,8 +3,7 @@ import numpy as np
 import astropy.io.fits as fits
 from ..utils.fitsio import get_bintable_info
 from ..utils.asciitable import structitem_to_dict
-from .base import _get_KIC_number
-
+from .name import _get_KIC_number
 
 class _KIC(object):
     '''Class for Kepler Input Catalog (`V/133

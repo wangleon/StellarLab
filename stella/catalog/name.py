@@ -1,11 +1,80 @@
-#!/usr/bin/env python
 import re
-import numpy as np
-from . import xindex
+
+def _get_star_number1(starname, key):
+    '''
+    Convert star name with the form of `SSS NNNN` to its integer number `NNNN`.
+
+    Args:
+        starname (integer or string): Name of a star
+        key (string): Prefix of the star name
+    Returns:
+        integer: Number of the star in the catalog. If fail a *None* value will
+            be returned.
+
+    '''
+    if isinstance(starname, int):
+        return starname
+    elif isinstance(starname, str):
+        if starname[0:len(key)] == key:
+            return int(starname[len(key):])
+        elif starname.isdigit():
+            return int(starname)
+        else:
+            return None
+    else:
+        return None
+
+def _get_HIP_number(starname):
+    '''Convert star name to an integer HIP number.
+
+    Args:
+        starname (string or integer): Name of the star
+    Returns:
+        integer: HIP number
+    '''
+    return _get_star_number1(starname, 'HIP')
+
+def _get_KIC_number(starname):
+    '''Convert star name to an integer KIC number.
+
+    Args:
+        starname (string or integer): Name of the star
+    Returns:
+        integer: KIC number
+    '''
+    return _get_star_number1(starname, 'KIC')
+
+def _get_EPIC_number(starname):
+    '''Convert star name to an integer EPIC number.
+
+    Args:
+        starname (string or integer): Name of the star
+    Returns:
+        integer: EPIC number
+    '''
+    return _get_star_number1(starname, 'EPIC')
+
+def _get_TYC_number(starname):
+    '''Convert star name to TYC number (TYC1, TYC2, TYC3).
+
+    Args:
+        starname (string): Name of the star
+    Returns:
+        tuple: A tuple of TYC numbers (TYC1, TYC2, TYC3)
+    '''
+    if starname[0:3]=='TYC':
+        g = starname[3:].split('-')
+        tyc1, tyc2, tyc3 = int(g[0]), int(g[1]), int(g[2])
+        return (tyc1, tyc2, tyc3)
+    elif len(starname.split('-'))==3:
+        g = starname.split('-')
+        tyc1, tyc2, tyc3 = int(g[0]), int(g[1]), int(g[2])
+        return (tyc1, tyc2, tyc3)
+    else:
+        return None
 
 def get_catalog(starname):
-    '''
-    Return name of the star catalog from name of the star.
+    '''Return the name of the star catalog from the name of star.
     '''
     starcat_re = {
         '^[Hh][Dd][\d\s]+[ABC]?$'          : 'HD',
@@ -27,112 +96,6 @@ def get_catalog(starname):
         if re.match(exp, starname) != None:
             return starcat_re[exp]
     return None
-
-def cross_starnames(starname):
-    name_lst = {}
-    cat = get_catalog(starname)
-    if cat == None:
-        return None
-
-    if cat == 'HIP':
-        name_lst['HIP'] = [_get_regular_HIP_name(starname)]
-        name_lst['HD'] = xindex.HIP_to_HD(name_lst['HIP'][0])
-        name_lst['BD'] = xindex.HIP_to_BD(name_lst['HIP'][0])
-        name_lst['CD'] = xindex.HIP_to_CD(name_lst['HIP'][0])
-        name_lst['TYC'] = xindex.HIP_to_TYC(name_lst['HIP'][0])
-
-        # fix two TYC for one HIP
-        if name_lst['TYC']!=None and len(name_lst['TYC'])>1 and name_lst['HD']!=None:
-            tmp = xindex.HD_to_TYC(name_lst['HD'][0])
-            if len(tmp)==1 and tmp[0] in name_lst['TYC']:
-                name_lst['TYC'] = tmp
-
-        # if HIP->TYC failed, find TYC by HD
-        if name_lst['TYC'] == None and name_lst['HD']!=None:
-            name_lst['TYC'] = xindex.HD_to_TYC(name_lst['HD'][0])
-
-        name_lst['2MASS'] = xindex.HIP_to_2MASS(name_lst['HIP'][0])
-    elif cat == 'HD':
-        name_lst['HD'] = [_get_regular_HD_name(starname)]
-        name_lst['HIP'] = xindex.HD_to_HIP(name_lst['HD'][0])
-        if name_lst['HIP'] == None:
-            # no HIP name
-            name_lst['TYC'] = xindex.HD_to_TYC(name_lst['HD'][0])
-            if name_lst['TYC'] != None:
-                name_lst['2MASS'] = xindex.TYC_to_2MASS(name_lst['TYC'][0])
-        else:
-            # if has HIP name
-            name_lst['BD'] = xindex.HIP_to_BD(name_lst['HIP'][0])
-            name_lst['CD'] = xindex.HIP_to_CD(name_lst['HIP'][0])
-            name_lst['TYC'] = xindex.HIP_to_TYC(name_lst['HIP'][0])
-
-            # fix two TYC for one HIP
-            if name_lst['TYC']!=None and len(name_lst['TYC'])>1 and name_lst['HD']!=None:
-                tmp = xindex.HD_to_TYC(name_lst['HD'][0])
-                if len(tmp)==1 and tmp[0] in name_lst['TYC']:
-                    name_lst['TYC'] = tmp
-
-            # if HIP->TYC failed, find TYC by HD
-            if name_lst['TYC'] == None:
-                name_lst['TYC'] = xindex.HD_to_TYC(name_lst['HD'][0])
-
-            name_lst['2MASS'] = xindex.HIP_to_2MASS(name_lst['HIP'][0])
-
-    elif cat == 'BD':
-        name_lst['BD'] = [_get_regular_BD_name(starname)]
-        name_lst['HIP'] = xindex.BD_to_HIP(name_lst['BD'][0])
-        if name_lst['HIP'] != None:
-            name_lst['HD'] = xindex.HIP_to_HD(name_lst['HIP'][0])
-            name_lst['CD'] = xindex.HIP_to_CD(name_lst['HIP'][0])
-            name_lst['TYC'] = xindex.HIP_to_TYC(name_lst['HIP'][0])
-
-            # fix two TYC for one HIP
-            if name_lst['TYC']!=None and len(name_lst['TYC'])>1 and name_lst['HD']!=None:
-                tmp = xindex.HD_to_TYC(name_lst['HD'][0])
-                if len(tmp)==1 and tmp[0] in name_lst['TYC']:
-                    name_lst['TYC'] = tmp
-
-            name_lst['2MASS'] = xindex.HIP_to_2MASS(name_lst['HIP'][0])
-    elif cat == 'CD':
-        name_lst['CD'] = [_get_regular_CD_name(starname)]
-        name_lst['HIP'] = xindex.CD_to_HIP(name_lst['CD'][0])
-        if name_lst['HIP'] != None:
-            name_lst['HD']    = xindex.HIP_to_HD(name_lst['HIP'][0])
-            name_lst['BD']    = xindex.HIP_to_BD(name_lst['HIP'][0])
-            name_lst['TYC']   = xindex.HIP_to_TYC(name_lst['HIP'][0])
-
-            # fix two TYC for one HIP
-            if name_lst['TYC']!=None and len(name_lst['TYC'])>1 and name_lst['HD']!=None:
-                tmp = xindex.HD_to_TYC(name_lst['HD'][0])
-                if len(tmp)==1 and tmp[0] in name_lst['TYC']:
-                    name_lst['TYC'] = tmp
-
-            name_lst['2MASS'] = xindex.HIP_to_2MASS(name_lst['HIP'][0])
-    elif cat == 'G':
-        name_lst['G'] = [_get_regular_G_name(starname)]
-        name_lst['TYC'] = xindex.G_to_TYC(name_lst['G'][0])
-        if name_lst['TYC'] != None:
-            name_lst['2MASS'] = xindex.TYC_to_2MASS(name_lst['TYC'][0])
-            name_lst['HIP']   = xindex.TYC_to_HIP(name_lst['TYC'][0])
-            if name_lst['HIP'] != None:
-                name_lst['HD'] = xindex.HIP_to_HD(name_lst['HIP'][0])
-                name_lst['BD'] = xindex.HIP_to_BD(name_lst['HIP'][0])
-                name_lst['CD'] = xindex.HIP_to_CD(name_lst['HIP'][0])
-    elif cat == 'TYC':
-        name_lst['TYC'] = [_get_regular_TYC_name(starname)]
-        name_lst['2MASS'] = xindex.TYC_to_2MASS(name_lst['TYC'][0])
-        name_lst['HIP']   = xindex.TYC_to_HIP(name_lst['TYC'][0])
-
-
-    # delete those None names
-    res_lst = {}
-    for cat in name_lst:
-        name = name_lst[cat]
-        if name != None:
-            res_lst[cat] = name
-    return res_lst
-
-
 
 def get_regular_name(starname):
     '''

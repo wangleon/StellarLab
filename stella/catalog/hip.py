@@ -4,7 +4,7 @@ import numpy as np
 import astropy.io.fits as fits
 from ..utils.fitsio import get_bintable_info
 from ..utils.asciitable import structitem_to_dict
-from .base import _get_HIP_number
+from .name import _get_HIP_number
 
 def _find_HIP_object(name, catfile, data_info, epoch=2000.0, output='dict'):
     '''

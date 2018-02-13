@@ -1,19 +1,124 @@
-#!/usr/bin/env python
 import os
 import numpy as np
 import astropy.io.fits as fits
 
-from .base import _get_HIP_number, _get_KIC_number
+from .name import get_regular_name, _get_HIP_number, _get_KIC_number
 from ..utils.asciifile import find_sortedfile, quickfind_sortedfile
 
 xindex_path = os.path.join(os.getenv('STELLA_DATA'),'catalog/xindex')
 
-def HIP_to_HD(starname):
-    '''
-    Convert HIP name to HD name
+def cross_starnames(starname):
+    name_lst = {}
+    cat = get_catalog(starname)
+    if cat == None:
+        return None
+
+    if cat == 'HIP':
+        name_lst['HIP'] = [_get_regular_HIP_name(starname)]
+        name_lst['HD']  = HIP_to_HD(name_lst['HIP'][0])
+        name_lst['BD']  = HIP_to_BD(name_lst['HIP'][0])
+        name_lst['CD']  = HIP_to_CD(name_lst['HIP'][0])
+        name_lst['TYC'] = HIP_to_TYC(name_lst['HIP'][0])
+
+        # fix two TYC for one HIP
+        if name_lst['TYC']!=None and len(name_lst['TYC'])>1 and name_lst['HD']!=None:
+            tmp = HD_to_TYC(name_lst['HD'][0])
+            if len(tmp)==1 and tmp[0] in name_lst['TYC']:
+                name_lst['TYC'] = tmp
+
+        # if HIP->TYC failed, find TYC by HD
+        if name_lst['TYC'] == None and name_lst['HD']!=None:
+            name_lst['TYC'] = HD_to_TYC(name_lst['HD'][0])
+
+        name_lst['2MASS'] = HIP_to_2MASS(name_lst['HIP'][0])
+    elif cat == 'HD':
+        name_lst['HD'] = [_get_regular_HD_name(starname)]
+        name_lst['HIP'] = HD_to_HIP(name_lst['HD'][0])
+        if name_lst['HIP'] == None:
+            # no HIP name
+            name_lst['TYC'] = HD_to_TYC(name_lst['HD'][0])
+            if name_lst['TYC'] != None:
+                name_lst['2MASS'] = TYC_to_2MASS(name_lst['TYC'][0])
+        else:
+            # if has HIP name
+            name_lst['BD']  = HIP_to_BD(name_lst['HIP'][0])
+            name_lst['CD']  = HIP_to_CD(name_lst['HIP'][0])
+            name_lst['TYC'] = HIP_to_TYC(name_lst['HIP'][0])
+
+            # fix two TYC for one HIP
+            if name_lst['TYC']!=None and len(name_lst['TYC'])>1 and name_lst['HD']!=None:
+                tmp = HD_to_TYC(name_lst['HD'][0])
+                if len(tmp)==1 and tmp[0] in name_lst['TYC']:
+                    name_lst['TYC'] = tmp
+
+            # if HIP->TYC failed, find TYC by HD
+            if name_lst['TYC'] == None:
+                name_lst['TYC'] = HD_to_TYC(name_lst['HD'][0])
+
+            name_lst['2MASS'] = HIP_to_2MASS(name_lst['HIP'][0])
+
+    elif cat == 'BD':
+        name_lst['BD'] = [_get_regular_BD_name(starname)]
+        name_lst['HIP'] = BD_to_HIP(name_lst['BD'][0])
+        if name_lst['HIP'] != None:
+            name_lst['HD'] = HIP_to_HD(name_lst['HIP'][0])
+            name_lst['CD'] = HIP_to_CD(name_lst['HIP'][0])
+            name_lst['TYC'] = HIP_to_TYC(name_lst['HIP'][0])
+
+            # fix two TYC for one HIP
+            if name_lst['TYC']!=None and len(name_lst['TYC'])>1 and name_lst['HD']!=None:
+                tmp = HD_to_TYC(name_lst['HD'][0])
+                if len(tmp)==1 and tmp[0] in name_lst['TYC']:
+                    name_lst['TYC'] = tmp
+
+            name_lst['2MASS'] = HIP_to_2MASS(name_lst['HIP'][0])
+    elif cat == 'CD':
+        name_lst['CD'] = [_get_regular_CD_name(starname)]
+        name_lst['HIP'] = CD_to_HIP(name_lst['CD'][0])
+        if name_lst['HIP'] != None:
+            name_lst['HD']    = HIP_to_HD(name_lst['HIP'][0])
+            name_lst['BD']    = HIP_to_BD(name_lst['HIP'][0])
+            name_lst['TYC']   = HIP_to_TYC(name_lst['HIP'][0])
+
+            # fix two TYC for one HIP
+            if name_lst['TYC']!=None and len(name_lst['TYC'])>1 and name_lst['HD']!=None:
+                tmp = HD_to_TYC(name_lst['HD'][0])
+                if len(tmp)==1 and tmp[0] in name_lst['TYC']:
+                    name_lst['TYC'] = tmp
+
+            name_lst['2MASS'] = HIP_to_2MASS(name_lst['HIP'][0])
+    elif cat == 'G':
+        name_lst['G'] = [_get_regular_G_name(starname)]
+        name_lst['TYC'] = G_to_TYC(name_lst['G'][0])
+        if name_lst['TYC'] != None:
+            name_lst['2MASS'] = TYC_to_2MASS(name_lst['TYC'][0])
+            name_lst['HIP']   = TYC_to_HIP(name_lst['TYC'][0])
+            if name_lst['HIP'] != None:
+                name_lst['HD'] = HIP_to_HD(name_lst['HIP'][0])
+                name_lst['BD'] = HIP_to_BD(name_lst['HIP'][0])
+                name_lst['CD'] = HIP_to_CD(name_lst['HIP'][0])
+    elif cat == 'TYC':
+        name_lst['TYC'] = [_get_regular_TYC_name(starname)]
+        name_lst['2MASS'] = TYC_to_2MASS(name_lst['TYC'][0])
+        name_lst['HIP']   = TYC_to_HIP(name_lst['TYC'][0])
+
+
+    # delete those None names
+    res_lst = {}
+    for cat in name_lst:
+        name = name_lst[cat]
+        if name != None:
+            res_lst[cat] = name
+    return res_lst
+
+
+
+
+def HIP_to_HD(name):
+    '''Convert HIP name to HD name.
     '''
 
-    hip = _get_HIP_number(starname)
+    hip = _get_HIP_number(name)
 
     fn = '%s/HIP-HD.csv'%xindex_path
     f1 = lambda row: int(row.split(',')[0])
@@ -28,12 +133,11 @@ def HIP_to_HD(starname):
     else:
         return [HDname]
 
-def HIP_to_BD(starname):
-    '''
-    Convert HIP name to BD name
+def HIP_to_BD(name):
+    '''Convert HIP name to BD name.
     '''
 
-    hip = _get_HIP_number(starname)
+    hip = _get_HIP_number(name)
 
     fn = '%s/HIP-BD.csv'%xindex_path
     f1 = lambda row: int(row.split(',')[0])
@@ -48,12 +152,11 @@ def HIP_to_BD(starname):
     else:
         return [HIPname]
 
-def HIP_to_CD(starname):
-    '''
-    Convert HIP name to CD name
+def HIP_to_CD(name):
+    '''Convert HIP name to CD name.
     '''
 
-    hip = _get_HIP_number(starname)
+    hip = _get_HIP_number(name)
 
     fn = '%s/HIP-CD.csv'%xindex_path
     f1 = lambda row: int(row.split(',')[0])
@@ -68,12 +171,11 @@ def HIP_to_CD(starname):
     else:
         return [CDname]
 
-def HIP_to_TYC(starname):
-    '''
-    Convert HIP name to TYC name
+def HIP_to_TYC(name):
+    '''Convert HIP name to TYC name.
     '''
 
-    hip = _get_HIP_number(starname)
+    hip = _get_HIP_number(name)
 
     fn = '%s/HIP-TYC.fits'%xindex_path
     f = fits.open(fn)
@@ -85,12 +187,11 @@ def HIP_to_TYC(starname):
     else:
         return ['TYC %d-%d-%d'%(rec['TYC1'],rec['TYC2'],rec['TYC3']) for rec in data[m]]
 
-def HIP_to_2MASS(starname,full=False):
-    '''
-    Convert HIP name to 2MASS name
+def HIP_to_2MASS(name,full=False):
+    '''Convert HIP name to 2MASS name.
     '''
 
-    hip = _get_HIP_number(starname)
+    hip = _get_HIP_number(name)
 
     fn = '%s/HIP-2MASS.fits'%xindex_path
     f = fits.open(fn)
@@ -105,13 +206,11 @@ def HIP_to_2MASS(starname,full=False):
     else:
         return [des_2mass]
 
-def HD_to_HIP(starname):
+def HD_to_HIP(name):
+    '''Convert HD name to HIP name.
     '''
-    Convert HD name to HIP name
-    '''
-    from .name import get_regular_name
-    starname = get_regular_name(starname)
-    hd = starname[2:].strip()
+    name = get_regular_name(name)
+    hd = name[2:].strip()
 
     fn = '%s/HD-HIP.csv'%xindex_path
     f1 = lambda row: row.split(',')[0].strip()
@@ -123,13 +222,11 @@ def HD_to_HIP(starname):
     else:
         return [HIPname]
 
-def HD_to_TYC(starname):
+def HD_to_TYC(name):
+    '''Convert HD name to TYC name.
     '''
-    Convert HD name to TYC name
-    '''
-    from .name import get_regular_name
-    starname = get_regular_name(starname)
-    hd = starname[2:].strip()
+    name = get_regular_name(name)
+    hd = name[2:].strip()
 
     fn = '%s/HD-TYC.csv'%xindex_path
     f1 = lambda row: row.split(',')[0].strip()
@@ -141,13 +238,11 @@ def HD_to_TYC(starname):
     else:
         return [TYCname]
 
-def BD_to_HIP(starname):
+def BD_to_HIP(name):
+    '''Convert BD name to HIP name.
     '''
-    Convert BD name to HIP name
-    '''
-    from .name import get_regular_name
-    starname = get_regular_name(starname)
-    bd = starname[2:].strip()
+    name = get_regular_name(name)
+    bd = name[2:].strip()
 
     fn = '%s/BD-HIP.csv'%xindex_path
     f1 = lambda row: row.split(',')[0].strip()
@@ -159,13 +254,11 @@ def BD_to_HIP(starname):
     else:
         return [HIPname]
 
-def CD_to_HIP(starname):
+def CD_to_HIP(name):
+    '''Convert CD name to HIP name.
     '''
-    Convert CD name to HIP name
-    '''
-    from .name import get_regular_name
-    starname = get_regular_name(starname)
-    cd = starname[2:].strip()
+    name = get_regular_name(name)
+    cd = name[2:].strip()
 
     fn = '%s/CD-HIP.csv'%xindex_path
     f1 = lambda row: row.split(',')[0].strip()
@@ -177,12 +270,11 @@ def CD_to_HIP(starname):
     else:
         return [HIPname]
 
-def TYC_to_HIP(starname):
+def TYC_to_HIP(name):
+    '''Convert TYC name to HIP name.
     '''
-    Convert TYC name to HIP name
-    '''
-    if starname[0:3]=='TYC':
-        g = starname[3:].split('-')
+    if name[0:3]=='TYC':
+        g = name[3:].split('-')
         tyc1,tyc2,tyc3 = int(g[0]),int(g[1]),int(g[2])
 
     fn = '%s/TYC-HIP.fits'%xindex_path
@@ -197,12 +289,11 @@ def TYC_to_HIP(starname):
     else:
         return ['HIP %d'%rec['HIP'] for rec in data[m1][m2][m3]]
 
-def TYC_to_2MASS(starname,full=False):
+def TYC_to_2MASS(name,full=False):
+    '''Convert TYC name to 2MASS name.
     '''
-    Convert TYC name to 2MASS name
-    '''
-    if starname[0:3]=='TYC':
-        g = starname[3:].split('-')
+    if name[0:3]=='TYC':
+        g = name[3:].split('-')
         tyc1,tyc2,tyc3 = int(g[0]),int(g[1]),int(g[2])
 
     fn = '%s/TYC-2MASS.fits'%xindex_path
@@ -223,12 +314,11 @@ def TYC_to_2MASS(starname,full=False):
     else:
         return ['2MASS J%s'%row['2MASS'] for row in data[m1][m2][m3]]
 
-def G_to_TYC(starname):
+def G_to_TYC(name):
+    '''Convert G name to TYC name.
     '''
-    Convert G name to TYC name
-    '''
-    if starname[0:2]=='G ':
-        Gname = starname[2:].strip()
+    if name[0:2]=='G ':
+        Gname = name[2:].strip()
 
     fn = '%s/G-TYC.csv'%xindex_path
     f1 = lambda row: row.split(',')[0].strip()
@@ -240,32 +330,29 @@ def G_to_TYC(starname):
     else:
         return [TYCname]
 
-def KIC_to_KOI(string):
-    '''
-    Convert KIC name to KOI name
+def KIC_to_KOI(name):
+    '''Convert KIC name to KOI name.
     '''
     fn = '%s/KIC-KOI.csv'%xindex_path
-    kic = _get_KIC_number(string)
+    kic = _get_KIC_number(name)
     f1 = lambda row: int(row.split(',')[0])
     f2 = lambda row: int(row.split(',')[1])
     return quickfind_sortedfile(kic,fn,f1,f2)
 
-def KIC_to_Kepler(string):
-    '''
-    Convert KIC name to Kepler name
+def KIC_to_Kepler(name):
+    '''Convert KIC name to Kepler name.
     '''
     fn = '%s/KIC-Kepler.csv'%xindex_path
-    kic = _get_KIC_number(string)
+    kic = _get_KIC_number(name)
     f1 = lambda row: int(row.split(',')[0])
     f2 = lambda row: int(row.split(',')[1])
     return quickfind_sortedfile(kic,fn,f1,f2)
 
-def KOI_to_KIC(string):
-    '''
-    Convert KOI name to KIC name
+def KOI_to_KIC(name):
+    '''Convert KOI name to KIC name.
     '''
     fn = '%s/KOI-KIC.csv'%xindex_path
-    koi = int(string)
+    koi = int(name)
     f1 = lambda row: int(row.split(',')[0])
     f2 = lambda row: int(row.split(',')[1])
     if koi < 100:
@@ -273,12 +360,11 @@ def KOI_to_KIC(string):
     else:
         return quickfind_sortedfile(koi,fn,f1,f2)
 
-def KOI_to_Kepler(string):
-    '''
-    Convert KOI name to Kepler name
+def KOI_to_Kepler(name):
+    '''Convert KOI name to Kepler name.
     '''
     fn = '%s/KOI-Kepler.csv'%xindex_path
-    koi = int(string)
+    koi = int(name)
     f1 = lambda row: int(row.split(',')[0])
     f2 = lambda row: int(row.split(',')[1])
     if koi < 100:
@@ -286,12 +372,11 @@ def KOI_to_Kepler(string):
     else:
         return quickfind_sortedfile(koi,fn,f1,f2)
 
-def Kepler_to_KIC(string):
-    '''
-    Convert Kepler name to KIC name
+def Kepler_to_KIC(name):
+    '''Convert Kepler name to KIC name.
     '''
     fn = '%s/Kepler-KIC.csv'%xindex_path
-    kepler = int(string)
+    kepler = int(name)
     f1 = lambda row: int(row.split(',')[0])
     f2 = lambda row: int(row.split(',')[1])
     if kepler < 100:
@@ -299,12 +384,12 @@ def Kepler_to_KIC(string):
     else:
         return quickfind_sortedfile(kepler,fn,f1,f2)
 
-def Kepler_to_KOI(string):
+def Kepler_to_KOI(name):
     '''
     Convert Kepler name to KOI name
     '''
     fn = '%s/Kepler-KOI.csv'%xindex_path
-    kepler = int(string)
+    kepler = int(name)
     f1 = lambda row: int(row.split(',')[0])
     f2 = lambda row: int(row.split(',')[1])
     if kepler < 100:
@@ -313,8 +398,7 @@ def Kepler_to_KOI(string):
         return quickfind_sortedfile(kepler,fn,f1,f2)
 
 def HIP_to_Gaia(name):
-    '''
-    Convert HIP name to Gaia name
+    '''Convert HIP name to Gaia name.
     '''
     if isinstance(name, int):
         hip = name
@@ -322,9 +406,9 @@ def HIP_to_Gaia(name):
         if name[0:3]=='HIP':
             hip = int(name[3:])
         else:
-            print('Unknown starname: %s'%name)
+            print('Unknown name: %s'%name)
     else:
-        print('Unknown starname')
+        print('Unknown name')
 
     data = fits.getdata('%s/HIP-Gaia.fits'%xindex_path)
     m = data['HIP']==hip

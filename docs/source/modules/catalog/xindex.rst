@@ -26,8 +26,7 @@ Summary
     TYC_to_2MASS
     TYC_to_HIP
 
-Functions in stella.catalog.xindex module
--------------------------------------------------
 .. automodule:: stella.catalog.xindex
     :members:
+    :private-members:
 

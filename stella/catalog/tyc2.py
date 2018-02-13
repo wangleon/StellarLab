@@ -3,7 +3,7 @@ import struct
 import numpy as np
 from ..utils.fitsio import get_bintable_info
 from ..utils.asciitable import structitem_to_dict
-from .base import _get_TYC_number
+from .name import _get_TYC_number
 
 class _TYC2(object):
     '''Class for Tycho-2 Catalogue (`I/259

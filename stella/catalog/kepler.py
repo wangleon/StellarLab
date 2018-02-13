@@ -2,8 +2,8 @@ import os
 from .base import _str_to_float, _str_to_int
 
 planet_files = {
-        1: 'ApJ.728.117.tablea1.dat' # Borucki et al. 2011a
-        2: 'ApJ.736.19.table2.dat'   # Borucki et al. 2011b
+        1: 'ApJ.728.117.tablea1.dat', # Borucki et al. 2011a
+        2: 'ApJ.736.19.table2.dat',   # Borucki et al. 2011b
         }
 
 
@@ -29,6 +29,7 @@ def find_system(koi, release):
     result = {}
     for dataset in release:
         if dataset == 1:
+            pass
         elif dataset == 2:
             planet_file = planet_files[dataset]
             filename = os.path.join(os.getenv('STELLA_DATA'),

@@ -4,7 +4,7 @@ import numpy as np
 import astropy.io.fits as fits
 from ..utils.fitsio import get_bintable_info
 from ..utils.asciitable import structitem_to_dict
-from .base import _get_EPIC_number
+from .name import _get_EPIC_number
 
 class _EPIC(object):
     '''Class for K2 Ecliptic Plane Input Catalog (EPIC, `Huber+ 2016
