@@ -56,8 +56,7 @@ astrometric data (`I/311
 .. autosummary::
     hip._HIP.find_object
     hip._HIP2.find_object
-    base._get_HIP_number
-
+    name._get_HIP_number
 
 
 .. _catalog_tyc2:
@@ -112,7 +111,7 @@ given intervals of *V*:sub:`T` magnitude (from Table 2 of Høg et al. 2000).
 .. _catalog_kic:
 
 Kepler Input Catalog (KIC)
----------------------------
+--------------------------
 The Kepler Input Catalog (`V/133
 <http://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=V/133>`_, Kepler Mission
 Team, 2009) contains photometric and physical data of over 13 million objects in
@@ -124,9 +123,13 @@ Seven bands were used, including the SDSS *u*, *g*, *r*, *i*, *z* filters,
 But two of them (*u* and *D*\ 51) are available only for a small subset of the
 data.
 The magnitudes in SDSS bands were calibrated using 284 standard stars in common
-with SDSS DR1.
-The *Kepler* magnitudes as defined by the *Kepler* response curve centered at
-665 nm were computed by linear combinations of *g*, *r*, *i* magnitudes.
+with SDSS DR1, but may affected by zero-point shifts.
+Pinsonneault et al. 2012 [#Pinsonneault2012]_ gave new calibration relations
+for *griz* photometry in KIC based on SDSS DR8 (Aihara et al. 2011
+[#Aihara2011]_).
+The *Kepler* magnitudes (*K*:sub:`p`) as defined by the *Kepler* response curve
+centered at 665 nm were computed by linear combinations of *g*, *r*, and *i*
+magnitudes.
 The stellar physical parameters (|Teff|, log\ *g*, log\ *Z* and
 *E*:sub:`B−V`) were estimated using Bayesian method to match the observed colors
 to the Castelli & Kurucz 2004 [#Castelli2004]_ stellar atmosphere models.
@@ -134,12 +137,17 @@ For details, see Brown et al. 2011 [#Brown2011]_.
 
 There are some known biases on the physical parameters in the Kepler Input
 Catalog.
-We refer the readers to Pinsonneault et al. 2012 [#Pinsonneault2012]_ for an
-improved |Teff| scale and Dong et al. 2014 [#Dong2014]_ for an improved
-[Fe/H] scale.
-Besides, Huber et al. 2014 [#Huber2014]_ derived parameters for 196,468 stars
-using Kepler photometric data, including 11,532 unclassified targes in this
-catalogue.
+For instance, Pinsonneault et al. 2012 [#Pinsonneault2012]_ found that KIC
+underestimated |Teff| by up tp 200 K for field dwarfs.
+Verner et al. 2011 [#Verner2011]_ found that the surface gravities (log\ *g*) in
+KIC are overestimated by ~0.23 dex and stellar radii are underestimated by up to
+50% for solar-type stars based on asteroseismic analysis.
+Dong et al. 2014 [#Dong2014]_ found systematic offset on KIC metallicities.
+Besides, Huber et al. 2014 [#Huber2014]_ derived properties for 196,468 stars
+observed in Q1-Q16 using a variety of methods, and later updated their catalog
+for Q1-Q17 transit detection run (DR24).
+Mathur et al. 2017 [#Mathur2017]_ presented revised stellar properties for
+197,096 Kepler targets based on Q1-Q17 data (DR25).
 
 .. figure:: images/2010ApJ...713L..79K.Fig1.png
     :alt: Kepler response curves
@@ -162,7 +170,7 @@ catalogue.
 .. currentmodule:: stella.catalog
 .. autosummary::
     kic._KIC.find_object
-    base._get_KIC_number
+    name._get_KIC_number
 
 .. _catalog_epic:
 
@@ -185,10 +193,11 @@ F-G dwarfs (~36%), and K giants (~21%).
 .. currentmodule:: stella.catalog
 .. autosummary::
     epic._EPIC.find_object
-    base._get_EPIC_number
+    name._get_EPIC_number
 
 References
-------------
+----------
+.. [#Aihara2011] Aihara et al., 2011, *ApJS*, 193, 29 :ads:`2011ApJS..193...29A`.
 .. [#Brown2011] Brown et al., 2011, *AJ*, 142, 112 :ads:`2011AJ....142..112B`
 .. [#Castelli2004] Castelli & Kurucz, 2004, arXiv: astrop-h/0405087 :arXiv:`astro-ph/0405087`
 .. [#Dong2014] Dong et al., 2014, *ApJ*, 789, L3 :ads:`2014ApJ...789L...3D`
@@ -197,6 +206,8 @@ References
 .. [#Huber2014] Huber et al., 2014, *ApJS*, 211, 2 :ads:`2014ApJS..211....2H`
 .. [#Huber2016] Huber et al., 2016, *ApJS*, 224, 2 :ads:`2016ApJS..224....2H`
 .. [#Koch2010] Koch et al., 2010, *ApJ*, 713, L79 :ads:`2010ApJ...713L..79K`
+.. [#Mathur2017] Mathur et al., 2017, *ApJS*, 229, 30 :ads:`2017ApJS..229...30M`
 .. [#Perryman1997] Perryman et al., 1997, *A&A*, 323, L49 :ads:`1997A%26A...323L..49P`
 .. [#Pinsonneault2012] Pinsonneault et al., 2012, *ApJS*, 199, 30 :ads:`2012ApJS..199...30P`
 .. [#vanLeeuwen2007] van Leeuwen, 2007, *A&A*, 474, 653 :ads:`2007A%26A...474..653V`
+.. [#Verner2011] Verner et al., 2011, *ApJ*, 738, L28 :ads:`2011ApJ...738L..28V`
