@@ -135,6 +135,14 @@ def HIP_to_HD(name):
 
 def HIP_to_BD(name):
     '''Convert HIP name to BD name.
+
+    See also:
+        * :ref:`catalog_hip`
+        * :func:`stella.catalog.xindex.HIP_to_2MASS`
+        * :func:`stella.catalog.xindex.HIP_to_CD`
+        * :func:`stella.catalog.xindex.HIP_to_Gaia`
+        * :func:`stella.catalog.xindex.HIP_to_HD`
+        * :func:`stella.catalog.xindex.HIP_to_TYC`
     '''
 
     hip = _get_HIP_number(name)
@@ -154,6 +162,15 @@ def HIP_to_BD(name):
 
 def HIP_to_CD(name):
     '''Convert HIP name to CD name.
+
+    See also:
+        * :ref:`catalog_hip`
+        * :func:`stella.catalog.xindex.HIP_to_HD`
+        * :func:`stella.catalog.xindex.HIP_to_2MASS`
+        * :func:`stella.catalog.xindex.HIP_to_BD`
+        * :func:`stella.catalog.xindex.HIP_to_Gaia`
+        * :func:`stella.catalog.xindex.HIP_to_HD`
+        * :func:`stella.catalog.xindex.HIP_to_TYC`
     '''
 
     hip = _get_HIP_number(name)
@@ -173,6 +190,14 @@ def HIP_to_CD(name):
 
 def HIP_to_TYC(name):
     '''Convert HIP name to TYC name.
+
+    See also:
+        * :ref:`catalog_hip`
+        * :func:`stella.catalog.xindex.HIP_to_2MASS`
+        * :func:`stella.catalog.xindex.HIP_to_BD`
+        * :func:`stella.catalog.xindex.HIP_to_CD`
+        * :func:`stella.catalog.xindex.HIP_to_Gaia`
+        * :func:`stella.catalog.xindex.HIP_to_HD`
     '''
 
     hip = _get_HIP_number(name)
@@ -189,6 +214,13 @@ def HIP_to_TYC(name):
 
 def HIP_to_2MASS(name,full=False):
     '''Convert HIP name to 2MASS name.
+
+    See also:
+        * :ref:`catalog_hip`
+        * :func:`stella.catalog.xindex.HIP_to_CD`
+        * :func:`stella.catalog.xindex.HIP_to_Gaia`
+        * :func:`stella.catalog.xindex.HIP_to_HD`
+        * :func:`stella.catalog.xindex.HIP_to_TYC`
     '''
 
     hip = _get_HIP_number(name)

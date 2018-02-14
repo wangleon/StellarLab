@@ -14,8 +14,23 @@ Base functions
     :private-members:
     :undoc-members:
 
-Starname functions
-------------------
+Parsing Starnames
+-----------------
+.. currentmodule:: stella.catalog.name
+.. autosummary::
+   _get_regular_BD_name
+   _get_regular_CD_name
+   _get_regular_G_name
+   _get_regular_HD_name
+   _get_regular_HIP_name
+   _get_regular_TYC_name
+   _get_star_number1
+   _get_EPIC_number
+   _get_HIP_number
+   _get_KIC_number
+   _get_TYC_number
+
+
 .. automodule:: stella.catalog.name
     :members:
     :private-members:

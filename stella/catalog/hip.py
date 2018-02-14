@@ -59,7 +59,7 @@ def _find_HIP_object(name, catfile, data_info, epoch=2000.0, output='dict'):
 
 
 class _HIP(object):
-    '''Class for Hipparcos Catalogue (`I/239
+    '''Class for *Hipparcos Catalogue* (`I/239
     <http://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=I/239>`_, Perryman+
     1997).
 
@@ -147,7 +147,7 @@ class _HIP(object):
 
 
 class _HIP2(object):
-    '''Class for Hipparcos New Reduction (`I/311
+    '''Class for *Hipparcos Catalogue New Reduction* (`I/311
     <http://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=I/311>`_, van Leeuwen
     2007).
 

@@ -6,7 +6,7 @@ from ..utils.asciitable import structitem_to_dict
 from .name import _get_KIC_number
 
 class _KIC(object):
-    '''Class for Kepler Input Catalog (`V/133
+    '''Class for *Kepler Input Catalog* (`V/133
     <http://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=V/133>`_, Kepler
     Mission Team, 2009).
 

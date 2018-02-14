@@ -7,7 +7,7 @@ from ..utils.asciitable import structitem_to_dict
 from .name import _get_EPIC_number
 
 class _EPIC(object):
-    '''Class for K2 Ecliptic Plane Input Catalog (EPIC, `Huber+ 2016
+    '''Class for *K2 Ecliptic Plane Input Catalog* (EPIC, `Huber+ 2016
     <http://adsabs.harvard.edu/abs/2016ApJS..224....2H>`_).
 
     For more details, see :ref:`K2 Ecliptic Plane Input Catalog<catalog_epic>`.

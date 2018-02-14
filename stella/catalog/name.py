@@ -1,73 +1,80 @@
 import re
 
-def _get_star_number1(starname, key):
+def _get_star_number1(name, key):
     '''
     Convert star name with the form of `SSS NNNN` to its integer number `NNNN`.
 
     Args:
-        starname (integer or string): Name of a star
-        key (string): Prefix of the star name
+        name (integer or string): Name of a star.
+        key (string): Prefix of the star name.
     Returns:
         integer: Number of the star in the catalog. If fail a *None* value will
             be returned.
 
     '''
-    if isinstance(starname, int):
-        return starname
-    elif isinstance(starname, str):
-        if starname[0:len(key)] == key:
-            return int(starname[len(key):])
-        elif starname.isdigit():
-            return int(starname)
+    if isinstance(name, int):
+        return name
+    elif isinstance(name, str):
+        if name[0:len(key)] == key:
+            return int(name[len(key):])
+        elif name.isdigit():
+            return int(name)
         else:
             return None
     else:
         return None
 
-def _get_HIP_number(starname):
-    '''Convert star name to an integer HIP number.
+def _get_HIP_number(name):
+    '''Convert star name to an integer HIP number in *Hipparcos Catalogue*
+    (`I/239 <http://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=I/239>`_).
 
     Args:
-        starname (string or integer): Name of the star
+        name (string or integer): Name of the star.
     Returns:
-        integer: HIP number
+        integer: HIP number.
     '''
-    return _get_star_number1(starname, 'HIP')
+    return _get_star_number1(name, 'HIP')
 
-def _get_KIC_number(starname):
-    '''Convert star name to an integer KIC number.
+def _get_KIC_number(name):
+    '''Convert star name to an integer KIC number in *Kepler Input Catalog*
+    (`V/133 <http://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=V/133>`_,
+    Kepler Mission Team, 2009).
 
     Args:
-        starname (string or integer): Name of the star
+        name (string or integer): Name of the star
     Returns:
         integer: KIC number
     '''
-    return _get_star_number1(starname, 'KIC')
+    return _get_star_number1(name, 'KIC')
 
-def _get_EPIC_number(starname):
-    '''Convert star name to an integer EPIC number.
+def _get_EPIC_number(name):
+    '''Convert star name to an integer EPIC number in *K2 Ecliptic Plane Input
+    Catalog* (`Huber+ 2016
+    <http://adsabs.harvard.edu/abs/2016ApJS..224....2H>`_).
 
     Args:
-        starname (string or integer): Name of the star
+        name (string or integer): Name of the star
     Returns:
         integer: EPIC number
     '''
-    return _get_star_number1(starname, 'EPIC')
+    return _get_star_number1(name, 'EPIC')
 
-def _get_TYC_number(starname):
-    '''Convert star name to TYC number (TYC1, TYC2, TYC3).
+def _get_TYC_number(name):
+    '''Convert star name to TYC numbers (TYC1, TYC2, TYC3) in *Tycho-2
+    Catalogue* (`I/259
+    <http://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=I/259>`_, Høg+ 2000).
 
     Args:
-        starname (string): Name of the star
+        name (string): Name of the star.
     Returns:
-        tuple: A tuple of TYC numbers (TYC1, TYC2, TYC3)
+        tuple: A tuple of TYC numbers (TYC1, TYC2, TYC3).
     '''
-    if starname[0:3]=='TYC':
-        g = starname[3:].split('-')
+    if name[0:3]=='TYC':
+        g = name[3:].split('-')
         tyc1, tyc2, tyc3 = int(g[0]), int(g[1]), int(g[2])
         return (tyc1, tyc2, tyc3)
-    elif len(starname.split('-'))==3:
-        g = starname.split('-')
+    elif len(name.split('-'))==3:
+        g = name.split('-')
         tyc1, tyc2, tyc3 = int(g[0]), int(g[1]), int(g[2])
         return (tyc1, tyc2, tyc3)
     else:
@@ -117,73 +124,85 @@ def get_regular_name(starname):
     else:
         return starname
 
-def _get_regular_HIP_name(starname):
-    '''Convert an HIP name to its regular form.
+def _get_regular_HIP_name(name):
+    '''Convert an HIP name in *Hipparcos Catalogue* (`I/239
+    <http://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=I/239>`_) to its
+    regular form `"HIP NNN"`.
+
+    Args:
+        name (string or integer): Name or HIP number of a star (e.g. `"HIP8276"`,
+            `"HIP 8276"`, `8443`).
+    Returns:
+        string: Regular HD name `"HIP NNNN"`.
+    See also:
+        * :ref:`catalog_hip`
     '''
 
-    if isinstance(starname, str):
-        starname = starname.strip()
-        starname = 'HIP '+starname[3:].strip()
-
-    elif isinstance(starname, int):
-        starname = 'HIP '+str(starname)
-
+    if isinstance(name, str):
+        name = name.strip()
+        return 'HIP ' + name[3:].strip()
+    elif isinstance(name, int):
+        return 'HIP %d'%name
     else:
         raise ValueError
 
-    return starname
+def _get_regular_HD_name(name):
+    '''Convert an HD name in *Henry Draper Catalogue* (`III/125A
+    <http://vizier.u-strasbg.fr/cgi-bin/VizieR?-source=III/135A>`_) to its
+    regular form `"HD NNNN"` or `"HD NNNN C"`.
+    
+    Args:
+        name (string or integer): Name or HD number of a star (e.g. `"HD8276"`,
+            `"HD 8276A"`, `8443`).
+    Returns:
+        string: Regular HD name `"HD NNNN"` or `"HD NNNN C"`.
+    See also:
 
-def _get_regular_HD_name(starname):
-    '''Convert an HD name to its regular form.
+        * `Henry Draper Catalogue and Extension (III/125A)
+          <http://vizier.u-strasbg.fr/cgi-bin/VizieR?-source=III/135A/catalog>`_
+
     '''
-
-    if isinstance(starname, str):
-
-        starname = starname.strip()
-
-        if starname[-1].isalpha():
-            comp = starname[-1]
-            starname = 'HD %d %s'%(int(starname[2:-1]), comp)
+    if isinstance(name, str):
+        name = name.strip()
+        if name[-1].isalpha():
+            comp = name[-1]
+            return 'HD %d %s'%(int(name[2:-1]), comp)
         else:
-            starname = 'HD %d'%(int(starname[2:]))
-
-    elif isinstance(starname, int):
-        starname = 'HD %d'%starname
-
+            return 'HD %d'%(int(name[2:]))
+    elif isinstance(name, int):
+        return 'HD %d'%name
     else:
         raise ValueError
 
-    return starname
 
-
-def _get_regular_BD_name(starname):
-    '''Convert a BD name to its regular form.
+def _get_regular_BD_name(name):
+    '''Convert a BD name to its regular form `"BD+MM NNNN"` in *Bonner
+    Durchmusterung* (`I/122
+    <http://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=I/122>`_, Argelander
+    1859-1903).
     '''
-
-    starname = starname.strip()
-
+    name = name.strip()
     # parse 'BD+33 23' to 'BD +33 23'
-    starname = 'BD '+starname[2:].strip()
-
+    name = 'BD '+ name[2:].strip()
     # parse 'BD 33 23' to 'BD +33 23'
-    g = starname.split()
+    g = name.split()
     if g[1][0].isdigit():
         g[1] = '+'+g[1]
-        starname = ' '.join(g)
+        name = ' '.join(g)
 
     # parse 'BD +33 23A' to 'BD +33 23 A'
     # but keep 'BD +33 23a'
-    if starname[-1].isalpha():
-        comp = starname[-1]
+    if name[-1].isalpha():
+        comp = name[-1]
         if comp.isupper():
-            starname = starname[:-1].strip()+' '+comp
+            name = name[:-1].strip()+' '+comp
         elif comp.islower():
-            starname = starname[:-1].strip()+comp
+            name = name[:-1].strip()+comp
         else:
             raise ValueError
 
     # parse 'BD -3 23' to 'BD -03 23'
-    g = starname.split()
+    g = name.split()
     if len(g[1])!=3:
         pm = g[1][0]
         num = abs(int(g[1]))
@@ -191,35 +210,38 @@ def _get_regular_BD_name(starname):
 
     # parse 'BD -03 0023' to 'BD -03 23'
     g[2] = str(int(g[2]))
-    starname = ' '.join(g)
+    name = ' '.join(g)
 
-    return starname
+    return name
 
-def _get_regular_CD_name(starname):
-    '''Convert a CD name to its regular form.
+def _get_regular_CD_name(name):
+    '''Convert a CD name to its regular form `"CD+MM NNNN"` in *Cordoba
+    Durchmusterung* (`I/114
+    <http://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=I/114>`_, Thome
+    1892-1932).
     '''
 
-    starname = starname.strip()
+    name = name.strip()
 
     # parse 'CD-33 23' to 'CD -33 23'
-    starname = 'CD '+starname[2:].strip()
+    name = 'CD '+name[2:].strip()
 
     # parse 'CD -33 23A' to 'CD -33 23 A'
-    if starname[-1].isalpha():
-        comp = starname[-1]
+    if name[-1].isalpha():
+        comp = name[-1]
         if comp.isupper():
-            starname = starname[:-1].strip()+' '+comp
+            name = name[:-1].strip()+' '+comp
         elif comp.islower():
-            starname = starname[:-1].strip()+comp
+            name = name[:-1].strip()+comp
         else:
             raise ValueError
 
     # parse 'CD -22 0023' to 'CD -22 23'
-    g = starname.split()
+    g = name.split()
     g[2] = str(int(g[2]))
-    starname = ' '.join(g)
+    name = ' '.join(g)
 
-    return starname
+    return name
 
 
 def _get_regular_G_name(starname):
@@ -250,16 +272,14 @@ def _get_regular_G_name(starname):
     return starname
 
 def _get_regular_TYC_name(*args):
-    '''Convert a TYC name to its regular form.
+    '''Convert a TYC name to its regular form `"TYC NNN-NNN-N"` in *Tycho-2
+    Catalogue* (`I/259
+    <http://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=I/259>`_, Høg+ 2000).
     '''
     if len(args)==1 and isinstance(args[0], str):
-        starname = args[0].strip()
-        starname = 'TYC '+starname[3:].strip()
-
+        name = args[0].strip()
+        return 'TYC '+name[3:].strip()
     elif len(args)==3:
-        starname = 'TYC '+'-'.join([str(args[0]),str(args[1]),str(args[2])])
+        return 'TYC '+'-'.join([str(args[0]),str(args[1]),str(args[2])])
     else:
         return None
-
-    return starname
-

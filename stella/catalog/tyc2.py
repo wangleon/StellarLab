@@ -6,7 +6,7 @@ from ..utils.asciitable import structitem_to_dict
 from .name import _get_TYC_number
 
 class _TYC2(object):
-    '''Class for Tycho-2 Catalogue (`I/259
+    '''Class for *Tycho-2 Catalogue* (`I/259
     <http://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=I/259>`_, Høg+ 2000).
 
     The Tycho-2 Catalogue contains 2,539,913 records, and additonal 17,588
