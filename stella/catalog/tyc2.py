@@ -13,6 +13,32 @@ class _TYC2(object):
     records in Supplement-1, and 1,146 records in Supplement-2.
     For more details, see :ref:`Tycho-2 Catalogue<catalog_tyc2>`.
 
+    .. csv-table:: Descriptions of Columns in Catalogue
+        :header: Key, Type, Unit, Description
+        :widths: 30, 30, 30, 180
+    
+        TYC,      integer32, ,       TYC number
+        RAdeg,    float64,   deg,    Right ascension (*α*) in ICRS at given epoch
+        DEdeg,    float64,   deg,    Declination (*δ*) in ICRS at at given epoch
+        pmRA,     float32,   mas/yr, Proper motion in Right ascension with cos(*δ*) factor
+        pmDE,     float32,   mas/yr, Proper motion in Declination
+        e_RA,     integer16, mas,    Error in RA with cos(*δ*) factor at mean epoch (−1 if blank)
+        e_DE,     integer16, mas,    Error in Dec at mean epoch (−1 if blank)
+        e_pmRA,   float32,   mas/yr, Error in proper motion in RA
+        e_pmDE,   float32,   mas/yr, Error in proper motion in Dec
+        epoch_RA, float32,   yr,     Mean epoch of RA in Julian year
+        epoch_DE, float32,   yr,     Mean epoch of Dec in Julian year
+        num,      integer16, ,       Number of positions used (−1 if blank)
+        q_RA,     float32,   ,       Goodness of fit for mean RA (truncated to 9.9 if >9.9)
+        q_DE,     float32,   ,       Goodness of fit for mean Dec (truncated to 9.9 if >9.9)
+        q_pmRA,   float32,   ,       Goodness of fit for pmRA (truncated to 9.9 if >9.9)
+        q_pmDE,   float32,   ,       Goodness of fit for pmDE (truncated to 9.9 if >9.9)
+        BTmag,    float32,   mag,    Mean *B*:sub:`T` magnitude
+        e_BTmag,  float32,   mag,    Error in *B*:sub:`T` magnitude
+        VTmag,    float32,   mag,    Mean *V*:sub:`T` magnitude
+        e_VTmag,  float32,   mag,    Error in *V*:sub:`T` magnitude
+        prox,     float32,   arcsec, "Proximity, or distance to the nearest entry (truncated to 99.9 if >99.9)"
+
     '''
 
     def __init__(self):
@@ -33,33 +59,8 @@ class _TYC2(object):
 
     def find_object(self, name, epoch=2000.0, output='dict'):
         '''
-        Find record for an object in Tycho-2 Catalogue.
+        Find record for an object in *Tycho-2 Catalogue*.
     
-        .. csv-table:: Descriptions of returned parameters
-            :header: Key, Type, Unit, Description
-            :widths: 30, 30, 30, 180
-    
-            TYC,      integer32, ,       HYC number
-            RAdeg,    float64,   deg,    Right ascension (*α*) in ICRS at given epoch
-            DEdeg,    float64,   deg,    Declination (*δ*) in ICRS at at given epoch
-            pmRA,     float32,   mas/yr, Proper motion in Right ascension with cos(*δ*) factor
-            pmDE,     float32,   mas/yr, Proper motion in Declination
-            e_RA,     integer16, mas,    Error in RA with cos(*δ*) factor at mean epoch (−1 if blank)
-            e_DE,     integer16, mas,    Error in Dec at mean epoch (−1 if blank)
-            e_pmRA,   float32,   mas/yr, Error in proper motion in RA
-            e_pmDE,   float32,   mas/yr, Error in proper motion in Dec
-            epoch_RA, float32,   yr,     Mean epoch of RA in Julian year
-            epoch_DE, float32,   yr,     Mean epoch of Dec in Julian year
-            num,      integer16, ,       Number of positions used (−1 if blank)
-            q_RA,     float32,   ,       Goodness of fit for mean RA (truncated to 9.9 if >9.9)
-            q_DE,     float32,   ,       Goodness of fit for mean Dec (truncated to 9.9 if >9.9)
-            q_pmRA,   float32,   ,       Goodness of fit for pmRA (truncated to 9.9 if >9.9)
-            q_pmDE,   float32,   ,       Goodness of fit for pmDE (truncated to 9.9 if >9.9)
-            BTmag,    float32,   mag,    Mean *B*:sub:`T` magnitude
-            e_BTmag,  float32,   mag,    Error in *B*:sub:`T` magnitude
-            VTmag,    float32,   mag,    Mean *V*:sub:`T` magnitude
-            e_VTmag,  float32,   mag,    Error in *V*:sub:`T` magnitude
-            prox,     float32,   arcsec, "Proximity, or distance to the nearest entry (truncated to 99.9 if >99.9)"
     
         Args:
             name (string or tuple): Name or nunmber tuple of star.

@@ -66,6 +66,37 @@ class _HIP(object):
     The HIP catalogue contains 118,218 records, with HIP numbers ranging
     from 1 to 120,416.
     For more details, see :ref:`Hipparcos Catalogue<catalog_hip>`.
+
+    .. csv-table:: Descriptions of Columns in Catalogue
+        :header: Key, Type, Unit, Description
+        :widths: 30, 30, 30, 100
+    
+        HIP,      integer32, ,       HIP number
+        RAdeg,    float64,   deg,    Right ascension (*α*) in ICRS at given epoch
+        DEdeg,    float64,   deg,    Declination (*δ*) in ICRS at at given epoch
+        Vmag,     float32,   mag,    *V* magnitude in Johnson system
+        Plx,      float32,   mas,    Parallax
+        e_Plx,    float32,   mas,    Error in parallax
+        pmRA,     float32,   mas/yr, Proper motion in Right ascension with cos(*δ*) factor
+        pmDE,     float32,   mas/yr, Proper motion in Declination
+        e_pmRA,   float32,   mas/yr, Error in proper motion in RA
+        e_pmDE,   float32,   mas/yr, Error in proper motion in Dec
+        BTmag,    float32,   mag,    Mean *B*:sub:`T` magnitude
+        e_BTmag,  float32,   mag,    Error in *B*:sub:`T` magnitude
+        VTmag,    float32,   mag,    Mean *V*:sub:`T` magnitude
+        e_VTmag,  float32,   mag,    Error in *V*:sub:`T` magnitude
+        B-V,      float32,   mag,    *B* − *V* color in Johnson system
+        e_B-V,    float32,   mag,    Error in *B* − *V* color
+        r_B-V,    character, ,       Source of *B* − *V* color
+        V-I,      float32,   mag,    *V* − *I* color in Cousin system
+        e_V-I,    float32,   mag,    Error in *V* − *I* color
+        r_V-I,    character, ,       Source of *V* − *I* color
+        Hpmag,    float32,   mag,    Median magnitude in Hipparcos system
+        e_Hpmag,  float32,   mag,    Error in *Hp* magnitude
+        Hpscat,   float32,   mag,    Scatter on *Hp* magnitude
+        o_Hpmag,  integer16, ,       Number of observations for *Hp* magnitude
+        SpType,   string,    mag,    Spectral type
+        r_SpType, character, ,       Source of Spectral type
     '''
 
     def __init__(self):
@@ -86,38 +117,7 @@ class _HIP(object):
 
     def find_object(self, name, epoch=2000.0, output='dict'):
         '''
-        Find record for an object in Hipparcos Catalogue.
-    
-        .. csv-table:: Descriptions of returned parameters
-            :header: Key, Type, Unit, Description
-            :widths: 30, 30, 30, 100
-    
-            HIP,      integer32, ,       HIP number
-            RAdeg,    float64,   deg,    Right ascension (*α*) in ICRS at given epoch
-            DEdeg,    float64,   deg,    Declination (*δ*) in ICRS at at given epoch
-            Vmag,     float32,   mag,    *V* magnitude in Johnson system
-            Plx,      float32,   mas,    Parallax
-            e_Plx,    float32,   mas,    Error in parallax
-            pmRA,     float32,   mas/yr, Proper motion in Right ascension with cos(*δ*) factor
-            pmDE,     float32,   mas/yr, Proper motion in Declination
-            e_pmRA,   float32,   mas/yr, Error in proper motion in RA
-            e_pmDE,   float32,   mas/yr, Error in proper motion in Dec
-            BTmag,    float32,   mag,    Mean *B*:sub:`T` magnitude
-            e_BTmag,  float32,   mag,    Error in *B*:sub:`T` magnitude
-            VTmag,    float32,   mag,    Mean *V*:sub:`T` magnitude
-            e_VTmag,  float32,   mag,    Error in *V*:sub:`T` magnitude
-            B-V,      float32,   mag,    *B* − *V* color in Johnson system
-            e_B-V,    float32,   mag,    Error in *B* − *V* color
-            r_B-V,    character, ,       Source of *B* − *V* color
-            V-I,      float32,   mag,    *V* − *I* color in Cousin system
-            e_V-I,    float32,   mag,    Error in *V* − *I* color
-            r_V-I,    character, ,       Source of *V* − *I* color
-            Hpmag,    float32,   mag,    Median magnitude in Hipparcos system
-            e_Hpmag,  float32,   mag,    Error in *Hp* magnitude
-            Hpscat,   float32,   mag,    Scatter on *Hp* magnitude
-            o_Hpmag,  integer16, ,       Number of observations for *Hp* magnitude
-            SpType,   string,    mag,    Spectral type
-            r_SpType, character, ,       Source of Spectral type
+        Find record for an object in *Hipparcos Catalogue*.
     
         Args:
             name (string or integer): Name or number of star.
@@ -154,6 +154,27 @@ class _HIP2(object):
     The Hipparcos Catalogue New Reduction contains 117,955 records, with HIP
     numbers ranging from 1 to 120,404.
     For more details, see :ref:`Hipparcos Catalogue New Reduction<catalog_hip2>`.
+
+    .. csv-table:: Descriptions of Columns in Catalogue
+        :header: Key, Type, Unit, Description
+        :widths: 30, 30, 30, 100
+    
+        HIP,     integer32, ,       HIP number
+        RAdeg,   float64,   deg,    Right ascension (*α*) in ICRS at given epoch
+        DEdeg,   float64,   deg,    Declination (*δ*) in ICRS at at given epoch
+        Plx,     float32,   mas,    Parallax
+        e_Plx,   float32,   mas,    Error in parallax
+        pmRA,    float32,   mas/yr, Proper motion in Right ascension with cos(*δ*) factor
+        pmDE,    float32,   mas/yr, Proper motion in Declination
+        e_pmRA,  float32,   mas/yr, Error in proper motion in RA
+        e_pmDE,  float32,   mas/yr, Error in proper motion in Dec
+        B-V,     float32,   mag,    *B* − *V* color in Johnson system
+        e_B-V,   float32,   mag,    Error in *B* − *V* color
+        V-I,     float32,   mag,    *V* − *I* color in Cousin system
+        Hpmag,   float32,   mag,    Median magnitude in Hipparcos system
+        e_Hpmag, float32,   mag,    Error in *Hp* magnitude
+        Hpscat,  float32,   mag,    Scatter on *Hp* magnitude
+    
     '''
 
     def __init__(self):
@@ -174,28 +195,8 @@ class _HIP2(object):
 
     def find_object(self, name, epoch=2000.0, output='dict'):
         '''
-        Find record for an object in Hipparcos Catalogue New Reduction.
+        Find record for an object in *Hipparcos Catalogue New Reduction*.
 
-        .. csv-table:: Descriptions of returned parameters
-            :header: Key, Type, Unit, Description
-            :widths: 30, 30, 30, 100
-    
-            HIP,     integer32, ,       HIP number
-            RAdeg,   float64,   deg,    Right ascension (*α*) in ICRS at given epoch
-            DEdeg,   float64,   deg,    Declination (*δ*) in ICRS at at given epoch
-            Plx,     float32,   mas,    Parallax
-            e_Plx,   float32,   mas,    Error in parallax
-            pmRA,    float32,   mas/yr, Proper motion in Right ascension with cos(*δ*) factor
-            pmDE,    float32,   mas/yr, Proper motion in Declination
-            e_pmRA,  float32,   mas/yr, Error in proper motion in RA
-            e_pmDE,  float32,   mas/yr, Error in proper motion in Dec
-            B-V,     float32,   mag,    *B* − *V* color in Johnson system
-            e_B-V,   float32,   mag,    Error in *B* − *V* color
-            V-I,     float32,   mag,    *V* − *I* color in Cousin system
-            Hpmag,   float32,   mag,    Median magnitude in Hipparcos system
-            e_Hpmag, float32,   mag,    Error in *Hp* magnitude
-            Hpscat,  float32,   mag,    Scatter on *Hp* magnitude
-    
         Args:
             name (string or integer): Name or number of star.
             epoch (float): Epoch of output astrometric parameters.
