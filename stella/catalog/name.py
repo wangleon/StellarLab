@@ -1,5 +1,123 @@
 import re
 
+constellations = {
+        'And': ['Andromedae',           'Andromeda'             ],
+        'Ant': ['Antliae',              'Antlia'                ],
+        'Aps': ['Apodis',               'Apus'                  ],
+        'Aqr': ['Aquarii',              'Aquarius'              ],
+        'Aql': ['Aquilae',              'Aquila'                ],
+        'Ara': ['Arae',                 'Ara'                   ],
+        'Ari': ['Arietis',              'Aries'                 ],
+        'Aur': ['Aurigae',              'Auriga'                ],
+        'Boo': ['Bootis',               'Bootes'                ],
+        'Cae': ['Caeli',                'Caelum'                ],
+        'Cam': ['Camelopardalis',       'Camelopardalis'        ],
+        'Cnc': ['Cancri',               'Cancer'                ],
+        'Cvn': ['Canum Venaticorum',    'Canes Venatici'        ],
+        'Cma': ['Canis Majoris',        'Canis Major'           ],
+        'Cmi': ['Canis Minoris',        'Canis Minor'           ],
+        'Cap': ['Capricorni',           'Capricornus'           ],
+        'Car': ['Carinae',              'Carina'                ],
+        'Cas': ['Cassiopeiae',          'Cassiopeia'            ],
+        'Cen': ['Centauri',             'Centaurus'             ],
+        'Cep': ['Cephei',               'Cepheus'               ],
+        'Cet': ['Ceti',                 'Cetus'                 ],
+        'Cha': ['Chamaeleotis',         'Chamaeleon'            ],
+        'Cir': ['Circini',              'Circinus'              ],
+        'Col': ['Columbae',             'Columba'               ],
+        'Com': ['Comae Berenices',      'Coma Berenices'        ],
+        'Cra': ['Coronae Australis',    'Corona Australis'      ],
+        'Crb': ['Coronae Borealis',     'Corona Borealis'       ],
+        'Crv': ['Corvi',                'Corvus'                ],
+        'Crt': ['Crateris',             'Crater'                ],
+        'Cru': ['Crucis',               'Crux'                  ],
+        'Cyg': ['Cygni',                'Cygnus'                ],
+        'Del': ['Delphini',             'Delphinus'             ],
+        'Dor': ['Doradus',              'Dorado'                ],
+        'Dra': ['Draconis',             'Draco'                 ],
+        'Equ': ['Equulei',              'Equuleus'              ],
+        'Eri': ['Eridani',              'Eridanus'              ],
+        'For': ['Fornacis',             'Fornax'                ],
+        'Gem': ['Geminorum',            'Gemini'                ],
+        'Gru': ['Gruis',                'Grus'                  ],
+        'Her': ['Herculis',             'Hercules'              ],
+        'Hor': ['Horologii',            'Horologium'            ],
+        'Hya': ['Hydrae',               'Hydra'                 ],
+        'Hyi': ['Hydri',                'Hydrus'                ],
+        'Ind': ['Indi',                 'Indus'                 ],
+        'Lac': ['Lacertae',             'Lacerta'               ],
+        'Leo': ['Leonis',               'Leo'                   ],
+        'Lmi': ['Leonis Minoris',       'Leo Minor'             ],
+        'Lep': ['Leporus',              'Lepus'                 ],
+        'Lib': ['Librae',               'Libra'                 ],
+        'Lup': ['Lupi',                 'Lupus'                 ],
+        'Lyn': ['Lyncis',               'Lynx'                  ],
+        'Lyr': ['Lyrae',                'Lyra'                  ],
+        'Men': ['Mensae',               'Mensa'                 ],
+        'Mic': ['Microscopii',          'Microscopium'          ],
+        'Mon': ['Monocerotis',          'Monoceros'             ],
+        'Mus': ['Muscae',               'Musca'                 ],
+        'Nor': ['Normae',               'Norma'                 ],
+        'Oct': ['Octantis',             'Octans'                ],
+        'Oph': ['Ophiuchi',             'Ophiuchus'             ],
+        'Ori': ['Orionis',              'Orion'                 ],
+        'Pav': ['Pavonis',              'Pavo'                  ],
+        'Peg': ['Pegasi',               'Pegasus'               ],
+        'Per': ['Persei',               'Perseus'               ],
+        'Phe': ['Phoenicis',            'Phoenix'               ],
+        'Pic': ['Pictoris',             'Pictor'                ],
+        'Psc': ['Piscium',              'Pisces'                ],
+        'Psa': ['Piscis Austrini',      'Piscis Austrinus'      ],
+        'Pup': ['Puppis',               'Puppis'                ],
+        'Pyx': ['Pyxidis',              'Pyxis'                 ],
+        'Ret': ['Reticuli',             'Reticulum'             ],
+        'Sge': ['Sagittae',             'Sagitta'               ],
+        'Sgr': ['Sagittarii',           'Sagittarius'           ],
+        'Sco': ['Scorpii',              'Scorpius'              ],
+        'Scl': ['Sculptoris',           'Sculptor'              ],
+        'Sct': ['Scuti',                'Scutum'                ],
+        'Ser': ['Serpentis',            'Serpens'               ],
+        'Sex': ['Sextantis',            'Sextans'               ],
+        'Tau': ['Tauri',                'Taurus'                ],
+        'Tel': ['Telescopii',           'Telescopium'           ],
+        'Tri': ['Trianguli',            'Triangulum'            ],
+        'Tra': ['Trianguli Australis',  'Triangulum Australe'   ],
+        'Tuc': ['Tucanae',              'Tucana'                ],
+        'Uma': ['Ursae Majoris',        'Ursa Major'            ],
+        'Umi': ['Ursae Minoris',        'Ursa Minor'            ],
+        'Vel': ['Velorum',              'Vela'                  ],
+        'Vir': ['Virginis',             'Virgo'                 ],
+        'Vol': ['Volantis',             'Volans'                ],
+        'Vul': ['Vulpeculae',           'Vulpecula'             ],
+        }
+
+greek_letters = {
+        'alf': 'alpha',
+        'bet': 'beta',
+        'gam': 'gamma',
+        'det': 'delta',
+        'eps': 'epsilon',
+        'zet': 'zeta',
+        'eta': 'eta',
+        'the': 'theta',
+        'iot': 'iota',
+        'kap': 'kappa',
+        'lam': 'lambda',
+        'mu' : 'mu',
+        'nu' : 'nu',
+        'xi' : 'xi',
+        'omi': 'omicron',
+        'pi' : 'pi',
+        'rho': 'rho',
+        'sig': 'sigma',
+        'tau': 'tau',
+        'ups': 'upsilon',
+        'phi': 'phi',
+        'chi': 'chi',
+        'psi': 'psi',
+        'ome': 'omega',
+        }
+
 def _get_star_number1(name, key):
     '''
     Convert star name with the form of `SSS NNNN` to its integer number `NNNN`.
@@ -25,8 +143,7 @@ def _get_star_number1(name, key):
         return None
 
 def _get_HIP_number(name):
-    '''Convert star name to an integer HIP number in *Hipparcos Catalogue*
-    (`I/239 <http://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=I/239>`_).
+    '''Convert star name in *Hipparcos Catalogue* to an integer HIP number.
 
     Args:
         name (string or integer): Name of the star.
@@ -36,9 +153,7 @@ def _get_HIP_number(name):
     return _get_star_number1(name, 'HIP')
 
 def _get_KIC_number(name):
-    '''Convert star name to an integer KIC number in *Kepler Input Catalog*
-    (`V/133 <http://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=V/133>`_,
-    Kepler Mission Team, 2009).
+    '''Convert star name in *Kepler Input Catalog* to an integer KIC number.
 
     Args:
         name (string or integer): Name of the star
@@ -48,9 +163,8 @@ def _get_KIC_number(name):
     return _get_star_number1(name, 'KIC')
 
 def _get_EPIC_number(name):
-    '''Convert star name to an integer EPIC number in *K2 Ecliptic Plane Input
-    Catalog* (`Huber+ 2016
-    <http://adsabs.harvard.edu/abs/2016ApJS..224....2H>`_).
+    '''Convert star name in *K2 Ecliptic Plane Input Catalog* to an integer EPIC
+    number.
 
     Args:
         name (string or integer): Name of the star
@@ -60,9 +174,8 @@ def _get_EPIC_number(name):
     return _get_star_number1(name, 'EPIC')
 
 def _get_TYC_number(name):
-    '''Convert star name to TYC numbers (TYC1, TYC2, TYC3) in *Tycho-2
-    Catalogue* (`I/259
-    <http://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=I/259>`_, Høg+ 2000).
+    '''Convert star name in *Tycho-2 Catalogue* to TYC numbers (TYC1, TYC2,
+    TYC3).
 
     Args:
         name (string): Name of the star.
@@ -125,9 +238,8 @@ def get_regular_name(starname):
         return starname
 
 def _get_regular_HIP_name(name):
-    '''Convert an HIP name in *Hipparcos Catalogue* (`I/239
-    <http://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=I/239>`_) to its
-    regular form `"HIP NNN"`.
+    '''Convert an HIP name in *Hipparcos Catalogue* to its regular form
+    `"HIP NNN"`.
 
     Args:
         name (string or integer): Name or HIP number of a star (e.g. `"HIP8276"`,
@@ -147,9 +259,8 @@ def _get_regular_HIP_name(name):
         raise ValueError
 
 def _get_regular_HD_name(name):
-    '''Convert an HD name in *Henry Draper Catalogue* (`III/125A
-    <http://vizier.u-strasbg.fr/cgi-bin/VizieR?-source=III/135A>`_) to its
-    regular form `"HD NNNN"` or `"HD NNNN C"`.
+    '''Convert an HD name in *Henry Draper Catalogue* to its regular form
+    `"HD NNNN"` or `"HD NNNN C"`.
     
     Args:
         name (string or integer): Name or HD number of a star (e.g. `"HD8276"`,
@@ -176,10 +287,8 @@ def _get_regular_HD_name(name):
 
 
 def _get_regular_BD_name(name):
-    '''Convert a BD name to its regular form `"BD+MM NNNN"` in *Bonner
-    Durchmusterung* (`I/122
-    <http://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=I/122>`_, Argelander
-    1859-1903).
+    '''Convert a BD name in *Bonner Durchmusterung* to its regular form 
+    `"BD+MM NNNN"`.
     '''
     name = name.strip()
     # parse 'BD+33 23' to 'BD +33 23'
@@ -215,10 +324,8 @@ def _get_regular_BD_name(name):
     return name
 
 def _get_regular_CD_name(name):
-    '''Convert a CD name to its regular form `"CD+MM NNNN"` in *Cordoba
-    Durchmusterung* (`I/114
-    <http://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=I/114>`_, Thome
-    1892-1932).
+    '''Convert a CD name in *Cordoba Durchmusterung* to its regular form
+    `"CD+MM NNNN"`.
     '''
 
     name = name.strip()
@@ -272,9 +379,8 @@ def _get_regular_G_name(starname):
     return starname
 
 def _get_regular_TYC_name(*args):
-    '''Convert a TYC name to its regular form `"TYC NNN-NNN-N"` in *Tycho-2
-    Catalogue* (`I/259
-    <http://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=I/259>`_, Høg+ 2000).
+    '''Convert a TYC name in *Tycho-2 Catalogue* to its regular form
+    `"TYC NNN-NNN-N"`.
     '''
     if len(args)==1 and isinstance(args[0], str):
         name = args[0].strip()

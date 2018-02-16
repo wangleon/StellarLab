@@ -112,10 +112,12 @@ def cross_starnames(starname):
     return res_lst
 
 
-
-
 def HIP_to_HD(name):
-    '''Convert HIP name to HD name.
+    '''Convert an HIP name in *Hipparcos Catalogue* to HD name in *Henry Draper
+    Catalogue*.
+
+    Args:
+        name (string or integer): Name of star in *Hipparcos Catalogue*.
     '''
 
     hip = _get_HIP_number(name)
@@ -134,7 +136,11 @@ def HIP_to_HD(name):
         return [HDname]
 
 def HIP_to_BD(name):
-    '''Convert HIP name to BD name.
+    '''Convert an HIP name in *Hipparcos Catalogue* to BD name in *Bonner
+    Durchmusterung*.
+
+    Args:
+        name (string or integer): Name of star in *Hipparcos Catalogue*.
 
     See also:
         * :ref:`catalog_hip`
@@ -161,7 +167,11 @@ def HIP_to_BD(name):
         return [HIPname]
 
 def HIP_to_CD(name):
-    '''Convert HIP name to CD name.
+    '''Convert an HIP name in *Hipparcos Catalogue* to CD name in *Cordoba
+    Durchmusterung*.
+
+    Args:
+        name (string or integer): Name of star in *Hipparcos Catalogue*.
 
     See also:
         * :ref:`catalog_hip`
@@ -189,7 +199,11 @@ def HIP_to_CD(name):
         return [CDname]
 
 def HIP_to_TYC(name):
-    '''Convert HIP name to TYC name.
+    '''Convert an HIP name in *Hipparcos Catalogue* to TYC name in *Tycho-2
+    Catalogue*.
+
+    Args:
+        name (string or integer): Name of star in *Hipparcos Catalogue*.
 
     See also:
         * :ref:`catalog_hip`
@@ -212,8 +226,12 @@ def HIP_to_TYC(name):
     else:
         return ['TYC %d-%d-%d'%(rec['TYC1'],rec['TYC2'],rec['TYC3']) for rec in data[m]]
 
-def HIP_to_2MASS(name,full=False):
-    '''Convert HIP name to 2MASS name.
+def HIP_to_2MASS(name, full=False):
+    '''Convert an HIP name in *Hipparcos Catalogue* to 2MASS name.
+
+    Args:
+        name (string or integer): Name of star in *Hipparcos Catalogue*.
+        full (*bool*):
 
     See also:
         * :ref:`catalog_hip`
@@ -239,7 +257,11 @@ def HIP_to_2MASS(name,full=False):
         return [des_2mass]
 
 def HD_to_HIP(name):
-    '''Convert HD name to HIP name.
+    '''Convert an HD name in *Henry Draper Catalogue* to HIP name in *Hipparcos
+    Catalogue*.
+
+    Args:
+        name (string or integer): Name of star in *Henry Draper Catalogue*.
     '''
     name = get_regular_name(name)
     hd = name[2:].strip()
@@ -255,7 +277,11 @@ def HD_to_HIP(name):
         return [HIPname]
 
 def HD_to_TYC(name):
-    '''Convert HD name to TYC name.
+    '''Convert an HD name in *Henry Draper Catalogue* to TYC name in *Tycho-2
+    Catalogue*.
+
+    Args:
+        name (string or integer): Name of star in *Henry Draper Catalogue*.
     '''
     name = get_regular_name(name)
     hd = name[2:].strip()
@@ -271,7 +297,11 @@ def HD_to_TYC(name):
         return [TYCname]
 
 def BD_to_HIP(name):
-    '''Convert BD name to HIP name.
+    '''Convert a BD name in *Bonner Durchmusterung* to HIP name in *Hipparcos
+    Catalogue*.
+
+    Args:
+        name (string): Name of star in *Bonner Durchmusterung*.
     '''
     name = get_regular_name(name)
     bd = name[2:].strip()
@@ -287,7 +317,11 @@ def BD_to_HIP(name):
         return [HIPname]
 
 def CD_to_HIP(name):
-    '''Convert CD name to HIP name.
+    '''Convert a CD name in *Cordoba Durchmusterung* to HIP name in *Hipparcos
+    Catalogue*.
+
+    Args:
+        name (string): Name of star in *Cordoba Durchmusterung*.
     '''
     name = get_regular_name(name)
     cd = name[2:].strip()
@@ -303,7 +337,8 @@ def CD_to_HIP(name):
         return [HIPname]
 
 def TYC_to_HIP(name):
-    '''Convert TYC name to HIP name.
+    '''Convert a TYC name in *Tycho-2 Catalogue* to HIP name in *Hipparcos
+    Catalogue*.
     '''
     if name[0:3]=='TYC':
         g = name[3:].split('-')
@@ -322,7 +357,7 @@ def TYC_to_HIP(name):
         return ['HIP %d'%rec['HIP'] for rec in data[m1][m2][m3]]
 
 def TYC_to_2MASS(name,full=False):
-    '''Convert TYC name to 2MASS name.
+    '''Convert a TYC name to 2MASS name.
     '''
     if name[0:3]=='TYC':
         g = name[3:].split('-')
@@ -347,7 +382,7 @@ def TYC_to_2MASS(name,full=False):
         return ['2MASS J%s'%row['2MASS'] for row in data[m1][m2][m3]]
 
 def G_to_TYC(name):
-    '''Convert G name to TYC name.
+    '''Convert a G name to TYC name in *Tycho-2 Catalogue*.
     '''
     if name[0:2]=='G ':
         Gname = name[2:].strip()
@@ -363,7 +398,7 @@ def G_to_TYC(name):
         return [TYCname]
 
 def KIC_to_KOI(name):
-    '''Convert KIC name to KOI name.
+    '''Convert a KIC name in *Kepler Input Catalog* to KOI name.
     '''
     fn = '%s/KIC-KOI.csv'%xindex_path
     kic = _get_KIC_number(name)
@@ -372,7 +407,7 @@ def KIC_to_KOI(name):
     return quickfind_sortedfile(kic,fn,f1,f2)
 
 def KIC_to_Kepler(name):
-    '''Convert KIC name to Kepler name.
+    '''Convert a KIC name in *Kepler Input Catalog* to Kepler name.
     '''
     fn = '%s/KIC-Kepler.csv'%xindex_path
     kic = _get_KIC_number(name)
@@ -381,7 +416,7 @@ def KIC_to_Kepler(name):
     return quickfind_sortedfile(kic,fn,f1,f2)
 
 def KOI_to_KIC(name):
-    '''Convert KOI name to KIC name.
+    '''Convert a KOI name to KIC name in *Kepler Input Catalog*.
     '''
     fn = '%s/KOI-KIC.csv'%xindex_path
     koi = int(name)
@@ -393,7 +428,7 @@ def KOI_to_KIC(name):
         return quickfind_sortedfile(koi,fn,f1,f2)
 
 def KOI_to_Kepler(name):
-    '''Convert KOI name to Kepler name.
+    '''Convert a KOI name to Kepler name.
     '''
     fn = '%s/KOI-Kepler.csv'%xindex_path
     koi = int(name)
@@ -405,7 +440,7 @@ def KOI_to_Kepler(name):
         return quickfind_sortedfile(koi,fn,f1,f2)
 
 def Kepler_to_KIC(name):
-    '''Convert Kepler name to KIC name.
+    '''Convert a Kepler name to KIC name.
     '''
     fn = '%s/Kepler-KIC.csv'%xindex_path
     kepler = int(name)
@@ -418,7 +453,7 @@ def Kepler_to_KIC(name):
 
 def Kepler_to_KOI(name):
     '''
-    Convert Kepler name to KOI name
+    Convert a Kepler name to KOI name
     '''
     fn = '%s/Kepler-KOI.csv'%xindex_path
     kepler = int(name)
@@ -430,7 +465,7 @@ def Kepler_to_KOI(name):
         return quickfind_sortedfile(kepler,fn,f1,f2)
 
 def HIP_to_Gaia(name):
-    '''Convert HIP name to Gaia name.
+    '''Convert an HIP name in *Hipparcos Catalogue* to Gaia name.
     '''
     if isinstance(name, int):
         hip = name
