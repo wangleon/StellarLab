@@ -193,28 +193,66 @@ def _get_TYC_number(name):
     else:
         return None
 
-def get_catalog(starname):
+def get_catalog(name):
     '''Return the name of the star catalog from the name of star.
+    
+    Args:
+        name (string): Name of star.
+    Returns:
+        catalog (string): Name of catalog.
+
     '''
+    name = ' '.join(name.split())
+
     starcat_re = {
-        '^[Hh][Dd][\d\s]+[ABC]?$'          : 'HD',
-        '^[Hh][Ii][Pp][\d\s]+$'            : 'HIP',
-        '^[Hh][Rr][\d\s]+$'                : 'HR',
-        '^[Bb][Dd][\+\-\d\s]+[a-zA-Z]?$'   : 'BD',
-        '^[Cc][Dd][\-\d\s]+[a-zA-Z]?$'     : 'CD',
-        '^TYC\s*\d+\-\d+\-\d?$'            : 'TYC',
-        '^SAO[\d\s]+$'                     : 'SAO',
-        '^GC[\d\s]+$'                      : 'GC',
-        '^GCRV[\d\s]+$'                    : 'GCRV',
-        '^G[\-\d\s]+$'                     : 'G',
-        '^NLTT[\d\s]+$'                    : 'NLTT',
-        '^LHS[\d\s]+[ABC]?$'               : 'LHS',
-        '^LSPM[\d\s]+[NSEW]?$'             : 'LSPM',
-        '^FK5[\d\s]+$'                     : 'FK5'
+        '^HD\s*\d+\s*[ABC]?$'               : 'HD',
+        '^HIP\s*\d+$'                       : 'HIP',
+        '^HR\s*\d+$'                        : 'HR',
+        '^BD\s*[\+\-]\d+\s\d+[a-zA-Z]?$'    : 'BD',
+        '^CD\s*\-\d+\s\d+[a-zA-Z]?$'        : 'CD',
+        '^EPIC\s*\d+$'                      : 'EPIC',
+        '^FK5\s*\d+$'                       : 'FK5',
+        '^GC\s*\d+$'                        : 'GC',
+        '^GCRV\s*\d+$'                      : 'GCRV',
+        '^G[\-\d\s]+$'                      : 'G',
+        '^KIC\s*\d+$'                       : 'KIC',
+        '^LHS[\d\s]+[ABC]?$'                : 'LHS',
+        '^LSPM[\d\s]+[NSEW]?$'              : 'LSPM',
+        '^NLTT[\d\s]+$'                     : 'NLTT',
+        '^SAO\s*\d+$'                       : 'SAO',
+        '^TYC\s*\d+\-\d+\-\d?$'             : 'TYC',
     }
     for exp in starcat_re:
-        if re.match(exp, starname) != None:
+        if re.match(exp, name) != None:
             return starcat_re[exp]
+
+    if re.match('\s[ABC]?', name[-2:]) != None:
+        comp = name[-1]
+        name = name[0:-1].strip()
+    else:
+        comp = ''
+
+    g = name.split()
+    if g[-1] in constellations:
+        # name is Bayer, Flamsteed, or Var
+        if g[0].isdigit():
+            return 'Flamsteed'
+        elif re.match('^[a-zA-Q]\d*$', g[0]):
+            # Bayer designations are in the range of a~z and A~Q
+            return 'Bayer'
+        elif re.match('^[R-Z]\d*$', g[0]):
+            # Variable names go from Q to Z
+            return 'Var'
+        elif re.match('^[A-Z][A-Z]\d*$', g[0]):
+            # Variable names with double uppercase letters
+            return 'Var'
+        elif len(g[0])>=3 and g[0][0:3] in greek_letters:
+            # Bayer designations with greek letters
+            return 'Bayer'
+        elif re.match('^V\d+$', g[0]) != None:
+            # Variable names V???
+            return 'Var'
+
     return None
 
 def get_regular_name(starname):
