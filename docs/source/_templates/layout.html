@@ -24,71 +24,74 @@
                 }
             }
 
+            // fold the long code blocks and buttons below the blocks
             var prelist = document.getElementsByTagName('pre');
             var i;
             for (i=0; i<prelist.length; i++) {
                 var precode = prelist[i];
                 var defHeight = precode.clientHeight;
                 if (defHeight>200) {
-                    precode.style.height='200px';
                     var pblock = precode.parentNode.parentNode;
-                    var button = document.createElement('button');
-                    button.innerHTML = 'Expand';
-                    button.style.width = '80px';
-                    button.style.marginLeft = '1em';
-                    button.onclick = function() {
-                        if (this.innerHTML=='Expand') {
+                    if (pblock.className == 'highlight-python') {
+                        precode.style.height='200px';
+                        var button = document.createElement('button');
+                        button.innerHTML = 'Expand';
+                        button.style.width = '80px';
+                        button.style.marginLeft = '1em';
+                        button.onclick = function() {
+                            if (this.innerHTML=='Expand') {
+                                var newpre = this.parentNode.childNodes[0].childNodes[0];
+                                newpre.style.height = '';
+                                this.innerHTML = 'Fold';
+                            } else {
+                                var newpre = this.parentNode.childNodes[0].childNodes[0];
+                                newpre.style.height = '200px';
+                                this.innerHTML = 'Expand';
+                            }
+                        };
+                        var button2 = document.createElement('button');
+                        button2.innerHTML = 'Copy';
+                        button2.style.width = '80px';
+                        button2.style.marginLeft = '0.5em';
+                        button2.onclick = function() {
+                        
                             var newpre = this.parentNode.childNodes[0].childNodes[0];
-                            newpre.style.height = '';
-                            this.innerHTML = 'Fold';
-                        } else {
-                            var newpre = this.parentNode.childNodes[0].childNodes[0];
-                            newpre.style.height = '200px';
-                            this.innerHTML = 'Expand';
-                        }
-                    };
-                    var button2 = document.createElement('button');
-                    button2.innerHTML = 'Copy';
-                    button2.style.width = '80px';
-                    button2.style.marginLeft = '0.5em';
-                    button2.onclick = function() {
-
-                        var newpre = this.parentNode.childNodes[0].childNodes[0];
-
-                        // from https://gist.github.com/stephenharris/25d7592f951642637e7a
-                        var textArea = document.createElement("textarea");
-
-            			// Place in top-left corner of screen regardless of scroll position.
-            			textArea.style.position = 'fixed';
-            			textArea.style.top = "-100px";
-		            	textArea.style.left = "-100px";
-
-            			// Ensure it has a small width and height. Setting to 1px / 1em
-            			// doesn't work as this gives a negative w/h on some browsers.
-            			textArea.style.width = '1px';
-            			textArea.style.height = '1px';
-			
-            			// We don't need padding, reducing the size if it does flash render.
-            			textArea.style.padding = 0;
-
-            			// Clean up any borders.
-            			textArea.style.border = 'none';
-            			textArea.style.outline = 'none';
-            			textArea.style.boxShadow = 'none';
-
-            			// Avoid flash of white box if rendered for any reason.
-            			textArea.style.background = 'transparent';
-
-            			//Set value to text to be copied
-			            textArea.value = newpre.textContent;
-
-                        document.body.appendChild(textArea);
-            			textArea.select();
-                        document.execCommand('copy');
-
-                    };
-                    pblock.appendChild(button);
-                    pblock.appendChild(button2);
+                        
+                            // from https://gist.github.com/stephenharris/25d7592f951642637e7a
+                            var textArea = document.createElement("textarea");
+                        
+            				// Place in top-left corner of screen regardless of scroll position.
+            				textArea.style.position = 'fixed';
+            				textArea.style.top = "-100px";
+		                	textArea.style.left = "-100px";
+                        
+            				// Ensure it has a small width and height. Setting to 1px / 1em
+            				// doesn't work as this gives a negative w/h on some browsers.
+            				textArea.style.width = '1px';
+            				textArea.style.height = '1px';
+			            
+            				// We don't need padding, reducing the size if it does flash render.
+            				textArea.style.padding = 0;
+                        
+            				// Clean up any borders.
+            				textArea.style.border = 'none';
+            				textArea.style.outline = 'none';
+            				textArea.style.boxShadow = 'none';
+                        
+            				// Avoid flash of white box if rendered for any reason.
+            				textArea.style.background = 'transparent';
+                        
+            				//Set value to text to be copied
+			                textArea.value = newpre.textContent;
+                        
+                            document.body.appendChild(textArea);
+            				textArea.select();
+                            document.execCommand('copy');
+                        
+                        };
+                        pblock.appendChild(button);
+                        pblock.appendChild(button2);
+                    }
                 }
             }
         }
