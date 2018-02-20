@@ -8,3 +8,5 @@ from .kic  import KIC
 from .epic import EPIC
 
 from . import kepler
+
+from . import utils
