@@ -1,5 +1,7 @@
+import math
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
 from astropy.coordinates import SkyCoord
 
 def plot_skymap(ra, dec, figfile, projection='hammer', figsize=(8,4.5), dpi=150,
@@ -102,7 +104,7 @@ def plot_hrd_histogram(teff, logl, teff_range, logl_range, figfile, figsize=(8,6
 
     fig = plt.figure(figsize=figsize, dpi=dpi)
     ax1 = fig.add_axes([0.1,0.1,0.75,0.85])
-    ax2 = fig.add_axes([0.9,0.1,0.02,0.85])
+    ax2 = fig.add_axes([0.88,0.1,0.03,0.85])
 
     teff1, teff2, dteff = teff_range
     logl1, logl2, dlogl = logl_range
@@ -111,33 +113,34 @@ def plot_hrd_histogram(teff, logl, teff_range, logl_range, figfile, figsize=(8,6
     n_teff = bins_teff.size - 1
     n_logl = bins_logl.size - 1
     
-    h, yedge, xedge = np.histogram2d(logl, teff, bins=[bins_logl, bins_teff])
     if scale=='log':
-        #cax = ax1.imshow(np.log10(h), cmap='Blues', interpolation='none', aspect='auto')
-        import matplotlib.colors as mcolors
-        cax = ax1.hist2d(teff, logl, bins=(bins_teff, bins_logl), cmap='Blues',
-                norm=mcolors.LogNorm())
-        cbar = fig.colorbar(cax[3], cax=ax2)
-        fig.savefig(figfile)
+        norm = mcolors.LogNorm()
     else:
-        cax = ax1.imshow(h, cmap='Blues', interpolation='none', aspect='auto')
-    #cbar = fig.colorbar(cax, cax=ax2)
+        norm = mcolors.Normalize()
 
-    xticks = np.arange(0, n_teff, int(1000/dteff))
-    yticks = np.arange(0, n_logl, int(1/dlogl))
-    ax1.set_xticks(xticks)
-    ax1.set_yticks(yticks)
-    ax1.set_xticklabels(np.int32(xedge[xticks]))
-    ax1.set_yticklabels(['%3.1f'%yedge[t] for t in yticks])
-    ax1.set_xlim(n_teff-0.5, -0.5)
-    ax1.set_ylim(-0.5, n_logl-0.5)
+    _,_,_,cax = ax1.hist2d(teff, logl, bins=(bins_teff, bins_logl), cmap='Blues',
+                            norm=norm)
+    cbar = fig.colorbar(cax, cax=ax2)
+
+    x1, x2 = ax1.get_xlim()
+    ax1.set_xlim(x2, x1)
     ax1.set_xlabel('$T_\mathrm{eff}$ (K)')
     ax1.set_ylabel('$\log(L/L_\odot)$')
-    if scale=='log':
-        #cbar.set_label('$\log{N}$')
-        pass
-    else:
-        cbar.set_label('$N$')
+    cbar.set_label('$N$')
 
-    #fig.savefig(figfile)
+    if scale=='log':
+        c1, c2 = cbar.get_clim()
+        mticks = []
+        power1 = math.floor(math.log10(c1))
+        power2 = math.ceil(math.log10(c2))
+        for power in np.arange(power1, power2):
+            for v in np.arange(1,10)*10**power:
+                if c1 <= v <= c2:
+                    mticks.append(v)
+        mticks = cax.norm(mticks)
+        cbar.ax.yaxis.set_ticks(mticks, minor=True)
+    else:
+        cbar.ax.minorticks_on()
+
+    fig.savefig(figfile)
     plt.close(fig)
