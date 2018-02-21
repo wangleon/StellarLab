@@ -2,13 +2,16 @@ import numpy as np
 import matplotlib.pyplot as plt
 from astropy.coordinates import SkyCoord
 
-def plot_skymap(ra, dec, figfile, figsize=(8,4.5), dpi=150, size=1, alpha=0.1):
+def plot_skymap(ra, dec, figfile, projection='hammer', figsize=(8,4.5), dpi=150,
+    size=1, alpha=0.1):
     '''Plot a skymap of sample stars.
 
     Args:
-        ra (list or :class`numpy.array)`: List of RA.
-        dec (list or :class`numpy.array)`: List of Dec.
+        ra (list or :class:`numpy.array)`: List of RA.
+        dec (list or :class:`numpy.array)`: List of Dec.
         figfile (string): Name of output figure.
+        projection (string): Projection of map. Avialable options include
+            'aitoff', 'mollweide', and 'hammer'.
         figsize (tuple): Size of figure in tuple (width, height).
         dpi (integer): DPI of figure.
         size (float): Size of data points.
@@ -19,7 +22,7 @@ def plot_skymap(ra, dec, figfile, figsize=(8,4.5), dpi=150, size=1, alpha=0.1):
     '''
 
     fig = plt.figure(figsize=figsize, dpi=dpi)
-    ax  = fig.add_axes([0.05, 0.05, 0.9, 0.9], projection='hammer')
+    ax  = fig.add_axes([0.05, 0.05, 0.9, 0.9], projection=projection)
     ra  = np.deg2rad(180-ra)
     dec = np.deg2rad(dec)
     ax.scatter(ra, dec, s=size, c='#1166aa', alpha=alpha, lw=0)
@@ -51,3 +54,33 @@ def plot_skymap(ra, dec, figfile, figsize=(8,4.5), dpi=150, size=1, alpha=0.1):
     # save the figure
     fig.savefig(figfile)
     plt.close(fig)
+
+def plot_magnitude_histogram(mags, band, figfile, bins, figsize=(8,6), dpi=150,
+    color='#1166aa', alpha=1, lw=0.5, yscale='log'):
+    '''Plot the histogram of magnitudes.
+
+    Args:
+        mags (list or :class:`numpy.array`): List of magnitudes.
+        band (string): Band of magnitudes.
+        figfile (string): Name of output figure.
+        bins (list or :class:`numpy.array`): Bins of magnitudes.
+        figsize (tuple): Size of figure in tuple (width, height).
+        dpi (integer): DPI of figure.
+        color (string): Color of histogram bars.
+        alpha (float): A float between (0, 1] representing the transparency of
+            histogram bars.
+        lw (float): Line width of histogram bars.
+        yscale (string): Scale of Y axis. Either 'linear' or 'log'.
+    '''
+
+    fig = plt.figure(figsize=figsize, dpi=dpi)
+    ax = fig.add_axes([0.1,0.1,0.85,0.85])
+    ax.hist(mags, bins=bins, color=color, alpha=alpha, lw=lw)
+    ax.set_yscale(yscale)
+    ax.set_xlabel(band)
+    ax.set_ylabel('$N$')
+
+    # save the figure
+    fig.savefig(figfile)
+    plt.close(fig)
+
