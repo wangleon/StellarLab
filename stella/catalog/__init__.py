@@ -2,6 +2,7 @@ from . import base
 from . import name
 from . import xindex
 
+from .hd   import HD
 from .hip  import HIP, HIP2
 from .tyc2 import TYC2
 from .kic  import KIC

@@ -152,6 +152,22 @@ def _get_HIP_number(name):
     '''
     return _get_star_number1(name, 'HIP')
 
+def _get_HD_number(name):
+    '''Convert star name in *Henry Draper Catalogue* to an integer HD number.
+
+    Args:
+        name (string or integer): Name of the star.
+    Returns:
+        integer: HD number.
+    '''
+    name = name.strip()
+
+    # remove companion code
+    if name[-1].isupper():
+        name = name[0:-1]
+
+    return _get_star_number1(name, 'HD')
+
 def _get_KIC_number(name):
     '''Convert star name in *Kepler Input Catalog* to an integer KIC number.
 
@@ -226,7 +242,7 @@ def get_catalog(name):
         if re.match(exp, name) != None:
             return starcat_re[exp]
 
-    if re.match('\s[ABC]?', name[-2:]) != None:
+    if re.match('^\s[ABC]?$', name[-2:]) != None:
         comp = name[-1]
         name = name[0:-1].strip()
     else:
@@ -234,7 +250,7 @@ def get_catalog(name):
 
     g = name.split()
     if g[-1] in constellations:
-        # name is Bayer, Flamsteed, or Var
+        # name is Bayer, Flamsteed, or Variable
         if g[0].isdigit():
             return 'Flamsteed'
         elif re.match('^[a-zA-Q]\d*$', g[0]):
@@ -307,7 +323,7 @@ def _get_regular_HD_name(name):
         string: Regular HD name `"HD NNNN"` or `"HD NNNN C"`.
     See also:
 
-        * `Henry Draper Catalogue and Extension (III/125A)
+        * `Henry Draper Catalogue and Extension (III/135A)
           <http://vizier.u-strasbg.fr/cgi-bin/VizieR?-source=III/135A/catalog>`_
 
     '''
@@ -326,7 +342,12 @@ def _get_regular_HD_name(name):
 
 def _get_regular_BD_name(name):
     '''Convert a BD name in *Bonner Durchmusterung* to its regular form 
-    `"BD+MM NNNN"`.
+    `"BD+ZZ NNNN"`.
+
+    Args:
+        name (string): Name of a star.
+    Returns:
+        string: Regular BD name `"BD+ZZ NNNN"`.
     '''
     name = name.strip()
     # parse 'BD+33 23' to 'BD +33 23'
@@ -363,7 +384,12 @@ def _get_regular_BD_name(name):
 
 def _get_regular_CD_name(name):
     '''Convert a CD name in *Cordoba Durchmusterung* to its regular form
-    `"CD+MM NNNN"`.
+    `"CD+ZZ NNNN"`.
+
+    Args:
+        name (string): Name of a star.
+    Returns:
+        string: Regular CD name `"CD+ZZ NNNN"`.
     '''
 
     name = name.strip()

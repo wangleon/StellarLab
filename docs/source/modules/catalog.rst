@@ -26,6 +26,7 @@ Parsing Starnames
    _get_regular_TYC_name
    _get_star_number1
    _get_EPIC_number
+   _get_HD_number
    _get_HIP_number
    _get_KIC_number
    _get_TYC_number
@@ -42,11 +43,17 @@ Catalogues
 .. currentmodule:: stella.catalog
 
 .. autosummary::
+   hd._HD
    hip._HIP
    hip._HIP2
    tyc2._TYC2
    kic._KIC
    epic._EPIC
+
+.. automodule:: stella.catalog.hd
+   :members:
+   :private-members:
+   :undoc-members:
 
 .. automodule:: stella.catalog.hip
    :members:
