@@ -38,7 +38,6 @@ def plot_skymap(ra, dec, figfile, projection='hammer', figsize=(8,4.5), dpi=150,
     # plot the galactic plane
     ra_lst = []
     dec_lst = []
-    #c = SkyCoord(0,0, frame='icrs', unit='deg')
     for l in np.arange(0,360):
         c = SkyCoord(l, 0, frame='galactic', unit='deg')
         eq = c.transform_to('icrs')
@@ -46,7 +45,9 @@ def plot_skymap(ra, dec, figfile, projection='hammer', figsize=(8,4.5), dpi=150,
         dec_lst.append(eq.dec.degree)
     ra_lst = np.array(ra_lst)
     dec_lst = np.array(dec_lst)
-    imaxdiff = np.abs(np.diff(ra_lst)).argmax()
+    dist_lst = np.sqrt(ra_lst**2 + dec_lst**2)
+
+    imaxdiff = np.abs(np.diff(dist_lst)).argmax()
     ra_lst = np.roll(ra_lst, -imaxdiff-1)
     dec_lst = np.roll(dec_lst, -imaxdiff-1)
     ra_lst = np.deg2rad(180-ra_lst)
@@ -57,13 +58,13 @@ def plot_skymap(ra, dec, figfile, projection='hammer', figsize=(8,4.5), dpi=150,
     fig.savefig(figfile)
     plt.close(fig)
 
-def plot_magnitude_histogram(mags, band, figfile, bins, figsize=(8,6), dpi=150,
-    color='#1166aa', alpha=1, lw=0.5, yscale='log'):
-    '''Plot the histogram of magnitudes.
+def plot_histogram(mags, xlabel, figfile, bins, figsize=(8,6), dpi=150,
+    color='#1166aa', alpha=1, linewidth=0.5, yscale='log'):
+    '''Plot a histogram.
 
     Args:
         mags (list or :class:`numpy.array`): List of magnitudes.
-        band (string): Band of magnitudes.
+        xlabel (string): Label in X-axis.
         figfile (string): Name of output figure.
         bins (list or :class:`numpy.array`): Bins of magnitudes.
         figsize (tuple): Size of figure in tuple (width, height).
@@ -71,30 +72,34 @@ def plot_magnitude_histogram(mags, band, figfile, bins, figsize=(8,6), dpi=150,
         color (string): Color of histogram bars.
         alpha (float): A float between (0, 1] representing the transparency of
             histogram bars.
-        lw (float): Line width of histogram bars.
+        linewidth (float): Line width of histogram bars.
         yscale (string): Scale of Y axis. Either 'linear' or 'log'.
+    Returns:
+        No returns.
     '''
 
     fig = plt.figure(figsize=figsize, dpi=dpi)
     ax = fig.add_axes([0.1,0.1,0.85,0.85])
-    ax.hist(mags, bins=bins, color=color, alpha=alpha, lw=lw)
+    ax.hist(mags, bins=bins, color=color, alpha=alpha, lw=linewidth)
     ax.set_yscale(yscale)
-    ax.set_xlabel(band)
+    ax.set_xlabel(xlabel)
     ax.set_ylabel('$N$')
 
     # save the figure
     fig.savefig(figfile)
     plt.close(fig)
 
-def plot_hrd_histogram(teff, logl, teff_range, logl_range, figfile, figsize=(8,6),
-    dpi=150, scale='log'):
+def plot_histogram2d(x, y, x_range, y_range, xlabel, ylabel, figfile,
+    reverse_x = False, reverse_y = False, figsize=(8,6), dpi=150, scale='log'):
     '''Plot a 2-D histogram of H-R diagram.
 
     Args:
-        teff (list or :class:`numpy.array`): List of *T*:sub:`eff`.
-        logl (list or :class:`numpy.array`): List of log\ *L*.
-        teff_range (tuple):
-        logl_range (tuple):
+        x (list or :class:`numpy.array`): List of x data.
+        y (list or :class:`numpy.array`): List of y data.
+        x_range (tuple): Beginning, end, and step of x data: (x1, x2, dx).
+        y_range (tuple): Beginning, end, and step of y data: (y1, y2, dy).
+        xlabel (string): Label in x-axis.
+        ylabel (string): Label in y-axis.
         figfile (string): Name of output figure.
         figsize (tuple): Size of figure in tuple (width, height).
         dpi (integer): DPI of figure.
@@ -106,26 +111,30 @@ def plot_hrd_histogram(teff, logl, teff_range, logl_range, figfile, figsize=(8,6
     ax1 = fig.add_axes([0.1,0.1,0.75,0.85])
     ax2 = fig.add_axes([0.88,0.1,0.03,0.85])
 
-    teff1, teff2, dteff = teff_range
-    logl1, logl2, dlogl = logl_range
-    bins_teff = np.arange(teff1, teff2+1e-6, dteff)
-    bins_logl = np.arange(logl1, logl2+1e-6, dlogl)
-    n_teff = bins_teff.size - 1
-    n_logl = bins_logl.size - 1
+    x1, x2, dx = x_range
+    y1, y2, dy = y_range
+    xbins = np.arange(x1, x2+1e-6, dx)
+    ybins = np.arange(y1, y2+1e-6, dy)
+    nx = xbins - 1
+    ny = ybins - 1
     
     if scale=='log':
         norm = mcolors.LogNorm()
     else:
         norm = mcolors.Normalize()
 
-    _,_,_,cax = ax1.hist2d(teff, logl, bins=(bins_teff, bins_logl), cmap='Blues',
-                            norm=norm)
+    _,_,_,cax = ax1.hist2d(x, y, bins=(xbins, ybins), cmap='Blues', norm=norm)
     cbar = fig.colorbar(cax, cax=ax2)
 
-    x1, x2 = ax1.get_xlim()
-    ax1.set_xlim(x2, x1)
-    ax1.set_xlabel('$T_\mathrm{eff}$ (K)')
-    ax1.set_ylabel('$\log(L/L_\odot)$')
+    if reverse_x:
+        _x1, _x2 = ax1.get_xlim()
+        ax1.set_xlim(_x2, _x1)
+    if reverse_y:
+        _y1, _y2 = ax1.get_ylim()
+        ax1.set_ylim(_y2, _y1)
+
+    ax1.set_xlabel(xlabel)
+    ax1.set_ylabel(ylabel)
     cbar.set_label('$N$')
 
     if scale=='log':
