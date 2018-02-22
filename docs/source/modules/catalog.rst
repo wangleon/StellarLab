@@ -103,3 +103,17 @@ Cross Index
     :private-members:
     :undoc-members:
 
+Catalogue Utilities
+-------------------
+
+.. currentmodule:: stella.catalog.utils
+
+.. autosummary::
+    plot_skymap
+    plot_histogram
+    plot_histogram2d
+
+.. automodule:: stella.catalog.utils
+    :members:
+    :private-members:
+    :undoc-members:
