@@ -48,13 +48,24 @@ class _EPIC(object):
     '''
 
     def __init__(self):
-        self.catfile = os.path.join(os.getenv('STELLA_DATA'), 'catalog/EPIC.fits')
-        self._data_info = None
+        self.catfile = {dataset: os.path.join(os.getenv('STELLA_DATA'),
+                                             'catalog/EPIC_%d.fits'%dataset)
+                        for dataset in range(1,7)
+                        }
+        self._epic_ranges = {
+                1: (201000001, 210000000),
+                2: (210000001, 220000000),
+                3: (220000001, 230000000),
+                4: (230000001, 240000000),
+                5: (240000001, 250000000),
+                6: (250000001, 251809654),
+                }
+        self._data_info = {}
         
-    def _get_data_info(self):
+    def _get_data_info(self, dataset):
         '''Get information of FITS table.'''
-        nbyte, nrow, ncol, pos, dtype, fmtfunc = get_bintable_info(self.catfile)
-        self._data_info = {
+        nbyte, nrow, ncol, pos, dtype, fmtfunc = get_bintable_info(self.catfile[dataset])
+        self._data_info[dataset] = {
                 'nbyte'  : nbyte,
                 'nrow'   : nrow,
                 'ncol'   : ncol,
@@ -77,33 +88,25 @@ class _EPIC(object):
         '''
         
         epic = _get_EPIC_number(name)
-
-        if self._data_info is None:
-            self._get_data_info()
-
-        pos     = self._data_info['pos']
-        nrow    = self._data_info['nrow']
-        nbyte   = self._data_info['nbyte']
-        fmtfunc = self._data_info['fmtfunc']
-
-        infile = open(self.catfile, 'rb')
-
-        # the EPIC numbers in the FITS file are increased monotonoically.
-        i1, i2 = 0, nrow-1
-        while(i2-i1 > 1):
-            i3 = int((i1+i2)/2)
-            infile.seek(pos + i3*nbyte, 0)
-            key = struct.unpack('>i',infile.read(4))[0]
-            if epic < key:
-                i2 = i3
-            elif epic > key:
-                i1 = i3
-            else:
+        for dataset, (epic1, epic2) in sorted(self._epic_ranges.items()):
+            if epic1 <= epic <= epic2:
                 break
-        infile.seek(-4,1)
-        item = fmtfunc(infile.read(nbyte))
 
+        if dataset not in self._data_info:
+            self._get_data_info(dataset)
+
+        pos     = self._data_info[dataset]['pos']
+        nrow    = self._data_info[dataset]['nrow']
+        nbyte   = self._data_info[dataset]['nbyte']
+        fmtfunc = self._data_info[dataset]['fmtfunc']
+
+        infile = open(self.catfile[dataset], 'rb')
+        infile.seek(pos + (epic-epic1)*nbyte, 0)
+        item = fmtfunc(infile.read(nbyte))
         infile.close()
+
+        if item['EPIC'] != epic:
+            return None
 
         if output == 'ndarray':
             return item
