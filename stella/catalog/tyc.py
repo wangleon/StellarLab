@@ -72,7 +72,9 @@ class _TYC(object):
             output (string): Type of output results. Either *"dict"* or
                 *"dtype"* (:class:`numpy.dtype`).
         Returns:
-            dict or :class:`numpy.dtype`: Record in catalogue.
+            dict or :class:`numpy.dtype`: Record in catalogue. If input name
+                can't be find in this catalogue, an empty item with TYC=0 is
+                returned.
         Examples:
             Find proper motion of AD Leo (TYC 1423-174-1)
     
@@ -98,9 +100,10 @@ class _TYC(object):
         fmtfunc = self._data_info['fmtfunc']
     
         infile = open(self.catfile, 'rb')
-        i1, i2 = 0, nrow-1
+        i1, i2 = 1, nrow-2
+        find = False
         while(i2-i1 > 1):
-            i3 = int((i1+i2)/2)
+            i3 = (i1+i2)//2
             infile.seek(pos + i3*nbyte, 0)
             key = struct.unpack('>i',infile.read(4))[0]
             if target < key:
@@ -108,8 +111,14 @@ class _TYC(object):
             elif target > key:
                 i1 = i3
             else:
+                find = True
                 break
-        infile.seek(-4,1)
+
+        if find:
+            infile.seek(-4,1)
+        else:
+            # the first element is an empty item
+            infile.seek(pos, 0)
         item = fmtfunc(infile.read(nbyte))
 
         infile.close()
@@ -136,19 +145,19 @@ class _TYC2(object):
         TYC,      integer32, ,       TYC number
         RAdeg,    float64,   deg,    Right ascension (*α*) in ICRS at given epoch
         DEdeg,    float64,   deg,    Declination (*δ*) in ICRS at at given epoch
-        pmRA,     float32,   mas/yr, Proper motion in Right ascension with cos(*δ*) factor
-        pmDE,     float32,   mas/yr, Proper motion in Declination
         e_RA,     integer16, mas,    Error in RA with cos(*δ*) factor at mean epoch (−1 if blank)
         e_DE,     integer16, mas,    Error in Dec at mean epoch (−1 if blank)
-        e_pmRA,   float32,   mas/yr, Error in proper motion in RA
-        e_pmDE,   float32,   mas/yr, Error in proper motion in Dec
         epoch_RA, float32,   yr,     Mean epoch of RA in Julian year
         epoch_DE, float32,   yr,     Mean epoch of Dec in Julian year
-        num,      integer16, ,       Number of positions used (−1 if blank)
         q_RA,     float32,   ,       Goodness of fit for mean RA (truncated to 9.9 if >9.9)
         q_DE,     float32,   ,       Goodness of fit for mean Dec (truncated to 9.9 if >9.9)
+        pmRA,     float32,   mas/yr, Proper motion in Right ascension with cos(*δ*) factor
+        pmDE,     float32,   mas/yr, Proper motion in Declination
+        e_pmRA,   float32,   mas/yr, Error in proper motion in RA
+        e_pmDE,   float32,   mas/yr, Error in proper motion in Dec
         q_pmRA,   float32,   ,       Goodness of fit for pmRA (truncated to 9.9 if >9.9)
         q_pmDE,   float32,   ,       Goodness of fit for pmDE (truncated to 9.9 if >9.9)
+        Num,      integer16, ,       Number of positions used (−1 if blank)
         BTmag,    float32,   mag,    Mean *B*:sub:`T` magnitude
         e_BTmag,  float32,   mag,    Error in *B*:sub:`T` magnitude
         VTmag,    float32,   mag,    Mean *V*:sub:`T` magnitude
@@ -183,7 +192,9 @@ class _TYC2(object):
             output (string): Type of output results. Either *"dict"* or
                 *"dtype"* (:class:`numpy.dtype`).
         Returns:
-            dict or :class:`numpy.dtype`: Record in catalogue.
+            dict or :class:`numpy.dtype`: Record in catalogue. If input name
+                can't be find in this catalogue, an empty item with TYC=0 is
+                returned.
         Examples:
             Find proper motion of Barnard's star (TYC 425-2502-1)
     
@@ -209,9 +220,10 @@ class _TYC2(object):
         fmtfunc = self._data_info['fmtfunc']
     
         infile = open(self.catfile, 'rb')
-        i1, i2 = 0, nrow-1
+        i1, i2 = 1, nrow-2
+        find = False
         while(i2-i1 > 1):
-            i3 = int((i1+i2)/2)
+            i3 = (i1+i2)//2
             infile.seek(pos + i3*nbyte, 0)
             key = struct.unpack('>i',infile.read(4))[0]
             if target < key:
@@ -219,8 +231,14 @@ class _TYC2(object):
             elif target > key:
                 i1 = i3
             else:
+                find = True
                 break
-        infile.seek(-4,1)
+
+        if find:
+            infile.seek(-4,1)
+        else:
+            # the first element is an empty item
+            infile.seek(pos, 0)
         item = fmtfunc(infile.read(nbyte))
         
         # looking for possible companion
