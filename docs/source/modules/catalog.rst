@@ -46,7 +46,8 @@ Catalogues
    hd._HD
    hip._HIP
    hip._HIP2
-   tyc2._TYC2
+   tyc._TYC
+   tyc._TYC2
    kic._KIC
    epic._EPIC
 
@@ -60,7 +61,7 @@ Catalogues
    :private-members:
    :undoc-members:
 
-.. automodule:: stella.catalog.tyc2
+.. automodule:: stella.catalog.tyc
    :members:
    :private-members:
    :undoc-members:
