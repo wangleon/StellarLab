@@ -6,7 +6,9 @@ from ..utils.asciitable import structitem_to_dict
 from .name import _get_SAO_number
 
 class _SAO(object):
-    '''Class for SAO catalog (`I/131A <>`_).
+    '''Class for *Smithsonian Astrophysical Observatory Star Catalog* (`I/131A
+    <http://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=I/131A>`_, SAO Staff
+    1966).
 
     .. csv-table:: Descriptions of Columns in Catalogue
         :header: Key, Type, Unit, Description
@@ -51,7 +53,8 @@ class _SAO(object):
 
     def find_object(self, name, output='dict'):
         '''
-        Find record for an object in *SAO Catalogue*.
+        Find record for an object in *Smithsonian Astrophysical Observatory Star
+        Catalog*.
 
         Args:
             name (string or integer): Name or number of star.
