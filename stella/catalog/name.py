@@ -168,6 +168,23 @@ def _get_HD_number(name):
 
     return _get_star_number1(name, 'HD')
 
+def _get_SAO_number(name):
+    '''Convert star name in *SAO Catalogue* to an integer SAO number.
+
+    Args:
+        name (string or integer): Name of the star.
+    Returns:
+        integer: SAO number.
+    '''
+    name = name.strip()
+
+    # remove companion code
+    if name[-1].isupper():
+        name = name[0:-1]
+
+    return _get_star_number1(name, 'SAO')
+
+
 def _get_KIC_number(name):
     '''Convert star name in *Kepler Input Catalog* to an integer KIC number.
 

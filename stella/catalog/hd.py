@@ -40,7 +40,7 @@ class _HD(object):
                 'ncol'   : ncol,
                 'pos'    : pos,
                 'dtype'  : dtype,
-                'fmtfunc': fmtfunc
+                'fmtfunc': fmtfunc,
                 }
 
     def find_object(self, name, output='dict'):
