@@ -3,9 +3,9 @@ SAO catalogue
 
 Convert ASCII to FITS Table
 ---------------------------
-Below example converts the ASCII files of HIP to FITS file.
+Below example converts the ASCII files of SAO to FITS file.
 
-.. literalinclude:: convert_HIP.py
+.. literalinclude:: convert.py
    :language: python
 
 
