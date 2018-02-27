@@ -3,6 +3,7 @@ from . import name
 from . import xindex
 
 from .hd   import HD
+from .bsc  import BSC
 from .sao  import SAO
 from .hip  import HIP, HIP2
 from .tyc  import TYC, TYC2
