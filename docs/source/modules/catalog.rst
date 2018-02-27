@@ -28,6 +28,7 @@ Parsing Starnames
    _get_EPIC_number
    _get_HD_number
    _get_HIP_number
+   _get_HR_number
    _get_KIC_number
    _get_SAO_number
    _get_TYC_number
@@ -52,6 +53,7 @@ Catalogues
    kic._KIC
    epic._EPIC
    sao._SAO
+   bsc._BSC
 
 .. automodule:: stella.catalog.hd
    :members:
@@ -84,6 +86,11 @@ Catalogues
    :undoc-members:
 
 .. automodule:: stella.catalog.sao
+   :members:
+   :private-members:
+   :undoc-members:
+
+.. automodule:: stella.catalog.bsc
    :members:
    :private-members:
    :undoc-members:
