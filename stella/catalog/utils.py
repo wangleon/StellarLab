@@ -36,23 +36,18 @@ def plot_skymap(ra, dec, figfile, projection='hammer', figsize=(8,4.5), dpi=150,
         tick.label1.set_fontsize(10)
 
     # plot the galactic plane
-    ra_lst = []
-    dec_lst = []
-    for l in np.arange(0,360):
-        c = SkyCoord(l, 0, frame='galactic', unit='deg')
-        eq = c.transform_to('icrs')
-        ra_lst.append(eq.ra.degree)
-        dec_lst.append(eq.dec.degree)
-    ra_lst = np.array(ra_lst)
-    dec_lst = np.array(dec_lst)
-    dist_lst = np.sqrt(ra_lst**2 + dec_lst**2)
-
-    imaxdiff = np.abs(np.diff(dist_lst)).argmax()
-    ra_lst = np.roll(ra_lst, -imaxdiff-1)
+    c = SkyCoord(np.arange(360), 0, frame='galactic', unit='deg')
+    eq = c.transform_to('icrs')
+    ra_lst  = eq.ra.degree
+    dec_lst = eq.dec.degree
+    imaxdiff = np.abs(np.diff(ra_lst)).argmax()
+    ra_lst  = np.roll(ra_lst, -imaxdiff-1)
     dec_lst = np.roll(dec_lst, -imaxdiff-1)
-    ra_lst = np.deg2rad(180-ra_lst)
+    ra_lst  = np.deg2rad(180-ra_lst)
     dec_lst = np.deg2rad(dec_lst)
-    ax.plot(ra_lst, dec_lst, 'k--', lw=0.8)
+    ax.plot(ra_lst, dec_lst, 'k--', lw=0.8, label='Galactic Plane')
+
+    ax.legend(loc='upper right')
 
     # save the figure
     fig.savefig(figfile)
