@@ -146,7 +146,7 @@ def save_txt(filename, data, format_dict=None):
         for rec in data.dtype.descr:
             if rec[1][1]=='S':
                 for s in data[:][rec[0]]:
-                    if delimiter in s:
+                    if delimiter in s.decode('utf-8'):
                         has_delimiter = True
                         break
             if has_delimiter:
@@ -168,13 +168,21 @@ def save_txt(filename, data, format_dict=None):
     maxlens = [0 for v in names]
     for row in data:
         for i,s in enumerate(row):
-            if len(str(s))>maxlens[i]:
-                maxlens[i] = len(str(s))
+            if data.dtype.descr[i][1][1] == 'S':
+                string = s.decode('utf-8')
+            else:
+                string = str(s)
+            maxlens[i] = max(maxlens[i], len(string))
 
     # write data
     if format_dict == None:
         for row in data:
-            lst = [str(v).ljust(maxlens[i]) for i,v in enumerate(list(row))]
+            lst = []
+            for i,v in enumerate(list(row)):
+                if data.dtype.descr[i][1][1] == 'S':
+                    v = v.decode('utf-8')
+                string = str(v).ljust(maxlens[i])
+                lst.append(string)
             file1.write('%s%s'%(delimiter.join(lst), os.linesep))
     else:
         for row in data:
