@@ -1,3 +1,4 @@
+import numpy as np
 import re
 
 constellations = {
@@ -139,6 +140,9 @@ def _get_star_number1(name, key):
             return int(name)
         else:
             return None
+    elif issubclass(type(name), np.integer):
+        # input is a numpy integer (e.g., type(name) = <class 'numpy.int32'>)
+        return int(name)
     else:
         return None
 
