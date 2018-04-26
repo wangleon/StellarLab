@@ -24,7 +24,7 @@ Summaries
 
 Hipparcos Catalogue (HIP)
 --------------------------
-The Hipparcos Catalogue (`I/239
+The *Hipparcos Catalogue* (`I/239
 <http://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=I/239>`_, Perryman et al.
 1997 [#Perryman1997]_) is the product of the *Hipparcos* satellite of the
 European Space Agency (ESA).
@@ -38,19 +38,36 @@ brighter than 9.
 The published astrometric solutions are given in International Celestial
 Reference System (ICRS) at epoch J1991.25.
 
+.. figure:: examples/catalog_HIP/maghist_hip.png
+    :alt: HIP Magnitude histograms
+    :align: center
+    :width: 500px
+    :figwidth: 500px
+    
+    Histogram of *V* magnitudes
+
+.. figure:: examples/catalog_HIP/hrdhist_hip.png
+    :alt: HIP HRD
+    :align: center
+    :width: 500px
+    :figwidth: 500px
+    
 .. _catalog_hip2:
 
-van Leeuwen 2007 [#vanLeeuwen2007]_ presents the new reduction of *Hipparcos*
-astrometric data (`I/311
-<http://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=I/311>`_).
+van Leeuwen 2007 [#vanLeeuwen2007]_ presents the new reduction (`I/311
+<http://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=I/311>`_) of *Hipparcos*
+astrometric data.
+A comparison of parallaxes between HIP (I/239, Perryman 1997) and HIP New
+Reduction (I/311, van Leeuwen 2007) is shown below.
 
-.. figure:: examples/catalog_HIP/histogram.png
-    :alt: HIP histograms
+.. figure:: examples/catalog_HIP/compare_parallax.png
+    :alt: comparison of parallaxes between HIP and HIP2
     :align: center
     :width: 900px
     :figwidth: 900px
-    
-    Histogram of *V* magnitudes (*left*) and H-R diagram (*right*)
+
+    Comparison of parallaxes between HIP and HIP2.
+
 
 .. currentmodule:: stella.catalog
 .. autosummary::
@@ -61,18 +78,27 @@ astrometric data (`I/311
 
 .. _catalog_tyc2:
 
-Tycho-2 Catalogue (TYC-2)
--------------------------
-The Tycho-2 Catalogue (`I/259
-<http://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=I/259>`_, Høg et al. 2000
-[#Hog2000]_) contains atrometric and two-colour photometric reference data for
-2.5 million brightest stars on the entire sky.
+Tycho Catalogues (TYC)
+----------------------
+The *Tycho Catalogue* (`I/239/tyc_main
+<http://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=I/239/tyc_main>`_, ESA
+1997) contains astrometric and two-colour photometric data for 1.06 million
+stars.
 It is based on the observational data collected by the ESA *Hipparcos*
 satellite.
-Proper motions are givenfor 96% of the stars based on the observed positions
+The right ascensions and declinations are given in the epoch of J1991.25 in
+the ICRS reference system.
+
+Based on an advanced reduction technique, Høg et al. 2000 [#Hog2000]_ presents
+the *Tycho-2 Catalogue* (`I/259
+<http://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=I/259>`_) containing 2.5
+million stars.
+The right ascensions and declinations are transferred to the epoch of J2000.0
+in the ICRS reference system.
+Proper motions are given for 96% of the stars based on the observed positions
 in Tycho-2, the Astrographic Catalogue (AC) and 143 other ground-based
 catalogues.
-The uncertainty on proper motion is 2.5 mas/yr.
+The typical uncertainty on proper motion is ~2.5 mas/yr.
 Supplement-1 lists stars included the Hipparcos and Tycho-1 Catalogues but not
 in TYC-2, and Supplement-2 lists 1146 Tycho-1 sstars which are probably either
 false or heavily disturbed.
@@ -95,18 +121,18 @@ given intervals of *V*:sub:`T` magnitude (from Table 2 of Høg et al. 2000).
     Median errors in *B*:sub:`T` magnitudes,        0.015,    0.016,    0.020,    0.033,     0.068,     0.173,       0.248,     0.143,       0.018
     Median errors in *V*:sub:`T` magnitudes,        0.010,    0.011,    0.014,    0.023,     0.050,     0.114,       0.198,     0.100,       0.013
 
-.. figure:: images/2000A&A...355L..27H.Fig1.png
-    :alt: Stellar densities in Tycho-2 Catalogue
+.. figure:: examples/catalog_TYC/maghist_tyc2.png
+    :alt: Magnitude histogram of Tycho-2 Catalogue
     :align: center
-    :width: 450px
-    :figwidth: 600px
+    :width: 500px
+    :figwidth: 500px
 
-    Stellar densities in Tycho-2 Catalogue in galactic coordinates. From Figure
-    1 of Høg et al. 2000
+    *V*:sub:`T` histogram of *Tycho-2 Catalogue*
 
 .. currentmodule:: stella.catalog
 .. autosummary::
-    tyc2._TYC2.find_object
+    tyc._TYC.find_object
+    tyc._TYC2.find_object
 
 .. _catalog_kic:
 
@@ -176,19 +202,37 @@ Mathur et al. 2017 [#Mathur2017]_ presented revised stellar properties for
 
 K2 Ecliptic Plane Input Catalog (EPIC)
 --------------------------------------
-The *K2* Ecliptic Plane Input Catalog (EPIC, Huber et al. 2016 [#Huber2016]_)
-provides photometry, kinematics, and stellar parameters to support target
-selection for the *K2* mission (Howell et al. 2014 [#Howell2014]_).
-There are 138,600 targets in *K2* Campaigns 1-8, including K-M dwarfs (~41%),
-F-G dwarfs (~36%), and K giants (~21%).
+The *K2* Ecliptic Plane Input Catalog (`EPIC
+<https://archive.stsci.edu/missions/k2/catalogs/>`_) provides photometry,
+kinematics, and stellar parameters to support target selection for the *K2*
+mission (Howell et al. 2014 [#Howell2014]_).
+The stellar parameters are derived with the method described in Huber et al.
+2016 [#Huber2016]_.
+The latest version of EPIC updated in Dec. 19, 2017 contains 50,546,248 sources.
 
-.. figure:: examples/catalog_EPIC/histogram_hrd.png
-    :alt: EPIC HRD
+.. figure:: examples/catalog_EPIC/skymap_epic.png
+    :alt: Skymap of EPIC
     :align: center
     :width: 500px
     :figwidth: 500px
 
-    2D histogram of EPIC stars on *T*:sub:`eff` − log\ *g* plane.
+    Skymap of EPIC sources
+
+.. figure:: examples/catalog_EPIC/maghist_epic.png
+    :alt: Magnitude histogram of EPIC
+    :align: center
+    :width: 500px
+    :figwidth: 500px
+
+    *K*:sub:`p` magnitude histogram of EPIC sources
+
+.. figure:: examples/catalog_EPIC/kielhist_epic.png
+    :alt: EPIC Kiel
+    :align: center
+    :width: 500px
+    :figwidth: 500px
+
+    Kiel diagram of EPIC stars
 
 .. currentmodule:: stella.catalog
 .. autosummary::

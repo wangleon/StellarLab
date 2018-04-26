@@ -1,4 +1,5 @@
 import os
+import math
 import struct
 import numpy as np
 from ..utils.fitsio import get_bintable_info
@@ -122,6 +123,12 @@ class _TYC(object):
         item = fmtfunc(infile.read(nbyte))
 
         infile.close()
+
+        # change epoch
+        pm_ra = item['pmRA']*1e-3/3600. # convert pm_RA from mas/yr to deg/yr
+        pm_de = item['pmDE']*1e-3/3600. # convert pm_DE from mas/yr to deg/yr
+        item['RAdeg'] += (epoch-1991.25)*pm_ra/math.cos(item['DEdeg']/180.*math.pi)
+        item['DEdeg'] += (epoch-1991.25)*pm_de
     
         if output == 'ndarray':
             return item
@@ -241,6 +248,12 @@ class _TYC2(object):
             infile.seek(pos, 0)
         item = fmtfunc(infile.read(nbyte))
         
+        # change epoch
+        pm_ra = item['pmRA']*1e-3/3600. # convert pm_RA from mas/yr to deg/yr
+        pm_de = item['pmDE']*1e-3/3600. # convert pm_DE from mas/yr to deg/yr
+        item['RAdeg'] += (epoch-2000.0)*pm_ra/math.cos(item['DEdeg']/180.*math.pi)
+        item['DEdeg'] += (epoch-2000.0)*pm_de
+
         # looking for possible companion
         if i3 != nrow - 1:
             key2 = struct.unpack('>i',infile.read(4))[0]
