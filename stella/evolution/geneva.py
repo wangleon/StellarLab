@@ -7,33 +7,32 @@ from scipy.interpolate import splprep, splev
 from ..parameter.metal import feh_to_z
 from ..utils.interpolation import newton
 
-class Geneva(object):
+class _Geneva(object):
     '''Geneva stellar evolution tracks and isochrones.
 
-
     .. csv-table:: Structure of Geneva track file
-        :header: "Key", "Type", "Unit", "Description"
+        :header: Key, Type, Unit, Description
         :widths: 30, 30, 30, 100
 
-        "z",       "float32",   "",            "Metal content"
-        "m0",      "float32",   "*M*:sub:`⊙`", "Initial mass"
-        "n",       "integer16", "",            "Number of data points"
-        "logTeff", "float32",   "",            "log\ :sub:`10`\ (*T*:sub:`eff`)"
-        "logL",    "float32",   "",            "log\ :sub:`10`\ (*L*\ /\ *L*:sub:`⊙`)"
-        "age",     "float32",   "Gyr",         "Age"
-        "mass",    "float32",   "*M*:sub:`⊙`", "Actual mass"
+        z,       float32,   ,            Metal content
+        m0,      float32,   *M*:sub:`⊙`, Initial mass
+        n,       integer16, ,            Number of data points
+        logTeff, float32,   ,            log\ :sub:`10`\ (*T*:sub:`eff`)
+        logL,    float32,   ,            log\ :sub:`10`\ (*L*\ /\ *L*:sub:`⊙`)
+        age,     float32,   Gyr,         Age
+        mass,    float32,   *M*:sub:`⊙`, Actual mass
     
     .. csv-table:: Structure of Geneva isocrhone file
-        :header: "Key", "Type", "Unit", "Description"
+        :header: Key, Type, Unit, Description
         :widths: 30, 30, 30, 100
 
-        "z",       "float32",   "",            "Metal content"
-        "logage",  "float32",   "",            "log\ :sub:`10`\ (age)"
-        "n",       "integer16", "",            "Number of data points"
-        "m0",      "float32",   "*M*:sub:`⊙`", "Initial mass"
-        "mass",    "float32",   "*M*:sub:`⊙`", "Actual mass"
-        "logTeff", "float32",   "",            "log\ :sub:`10`\ (*T*:sub:`eff`)"
-        "logL",    "float32",   "",            "log\ :sub:`10`\ (*L*\ /\ *L*:sub:`⊙`)"
+        z,       float32,   ,            Metal content
+        logage,  float32,   ,            log\ :sub:`10`\ (age)
+        n,       integer16, ,            Number of data points
+        m0,      float32,   *M*:sub:`⊙`, Initial mass
+        mass,    float32,   *M*:sub:`⊙`, Actual mass
+        logTeff, float32,   ,            log\ :sub:`10`\ (*T*:sub:`eff`)
+        logL,    float32,   ,            log\ :sub:`10`\ (*L*\ /\ *L*:sub:`⊙`)
 
     '''
 
@@ -258,6 +257,8 @@ class Geneva(object):
             isochrone = interepolate_param(isochronez_lst, np.log10(z_lst), math.log10(z))
 
         return isochrone
+
+Geneva = _Geneva()
 
 def interpolate_data(track, n, k=1):
     '''Interpolate the evolution track.

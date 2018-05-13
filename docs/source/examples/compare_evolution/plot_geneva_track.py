@@ -10,21 +10,20 @@ from stella.evolution.geneva import Geneva
 
 def main():
     
-    geneva = Geneva()
-
     feh1, feh2 = -3, 0.5
     cnorm = colors.Normalize(vmin=feh1, vmax=feh2)
     scalarmap = cmap.ScalarMappable(norm=cnorm, cmap=cmap.jet)
     
-    family = 'serif'
+    #family = 'serif'
     fig = plt.figure(figsize=(8,6), dpi=150)
     ax  = fig.add_axes([0.1,0.1,0.7,0.85])
     axc = fig.add_axes([0.84,0.1,0.03,0.85])
     for iz, z in enumerate([0.020, 0.004, 0.001]):
+        # solar z = 0.0134 from Asplund 2009
         M_H = math.log10(z/0.0134)
         color = scalarmap.to_rgba(M_H)
         for im,m0 in enumerate([1.0, 2.0, 5.0]):
-            track = geneva.get_track(mass0=m0, z=z)
+            track = Geneva.get_track(mass0=m0, z=z)
             logTeff_lst = track[0]
             logL_lst    = track[1]
             if im == 0:
@@ -43,7 +42,7 @@ def main():
     ax.set_xlabel('$\log(T_\mathrm{eff})$')
     ax.set_ylabel('$\log(L/L_\odot)$')
     cbar = fig.colorbar(cax, cax=axc, ticks=np.arange(feh1, feh2+1e-5, 0.5))
-    cbar.set_label('[Fe/H]', family=family)
+    cbar.set_label('[Fe/H]')
     ax.set_xlim(4.4, 3.5)
     ax.set_ylim(-1, 5)
     ax.xaxis.set_major_locator(tck.MultipleLocator(0.2))
