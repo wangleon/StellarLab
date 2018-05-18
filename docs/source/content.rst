@@ -20,7 +20,7 @@ Modules
    
    modules/extinction
    modules/catalog
-   modules/evolution/*
+   modules/evolution
    modules/parameter
    modules/spectrum
    modules/kinetics/*

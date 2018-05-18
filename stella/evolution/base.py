@@ -17,7 +17,6 @@ def interpolate_data(track, n, k=1):
     newt   = splev(newx, tck)
     return (newt[0], newt[1], newt[2], newt[3])
 
-
 def interpolate_param(track_lst, param_lst, param):
     '''Interpolate the tracks over a certain parameter space.
 
@@ -47,4 +46,3 @@ def interpolate_param(track_lst, param_lst, param):
     newtrack = tuple(inter2[:,k] for k in range(nparam))
 
     return newtrack
-
