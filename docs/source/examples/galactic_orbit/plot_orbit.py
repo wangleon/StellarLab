@@ -5,7 +5,7 @@ from scipy.integrate import odeint
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from astropy.coordinates import SkyCoord
-from stella.catalog  import find_catalog
+from stella.catalog  import HIP2
 from stella.kinetics import potential
 from stella.kinetics import orbit
 from stella.constant import pc
@@ -34,8 +34,7 @@ x_lst, y_lst, z_lst = orbit.compute_Galorbit(
 
 # HD 122563 = HIP 68594
 hip = 68594
-
-item = find_catalog.find_HIP2(hip)
+item = HIP2.find_object(hip)
 ra = item['RAdeg']
 dec = item['DEdeg']
 rv = (-26.58, 0.15)
