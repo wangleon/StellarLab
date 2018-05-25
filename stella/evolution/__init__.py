@@ -3,6 +3,7 @@ from .y2     import Y2Track
 #from .y2pms  import Y2PMSTrack
 #from .geneva import GenevaTrack
 from . import geneva
+from .yapsi import YaPSI
 
 def get_track(track,**kwargs):
     track = track.lower().strip()

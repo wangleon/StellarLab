@@ -106,11 +106,11 @@ class _Geneva(object):
         the Geneva evolution track database.
     
         Args:
-            mass0 (float): Initial mass
-            z (float): Metal content
-            n (int, optional): number of interpolated points
+            mass0 (float): Initial mass.
+            z (float): Metal content.
+            n (int, optional): number of interpolated points.
         Returns:
-            tuple: A tuple containing (log\ *T*:sub:`eff`, log\ *L*, age, *M*)
+            tuple: A tuple containing (log\ *T*:sub:`eff`, log\ *L*, age, *M*).
         '''
         if self._track_data is None:
             self._load_tracks()
