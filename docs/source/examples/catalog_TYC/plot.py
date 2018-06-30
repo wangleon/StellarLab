@@ -2,9 +2,35 @@
 import os
 import numpy as np
 import astropy.io.fits as fits
+import matplotlib.pyplot as plt
+
 from stella.parameter.teff import _BV_to_Teff_Flower1996
 from stella.parameter.bc import _Teff_to_BC_Flower1996
-from stella.catalog.utils import plot_skymap, plot_histogram, plot_histogram2d
+from stella.catalog.utils import plot_skymap
+
+
+def plot_histogram(vtmag, figfile):
+    # plot magnitude histogram
+    bins = np.arange(-2,16)
+    fig = plt.figure(figsize=(8,6), dpi=150)
+    ax = fig.add_axes([0.1,0.1,0.88,0.85])
+    ax.hist(vtmag, bins=bins, color='#1166aa', rwidth=0.9)
+    ax.set_axisbelow(True)
+    ax.set_facecolor('#dddddd')
+    ax.yaxis.grid(True, color='w', linestyle='-', linewidth=1)
+    ax.set_yscale('log')
+    # change tick size
+    for tick in ax.xaxis.get_major_ticks():
+        tick.label1.set_fontsize(13)
+    for tick in ax.yaxis.get_major_ticks():
+        tick.label1.set_fontsize(13)
+    ax.set_xlabel('$V_\mathrm{T}$', fontsize=15)
+    ax.set_ylabel('$N$', fontsize=15)
+    ax.set_xticklabels(np.arange(-2, 16, 2))
+    ax.set_ylim(0.5, 2e6)
+    # save the figure
+    fig.savefig(figfile)
+    plt.close(fig)
 
 def main():
 
@@ -20,10 +46,9 @@ def main():
     # plot magnitude histogram
     mask = np.isnan(data['VTmag'])
     vtmag = data[~mask]['VTmag']
-    bins = np.arange(0,16)
-    plot_histogram(vtmag, '$V_\mathrm{T}$', 'maghist_tyc2.png', bins=bins, yscale='log')
+    plot_histogram(vtmag, 'maghist_tyc2.png')
 
-
+    #---------------------------------------------------------------------------
     # read data file
     catfile = os.path.join(os.getenv('STELLA_DATA'), 'catalog/TYC.fits')
     data = fits.getdata(catfile)
@@ -36,30 +61,7 @@ def main():
     # plot magnitude histogram
     mask = np.isnan(data['VTmag'])
     vtmag = data[~mask]['VTmag']
-    bins = np.arange(0,16)
-    plot_histogram(vtmag, '$V_\mathrm{T}$', 'maghist_tyc.png', bins=bins, yscale='log')
-
-
-    exit()
-    # plot HRD
-    mask1 = ~np.isnan(data['Plx'])
-    mask2 = ~np.isnan(data['B-V'])
-    data = data[mask1*mask2]
-    mask = data['Plx']>0
-    data = data[mask]
-    Mv = data['Vmag'] - 5*np.log10(1000./data['Plx']) + 5
-    Teff = _BV_to_Teff_Flower1996(data['B-V'])
-    mask = Teff>0
-    Teff=Teff[mask]
-    BC = np.array([_Teff_to_BC_Flower1996(t) for t in Teff])
-    Mbol = Mv[mask] + BC
-    logL = 0.4*(4.74-Mbol)
-
-    plot_histogram2d(Teff, logL, (3000, 12000, 100), (-2,4,0.1),
-            xlabel='$T_\mathrm{eff}$ (K)',
-            ylabel='$\log(L/L_\odot)$',
-            reverse_x=True,
-            figfile='hrdhist_hip.png')
+    plot_histogram(vtmag, 'maghist_tyc.png')
 
 if __name__=='__main__':
     main()
