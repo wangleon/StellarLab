@@ -1,5 +1,6 @@
 import math
 import numpy as np
+import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 from astropy.coordinates import SkyCoord
@@ -28,7 +29,7 @@ def plot_skymap(ra, dec, figfile, projection='hammer', figsize=(8,4.5), dpi=150,
     ra  = np.deg2rad(180-ra)
     dec = np.deg2rad(dec)
     ax.scatter(ra, dec, s=size, c='#1166aa', alpha=alpha, lw=0)
-    ax.grid(True)
+    ax.grid(True, color='k', linestyle=':', linewidth=0.5)
     ax.set_xticklabels(['%dh'%v for v in np.arange(22,0,-2)])
     for tick in ax.xaxis.get_major_ticks():
         tick.label1.set_fontsize(10)
@@ -54,7 +55,8 @@ def plot_skymap(ra, dec, figfile, projection='hammer', figsize=(8,4.5), dpi=150,
     plt.close(fig)
 
 def plot_histogram(mags, xlabel, figfile, bins, figsize=(8,6), dpi=150,
-    color='#1166aa', alpha=1, linewidth=0.5, yscale='log'):
+    color='#1166aa', alpha=1, linewidth=0.5, yscale='log', labelsize=15,
+    ticksize=13):
     '''Plot a histogram.
 
     Args:
@@ -69,16 +71,29 @@ def plot_histogram(mags, xlabel, figfile, bins, figsize=(8,6), dpi=150,
             histogram bars.
         linewidth (float): Line width of histogram bars.
         yscale (string): Scale of Y axis. Either 'linear' or 'log'.
+        labelsize (integer): Size of X and Y axis labels.
+        ticksize (integer): Size of tick labels.
     Returns:
         No returns.
     '''
 
     fig = plt.figure(figsize=figsize, dpi=dpi)
     ax = fig.add_axes([0.1,0.1,0.85,0.85])
-    ax.hist(mags, bins=bins, color=color, alpha=alpha, lw=linewidth)
+    ax.hist(mags, bins=bins, color=color, alpha=alpha, lw=linewidth,
+            rwidth=0.9, zorder=1)
+    ax.set_axisbelow(True)
+    ax.set_facecolor('#dddddd')
+    ax.yaxis.grid(True, color='w', linestyle='-', linewidth=1, zorder=-1)
     ax.set_yscale(yscale)
-    ax.set_xlabel(xlabel)
-    ax.set_ylabel('$N$')
+
+    # change tick size
+    for tick in ax.xaxis.get_major_ticks():
+        tick.label1.set_fontsize(ticksize)
+    for tick in ax.yaxis.get_major_ticks():
+        tick.label1.set_fontsize(ticksize)
+
+    ax.set_xlabel(xlabel, fontsize=labelsize)
+    ax.set_ylabel('$N$', fontsize=labelsize)
 
     # save the figure
     fig.savefig(figfile)

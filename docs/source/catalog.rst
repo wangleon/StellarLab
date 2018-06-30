@@ -37,21 +37,20 @@ The median error in parallax is 0.97 mas for stars with *Hipparcos* magnitudes
 brighter than 9.
 The published astrometric solutions are given in International Celestial
 Reference System (ICRS) at epoch J1991.25.
+Below are the skymap, *V* magnitude histogram, and 2D HRD histogram of the
+*Hipparcos Catalogue*.
 
-.. figure:: examples/catalog_HIP/maghist_hip.png
-    :alt: HIP Magnitude histograms
-    :align: center
-    :width: 500px
-    :figwidth: 500px
-    
-    Histogram of *V* magnitudes
-
-.. figure:: examples/catalog_HIP/hrdhist_hip.png
-    :alt: HIP HRD
-    :align: center
-    :width: 500px
-    :figwidth: 500px
-    
+.. image:: examples/catalog_HIP/skymap_hip.png
+    :alt: Skymap of HIP 
+    :height: 270px
+.. image:: examples/catalog_HIP/maghist_hip.png
+    :alt: Magnitude histogram of HIP
+    :height: 270px
+.. image:: examples/catalog_HIP/hrdhist_hip.png
+    :alt: Magnitude histogram of HIP
+    :height: 270px
+   
+   
 .. _catalog_hip2:
 
 van Leeuwen 2007 [#vanLeeuwen2007]_ presents the new reduction (`I/311
@@ -71,7 +70,9 @@ Reduction (I/311, van Leeuwen 2007) is shown below.
 
 .. currentmodule:: stella.catalog
 .. autosummary::
+    hip._HIP
     hip._HIP.find_object
+    hip._HIP2
     hip._HIP2.find_object
     name._get_HIP_number
 
@@ -121,17 +122,20 @@ given intervals of *V*:sub:`T` magnitude (from Table 2 of Høg et al. 2000).
     Median errors in *B*:sub:`T` magnitudes,        0.015,    0.016,    0.020,    0.033,     0.068,     0.173,       0.248,     0.143,       0.018
     Median errors in *V*:sub:`T` magnitudes,        0.010,    0.011,    0.014,    0.023,     0.050,     0.114,       0.198,     0.100,       0.013
 
-.. figure:: examples/catalog_TYC/maghist_tyc2.png
-    :alt: Magnitude histogram of Tycho-2 Catalogue
-    :align: center
-    :width: 500px
-    :figwidth: 500px
+.. image:: examples/catalog_TYC/skymap_tyc2.png
+    :alt: Skymap of HIP 
+    :height: 350px
+.. image:: examples/catalog_TYC/maghist_tyc2.png
+    :alt: Magnitude histogram of HIP
+    :height: 350px
 
-    *V*:sub:`T` histogram of *Tycho-2 Catalogue*
+Skymap and *V*:sub:`T` magnitude histogram of *Tycho-2 Catalogue*.
 
 .. currentmodule:: stella.catalog
 .. autosummary::
+    tyc._TYC
     tyc._TYC.find_object
+    tyc._TYC2
     tyc._TYC2.find_object
 
 .. _catalog_kic:
