@@ -8,7 +8,6 @@ from stella.parameter.teff import _BV_to_Teff_Flower1996
 from stella.parameter.bc import _Teff_to_BC_Flower1996
 from stella.catalog.utils import plot_skymap
 
-
 def plot_histogram(vtmag, figfile):
     # plot magnitude histogram
     bins = np.arange(-2,16)
@@ -26,7 +25,8 @@ def plot_histogram(vtmag, figfile):
         tick.label1.set_fontsize(13)
     ax.set_xlabel('$V_\mathrm{T}$', fontsize=15)
     ax.set_ylabel('$N$', fontsize=15)
-    ax.set_xticklabels(np.arange(-2, 16, 2))
+    ax.set_xticks(np.arange(-2, 16+1e-3, 2))
+    ax.set_xlim(-2, 16)
     ax.set_ylim(0.5, 2e6)
     # save the figure
     fig.savefig(figfile)

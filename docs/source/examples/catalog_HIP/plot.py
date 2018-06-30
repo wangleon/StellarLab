@@ -41,7 +41,8 @@ def main():
         tick.label1.set_fontsize(13)
     ax.set_xlabel('$V$', fontsize=15)
     ax.set_ylabel('$N$', fontsize=15)
-    ax.set_xticklabels(np.arange(-2, 16, 2))
+    ax.set_xticks(np.arange(-2, 16+1e-3, 2))
+    ax.set_xlim(-3, 16)
     # save the figure
     fig.savefig('maghist_hip.png')
     plt.close(fig)
