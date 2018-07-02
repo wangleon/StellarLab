@@ -10,23 +10,23 @@ Below example converts the ASCII files of KIC to FITS file.
 .. literalinclude:: convert.py
    :language: python
 
-Plotting Histograms
--------------------
+Skymap, Magnitudes, and Kiel diagram
+------------------------------------
+Below example plots the skymap, histogram of *K*:sub:`p` magnitudes, and Kiel
+diagram of KIC.
 
-Below example shows the histogram of *K*:sub:`p` magnitudes and 2D histogram
-of KIC.
-
-.. literalinclude:: plot_histogram.py
+.. literalinclude:: plot.py
    :language: python
 
-.. figure:: histogram.png
-    :alt: KIC statistics
-    :align: center
-    :width: 900px
-    :figwidth: 900px
-    
-    Histogram of *K*:sub:`p` magnitudes (*left*) and |Teff| - log\ *g*
-    diagram (*right*)
+.. image:: skymap_kic.png
+    :alt: Skymap of KIC
+    :height: 270px
+.. image:: maghist_kic.png
+    :alt: Magnitude histogram of KIC
+    :height: 270px
+.. image:: kielhist_kic.png
+    :alt: Kiel diagram histogram of KIC
+    :height: 270px
 
 Counting Parameters
 -------------------
