@@ -41,13 +41,13 @@ Below are the skymap, *V* magnitude histogram, and 2D HRD histogram of the
 *Hipparcos Catalogue*.
 
 .. image:: examples/catalog_HIP/skymap_hip.png
-    :alt: Skymap of HIP 
+    :alt: Skymap of HIP
     :height: 270px
 .. image:: examples/catalog_HIP/maghist_hip.png
     :alt: Magnitude histogram of HIP
     :height: 270px
 .. image:: examples/catalog_HIP/hrdhist_hip.png
-    :alt: Magnitude histogram of HIP
+    :alt: HRD histogram of HIP
     :height: 270px
    
    
@@ -188,17 +188,21 @@ Mathur et al. 2017 [#Mathur2017]_ presented revised stellar properties for
     Response curves of the *Kepler* telescope. From Koch et al. 2010
     [#Koch2010]_
 
-.. figure:: examples/catalog_KIC/histogram.png
-    :alt: KIC statistics
-    :align: center
-    :width: 900px
-    :figwidth: 900px
-    
-    Histogram of *K*:sub:`p` magnitudes (*left*) and |Teff| - log\ *g*
-    diagram (*right*)
+
+.. image:: examples/catalog_KIC/skymap_kic.png
+    :alt: Skymap of KIC
+    :height: 270px
+.. image:: examples/catalog_KIC/maghist_kic.png
+    :alt: Magnitude histogram of KIC
+    :height: 270px
+.. image:: examples/catalog_KIC/kielhist_kic.png
+    :alt: Kiel diagram histogram of KIC
+    :height: 270px
+
 
 .. currentmodule:: stella.catalog
 .. autosummary::
+    kic._KIC
     kic._KIC.find_object
     name._get_KIC_number
 
@@ -213,33 +217,22 @@ mission (Howell et al. 2014 [#Howell2014]_).
 The stellar parameters are derived with the method described in Huber et al.
 2016 [#Huber2016]_.
 The latest version of EPIC updated in Dec. 19, 2017 contains 50,546,248 sources.
+Below are the skymap, *K*:sub:`p` magnitude histogram, and 2D Kiel histogram of
+the *K2* Ecliptic Plane Input Catalog.
 
-.. figure:: examples/catalog_EPIC/skymap_epic.png
+.. image:: examples/catalog_EPIC/skymap_epic.png
     :alt: Skymap of EPIC
-    :align: center
-    :width: 500px
-    :figwidth: 500px
-
-    Skymap of EPIC sources
-
-.. figure:: examples/catalog_EPIC/maghist_epic.png
+    :height: 270px
+.. image:: examples/catalog_EPIC/maghist_epic.png
     :alt: Magnitude histogram of EPIC
-    :align: center
-    :width: 500px
-    :figwidth: 500px
-
-    *K*:sub:`p` magnitude histogram of EPIC sources
-
-.. figure:: examples/catalog_EPIC/kielhist_epic.png
-    :alt: EPIC Kiel
-    :align: center
-    :width: 500px
-    :figwidth: 500px
-
-    Kiel diagram of EPIC stars
+    :height: 270px
+.. image:: examples/catalog_EPIC/kielhist_epic.png
+    :alt: Kiel diagram histogram of EPIC
+    :height: 270px
 
 .. currentmodule:: stella.catalog
 .. autosummary::
+    epic._EPIC
     epic._EPIC.find_object
     name._get_EPIC_number
 

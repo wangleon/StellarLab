@@ -27,16 +27,50 @@ def main():
 
     plot_skymap(ra_lst, dec_lst, 'skymap_epic.png', size=1, alpha=0.01)
 
-    # plot magnitude histogram
-    bins = np.arange(0,20)
-    plot_histogram(kp_lst, '$K_\mathrm{p}$', 'maghist_epic.png', bins=bins, yscale='log')
+    plot_histogram(kp_lst,
+            bins    = np.arange(0, 20),
+            figfile = 'maghist_epic.png',
+            xlabel  = '$K_\mathrm{p}$',
+            xticks  = np.arange(0, 21, 2),
+            )
 
     # plot Kiel histogram
-    plot_histogram2d(teff_lst, logg_lst, (2000, 12000, 100), (0,6,0.1),
-            xlabel='$T_\mathrm{eff}$ (K)',
-            ylabel='$\log{g}$',
-            reverse_x=True, reverse_y=True,
-            figfile='kielhist_epic.png')
+    plot_histogram2d(teff_lst, logg_lst,
+            xbins     = np.arange(2000, 12001, 100),
+            ybins     = np.arange(0, 6.01, 0.1),
+            xlabel    = '$T_\mathrm{eff}$ (K)',
+            ylabel    = '$\log{g}$',
+            figfile   = 'kielhist_epic.png',
+            reverse_x = True,
+            reverse_y = True,
+            scale     = 'log',
+            )
+    exit()
+
+    # plot magnitude histogram
+    bins = np.arange(0,20)
+    fig = plt.figure(figsize=(8,6), dpi=150)
+    ax = fig.add_axes([0.1,0.1,0.88,0.85])
+    ax.hist(kp_lst, bins=bins, color='#1166aa', rwidth=0.9)
+    ax.set_axisbelow(True)
+    ax.set_facecolor('#dddddd')
+    ax.yaxis.grid(True, color='w', linestyle='-', linewidth=1)
+    ax.set_yscale('log')
+    # change tick size
+    for tick in ax.xaxis.get_major_ticks():
+        tick.label1.set_fontsize(13)
+    for tick in ax.yaxis.get_major_ticks():
+        tick.label1.set_fontsize(13)
+    ax.set_xlabel('$K_\mathrm{p}$', fontsize=15)
+    ax.set_ylabel('$N$', fontsize=15)
+    ax.set_xticks(np.arange(0, 20+1e-3, 2))
+    ax.set_xlim(0, 20)
+    # save the figure
+    fig.savefig('maghist_epic.png')
+    plt.close(fig)
+
+
+
 
 if __name__=='__main__':
     main()
