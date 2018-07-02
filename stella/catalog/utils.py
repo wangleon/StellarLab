@@ -54,36 +54,38 @@ def plot_skymap(ra, dec, figfile, projection='hammer', figsize=(8,4.5), dpi=150,
     fig.savefig(figfile)
     plt.close(fig)
 
-def plot_histogram(mags, xlabel, figfile, bins, figsize=(8,6), dpi=150,
-    color='#1166aa', alpha=1, linewidth=0.5, yscale='log', labelsize=15,
-    ticksize=13):
+def plot_histogram(x, xlabel, figfile, bins, figsize=(8,6), dpi=150,
+    color='#1166aa', alpha=1, rwidth=0.9, yscale='log', xlim=None, ylim=None,
+    xticks=None, ticksize=13, labelsize=15):
     '''Plot a histogram.
 
     Args:
-        mags (list or :class:`numpy.array`): List of magnitudes.
+        x (list or :class:`numpy.array`): List of data.
         xlabel (string): Label in X-axis.
         figfile (string): Name of output figure.
-        bins (list or :class:`numpy.array`): Bins of magnitudes.
+        bins (list or :class:`numpy.array`): Bins of data.
         figsize (tuple): Size of figure in tuple (width, height).
         dpi (integer): DPI of figure.
         color (string): Color of histogram bars.
         alpha (float): A float between (0, 1] representing the transparency of
             histogram bars.
-        linewidth (float): Line width of histogram bars.
+        rwidth (float): Relative width of histogram bars.
         yscale (string): Scale of Y axis. Either 'linear' or 'log'.
-        labelsize (integer): Size of X and Y axis labels.
+        xlim (tuple): Limits of X axis.
+        ylim (tuple): Limits of Y axis.
+        xticks (list): List of ticks in X axis.
         ticksize (integer): Size of tick labels.
+        labelsize (integer): Size of X and Y axis labels.
     Returns:
         No returns.
     '''
 
     fig = plt.figure(figsize=figsize, dpi=dpi)
-    ax = fig.add_axes([0.1,0.1,0.85,0.85])
-    ax.hist(mags, bins=bins, color=color, alpha=alpha, lw=linewidth,
-            rwidth=0.9, zorder=1)
+    ax = fig.add_axes([0.1,0.1,0.88,0.85])
+    ax.hist(x, bins=bins, color=color, alpha=alpha, rwidth=rwidth)
     ax.set_axisbelow(True)
     ax.set_facecolor('#dddddd')
-    ax.yaxis.grid(True, color='w', linestyle='-', linewidth=1, zorder=-1)
+    ax.yaxis.grid(True, color='w', linestyle='-', linewidth=1)
     ax.set_yscale(yscale)
 
     # change tick size
@@ -92,6 +94,12 @@ def plot_histogram(mags, xlabel, figfile, bins, figsize=(8,6), dpi=150,
     for tick in ax.yaxis.get_major_ticks():
         tick.label1.set_fontsize(ticksize)
 
+    if xlim is None:
+        xlim = bins[0], bins[-1]
+    ax.set_xlim(xlim)
+    if ylim is not None:
+        ax.set_ylim(ylim)
+    ax.set_xticks(xticks)
     ax.set_xlabel(xlabel, fontsize=labelsize)
     ax.set_ylabel('$N$', fontsize=labelsize)
 
@@ -99,20 +107,26 @@ def plot_histogram(mags, xlabel, figfile, bins, figsize=(8,6), dpi=150,
     fig.savefig(figfile)
     plt.close(fig)
 
-def plot_histogram2d(x, y, x_range, y_range, xlabel, ylabel, figfile,
-    reverse_x = False, reverse_y = False, figsize=(8,6), dpi=150, scale='log'):
+def plot_histogram2d(x, y, xbins, ybins, xlabel, ylabel, figfile,
+    figsize=(8,6), dpi=150, reverse_x=False, reverse_y=False, scale='log',
+    ticksize=13, labelsize=15):
     '''Plot a 2-D histogram of H-R diagram.
 
     Args:
         x (list or :class:`numpy.array`): List of x data.
         y (list or :class:`numpy.array`): List of y data.
-        x_range (tuple): Beginning, end, and step of x data: (x1, x2, dx).
-        y_range (tuple): Beginning, end, and step of y data: (y1, y2, dy).
+        xbins (list or :class:`numpy.array`): Bins of data along x axis.
+        ybins (list or :class:`numpy.array`): Bins of data along y axis.
         xlabel (string): Label in x-axis.
         ylabel (string): Label in y-axis.
         figfile (string): Name of output figure.
         figsize (tuple): Size of figure in tuple (width, height).
         dpi (integer): DPI of figure.
+        reverse_x (bool): Reverse x axis if *True*.
+        reverse_y (bool): Reverse y axis if *True*.
+        scale (string): Scale of y axis.
+        ticksize (integer): Size of tick labels.
+        labelsize (integer): Size of X and Y axis labels.
     Returns:
         No returns.
     '''
@@ -121,13 +135,6 @@ def plot_histogram2d(x, y, x_range, y_range, xlabel, ylabel, figfile,
     ax1 = fig.add_axes([0.1,0.1,0.75,0.85])
     ax2 = fig.add_axes([0.88,0.1,0.03,0.85])
 
-    x1, x2, dx = x_range
-    y1, y2, dy = y_range
-    xbins = np.arange(x1, x2+1e-6, dx)
-    ybins = np.arange(y1, y2+1e-6, dy)
-    nx = xbins - 1
-    ny = ybins - 1
-    
     if scale=='log':
         norm = mcolors.LogNorm()
     else:
@@ -143,9 +150,9 @@ def plot_histogram2d(x, y, x_range, y_range, xlabel, ylabel, figfile,
         _y1, _y2 = ax1.get_ylim()
         ax1.set_ylim(_y2, _y1)
 
-    ax1.set_xlabel(xlabel)
-    ax1.set_ylabel(ylabel)
-    cbar.set_label('$N$')
+    ax1.set_xlabel(xlabel, fontsize=labelsize)
+    ax1.set_ylabel(ylabel, fontsize=labelsize)
+    cbar.set_label('$N$', fontsize=labelsize)
 
     if scale=='log':
         c1, c2 = cbar.get_clim()
@@ -160,6 +167,13 @@ def plot_histogram2d(x, y, x_range, y_range, xlabel, ylabel, figfile,
         cbar.ax.yaxis.set_ticks(mticks, minor=True)
     else:
         cbar.ax.minorticks_on()
+
+    # change tick size
+    for tick in ax1.xaxis.get_major_ticks():
+        tick.label1.set_fontsize(ticksize)
+    for tick in ax1.yaxis.get_major_ticks():
+        tick.label1.set_fontsize(ticksize)
+    cbar.ax.tick_params(labelsize=ticksize)
 
     fig.savefig(figfile)
     plt.close(fig)
