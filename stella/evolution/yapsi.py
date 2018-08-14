@@ -49,7 +49,8 @@ class _YaPSI(object):
             mass (float): Stellar mass.
             alpha (float): Mixing length.
         Returns:
-            tuple: A tuple of four integers as the track ID.
+            tuple: A tuple of four integers (`y_id`, `feh_id`, `mass_id`,
+                `alpha_id`) as the track ID.
         '''
         y_id    = int(round(y*100))
         feh_id  = int(round(feh*10))
@@ -66,6 +67,19 @@ class _YaPSI(object):
 
     def get_track(self, y, feh, mass, n, minage=0):
         '''
+        Get the evolution track for given *Y*, [Fe/H] and *M*.
+
+        Args:
+            y (float):
+            feh (float): Metallicity.
+            mass (float): Stellar mass.
+            n (integer): Number of points in evolution track.
+            minage (float): Minimum age returned in the evolution track.
+
+        Returns:
+            tuple: A tuple containing:
+
+
 
         '''
 
@@ -86,10 +100,10 @@ class _YaPSI(object):
         '''Get the begining index of the 4-points interpolation.
 
         Args:
-            nodes (list): Input node list
-            value (intger or float): Input value
+            nodes (list): Input node list.
+            value (intger or float): Input value.
         Returns:
-            int: Beginning index of 4-points interpolation
+            integer: Beginning index of 4-points interpolation.
         '''
         i0 = np.searchsorted(nodes, value)
         i = i0-2
@@ -97,18 +111,18 @@ class _YaPSI(object):
         i = min(i, len(nodes)-4)
         return i
 
-    def _has_alpha1(self, mass):
-        '''
-        '''
-        return mass >= 0.60
-
-    def _has_alpha2(self, ):
-        '''
-        '''
-        return mass <= 1.10
-
     def _load_track(self, y, feh):
         '''
+        Load the track of given *y* and *feh* values and pack it into the cache.
+
+        Args:
+            y (float): 
+            feh (float): Metallicity.
+
+        Notes:
+            The track data is a tuple containing four arrays
+            (log\ *T*:sub:`eff`, log\ *L*, age, log\ *g*).
+
         '''
         data_path  = '%s/evolution/YaPSI'%os.getenv('STELLA_DATA')
         iy   = self._y_nodes.index(y)
@@ -139,8 +153,8 @@ class _YaPSI(object):
             alpha = (self._alpha1, self._alpha2)[mass<=1.1]
             trackid = self._get_trackid(y, feh, mass, alpha)
             track = self._track_data[trackid]
-            mask = track[2] > minage
-            track = (track[0][mask], track[1][mask], track[2][mask], track[3][mask])
+            m = track[2] > minage
+            track = (track[0][m], track[1][m], track[2][m], track[3][m])
             track = interpolate_data(track, n)
         else:
             track_lst = []
@@ -150,8 +164,8 @@ class _YaPSI(object):
                 alpha = (self._alpha1, self._alpha2)[_mass<=1.1]
                 trackid = self._get_trackid(y, feh, _mass, alpha)
                 track = self._track_data[trackid]
-                mask = track[2] > minage
-                track = (track[0][mask], track[1][mask], track[2][mask], track[3][mask])
+                m = track[2] > minage
+                track = (track[0][m], track[1][m], track[2][m], track[3][m])
                 track = interpolate_data(track, n)
                 track_lst.append(track)
             track = interpolate_param(track_lst, mass_lst, mass)
