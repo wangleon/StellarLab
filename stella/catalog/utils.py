@@ -99,7 +99,8 @@ def plot_histogram(x, xlabel, figfile, bins, figsize=(8,6), dpi=150,
     ax.set_xlim(xlim)
     if ylim is not None:
         ax.set_ylim(ylim)
-    ax.set_xticks(xticks)
+    if xticks is not None:
+        ax.set_xticks(xticks)
     ax.set_xlabel(xlabel, fontsize=labelsize)
     ax.set_ylabel('$N$', fontsize=labelsize)
 
