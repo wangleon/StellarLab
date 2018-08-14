@@ -45,32 +45,6 @@ def main():
             reverse_y = True,
             scale     = 'log',
             )
-    exit()
-
-    # plot magnitude histogram
-    bins = np.arange(0,20)
-    fig = plt.figure(figsize=(8,6), dpi=150)
-    ax = fig.add_axes([0.1,0.1,0.88,0.85])
-    ax.hist(kp_lst, bins=bins, color='#1166aa', rwidth=0.9)
-    ax.set_axisbelow(True)
-    ax.set_facecolor('#dddddd')
-    ax.yaxis.grid(True, color='w', linestyle='-', linewidth=1)
-    ax.set_yscale('log')
-    # change tick size
-    for tick in ax.xaxis.get_major_ticks():
-        tick.label1.set_fontsize(13)
-    for tick in ax.yaxis.get_major_ticks():
-        tick.label1.set_fontsize(13)
-    ax.set_xlabel('$K_\mathrm{p}$', fontsize=15)
-    ax.set_ylabel('$N$', fontsize=15)
-    ax.set_xticks(np.arange(0, 20+1e-3, 2))
-    ax.set_xlim(0, 20)
-    # save the figure
-    fig.savefig('maghist_epic.png')
-    plt.close(fig)
-
-
-
 
 if __name__=='__main__':
     main()

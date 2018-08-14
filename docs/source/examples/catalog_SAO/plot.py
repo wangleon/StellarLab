@@ -18,9 +18,12 @@ def main():
     # plot magnitude histogram
     mask = np.isnan(data['Vmag'])
     vmag = data[~mask]['Vmag']
-    bins = np.arange(0,14)
-    plot_histogram(vmag, '$V$', 'maghist_sao.png', bins=bins, yscale='log')
-
+    plot_histogram(vmag,
+            bins    = np.arange(0, 13),
+            figfile = 'maghist_sao.png',
+            xlabel  = '$V$',
+            xticks  = np.arange(0, 13, 2),
+            )
 
 if __name__=='__main__':
     main()
