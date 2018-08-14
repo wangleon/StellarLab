@@ -20,10 +20,18 @@ Summary of Evolution Tracks and Isochrones
 
 .. autosummary::
    geneva._Geneva
+   yapsi._YaPSI
 
 Geneva Evolution Tracks and Isochrones
 --------------------------------------
 .. automodule:: stella.evolution.geneva
+   :members:
+   :private-members:
+   :undoc-members:
+
+YaPSI Evolution Tracks and Isochrones
+--------------------------------------
+.. automodule:: stella.evolution.yapsi
    :members:
    :private-members:
    :undoc-members:

@@ -1,15 +1,16 @@
 import numpy as np
+from scipy.interpolate import griddata
 
-def feh_to_z(FeH, alpha=0.0):
+def feh_to_z(feh, alpha=0.0):
     '''
     Convert stellar [Fe/H] abundances between [−3.0, +1.0] and [α/Fe] abundances
     between [0.0, +0.6] to *Z*.
 
     Args:
-        FeH (float): [Fe/H] abundance ratio
-        alpha (float, optional): [α/Fe] abundance ratio. Defaut is 0.0
+        feh (float): Iron abundance ([Fe/H]).
+        alpha (float): abundance of α elemements relative to iron ([α/Fe]).
     Returns:
-        float: Metal ratio (*Z*)
+        float: Metal component ratio (*Z*).
 
     The returned values are shown as below:
 
@@ -22,7 +23,6 @@ def feh_to_z(FeH, alpha=0.0):
 
 
     '''
-    from scipy.interpolate import griddata
     ydata,xdata = np.mgrid[0.0:0.6+1e-3:0.3,-3.0:1.0+1e-3:0.5]
     coor = np.concatenate((xdata.reshape(-1,1),
                            ydata.reshape(-1,1)),axis=1)
