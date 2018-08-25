@@ -123,7 +123,7 @@ class MultiSpecItem(object):
                     wvi = poly.chebyshev.chebval(n,self.c[func])
                 elif int(self.ftype[func])==2:
                     # ftype = 2: Legendre Polynomial
-                    wvi = legendre_poly(n,self.c[func])
+                    wvi = poly.legendre.legval(n,self.c[func])
                 elif int(self.ftype[func])==3:
                     # ftype = 3: Cubic Spline
                     pass
