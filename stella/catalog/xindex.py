@@ -5,7 +5,7 @@ import astropy.io.fits as fits
 from .name import get_regular_name, _get_HIP_number, _get_KIC_number
 from ..utils.asciifile import find_sortedfile, quickfind_sortedfile
 
-xindex_path = os.path.join(os.getenv('STELLA_DATA'),'catalog/xindex')
+xindex_path = os.path.join(os.getenv('STELLA_DATA'), 'catalog/xindex')
 
 def cross_starnames(starname):
     name_lst = {}
@@ -122,13 +122,13 @@ def HIP_to_HD(name):
 
     hip = _get_HIP_number(name)
 
-    fn = '%s/HIP-HD.csv'%xindex_path
+    filename = os.path.join(xindex_path, 'HIP-HD.csv')
     f1 = lambda row: int(row.split(',')[0])
     f2 = lambda row: 'HD '+row.split(',')[1].strip()
     if hip<100:
-        HDname = find_sortedfile(hip,fn,f1,f2)
+        HDname = find_sortedfile(hip, filename, f1, f2)
     else:
-        HDname = quickfind_sortedfile(hip,fn,f1,f2)
+        HDname = quickfind_sortedfile(hip, filename, f1, f2)
 
     if HDname == None:
         return None
@@ -153,13 +153,13 @@ def HIP_to_BD(name):
 
     hip = _get_HIP_number(name)
 
-    fn = '%s/HIP-BD.csv'%xindex_path
+    filename = os.path.join(xindex_path, 'HIP-BD.csv')
     f1 = lambda row: int(row.split(',')[0])
     f2 = lambda row: 'BD '+row.split(',')[1].strip()
     if hip<100:
-        HIPname = find_sortedfile(hip,fn,f1,f2)
+        HIPname = find_sortedfile(hip, filename, f1, f2)
     else:
-        HIPname = quickfind_sortedfile(hip,fn,f1,f2)
+        HIPname = quickfind_sortedfile(hip, filename, f1, f2)
 
     if HIPname == None:
         return None
@@ -185,13 +185,13 @@ def HIP_to_CD(name):
 
     hip = _get_HIP_number(name)
 
-    fn = '%s/HIP-CD.csv'%xindex_path
+    filename = os.path.join(xindex_path, 'HIP-CD.csv')
     f1 = lambda row: int(row.split(',')[0])
     f2 = lambda row: 'CD '+row.split(',')[1].strip()
     if hip<100:
-        CDname = find_sortedfile(hip,fn,f1,f2)
+        CDname = find_sortedfile(hip, filename, f1, f2)
     else:
-        CDname = quickfind_sortedfile(hip,fn,f1,f2)
+        CDname = quickfind_sortedfile(hip, filename, f1, f2)
 
     if CDname == None:
         return None
@@ -216,8 +216,8 @@ def HIP_to_TYC(name):
 
     hip = _get_HIP_number(name)
 
-    fn = '%s/HIP-TYC.fits'%xindex_path
-    f = fits.open(fn)
+    filename = os.path.join(xindex_path, 'HIP-TYC.fits')
+    f = fits.open(filename)
     data = f[1].data
     f.close()
     m = data['HIP']==hip
@@ -243,8 +243,8 @@ def HIP_to_2MASS(name, full=False):
 
     hip = _get_HIP_number(name)
 
-    fn = '%s/HIP-2MASS.fits'%xindex_path
-    f = fits.open(fn)
+    filename = os.path.join(xindex_path, 'HIP-2MASS.fits')
+    f = fits.open(filename)
     data = f[1].data
     i = np.searchsorted(data['HIP'],hip)
     row = data[i]
@@ -266,10 +266,10 @@ def HD_to_HIP(name):
     name = get_regular_name(name)
     hd = name[2:].strip()
 
-    fn = '%s/HD-HIP.csv'%xindex_path
+    filename = os.path.join(xindex_path, 'HD-HIP.csv')
     f1 = lambda row: row.split(',')[0].strip()
     f2 = lambda row: 'HIP %d'%(int(row.split(',')[1]))
-    HIPname = quickfind_sortedfile(hd,fn,f1,f2)
+    HIPname = quickfind_sortedfile(hd, filename, f1, f2)
 
     if HIPname is None:
         return None
@@ -286,11 +286,11 @@ def HD_to_TYC(name):
     name = get_regular_name(name)
     hd = name[2:].strip()
 
-    fn = '%s/HD-TYC.csv'%xindex_path
+    filename = os.path.join(xindex_path, 'HD-TYC.csv')
     f1 = lambda row: row.split(',')[0].strip()
     f2 = lambda row: 'TYC %s'%(row.split(',')[1].strip())
 
-    TYCname = quickfind_sortedfile(hd,fn,f1,f2)
+    TYCname = quickfind_sortedfile(hd, filename, f1, f2)
     if TYCname == None:
         return None
     else:
@@ -306,11 +306,11 @@ def BD_to_HIP(name):
     name = get_regular_name(name)
     bd = name[2:].strip()
 
-    fn = '%s/BD-HIP.csv'%xindex_path
+    filename = os.path.join(xindex_path, 'BD-HIP.csv')
     f1 = lambda row: row.split(',')[0].strip()
     f2 = lambda row: 'HIP %d'%(int(row.split(',')[1]))
 
-    HIPname = quickfind_sortedfile(bd,fn,f1,f2)
+    HIPname = quickfind_sortedfile(bd, filename, f1, f2)
     if HIPname == None:
         return None
     else:
@@ -326,11 +326,11 @@ def CD_to_HIP(name):
     name = get_regular_name(name)
     cd = name[2:].strip()
 
-    fn = '%s/CD-HIP.csv'%xindex_path
+    filename = os.path.join(xindex_path, 'CD-HIP.csv')
     f1 = lambda row: row.split(',')[0].strip()
     f2 = lambda row: 'HIP %d'%(int(row.split(',')[1]))
     
-    HIPname = quickfind_sortedfile(cd,fn,f1,f2)
+    HIPname = quickfind_sortedfile(cd, filename, f1, f2)
     if HIPname == None:
         return None
     else:
@@ -344,8 +344,8 @@ def TYC_to_HIP(name):
         g = name[3:].split('-')
         tyc1,tyc2,tyc3 = int(g[0]),int(g[1]),int(g[2])
 
-    fn = '%s/TYC-HIP.fits'%xindex_path
-    f = fits.open(fn)
+    filename = os.path.join(xindex_path, 'TYC-HIP.fits')
+    f = fits.open(filename)
     data = f[1].data
     f.close()
     m1 = data['TYC1']==tyc1
@@ -363,8 +363,8 @@ def TYC_to_2MASS(name,full=False):
         g = name[3:].split('-')
         tyc1,tyc2,tyc3 = int(g[0]),int(g[1]),int(g[2])
 
-    fn = '%s/TYC-2MASS.fits'%xindex_path
-    f = fits.open(fn)
+    filename = os.path.join(xindex_path, 'TYC-2MASS.fits')
+    f = fits.open(filename)
     data = f[1].data
     f.close()
 
@@ -387,11 +387,11 @@ def G_to_TYC(name):
     if name[0:2]=='G ':
         Gname = name[2:].strip()
 
-    fn = '%s/G-TYC.csv'%xindex_path
+    filename = os.path.join(xindex_path, 'G-TYC.csv')
     f1 = lambda row: row.split(',')[0].strip()
     f2 = lambda row: 'TYC %s'%(row.split(',')[1].strip())
 
-    TYCname = quickfind_sortedfile(Gname,fn,f1,f2)
+    TYCname = quickfind_sortedfile(Gname, filename, f1, f2)
     if TYCname == None:
         return None
     else:
@@ -399,39 +399,64 @@ def G_to_TYC(name):
 
 def KIC_to_KOI(name):
     '''Convert a KIC name in *Kepler Input Catalog* to KOI name.
+
+    See also:
+        * :func:`stella.catalog.xindex.KOI_to_KIC`
+        * :func:`stella.catalog.xindex.KIC_to_Kepler`
+        * :func:`stella.catalog.xindex.Kepler_to_KIC`
+        * :func:`stella.catalog.xindex.Kepler_to_KOI`
+        * :func:`stella.catalog.xindex.KOI_to_Kepler`
     '''
-    fn = '%s/KIC-KOI.csv'%xindex_path
+    filename = os.path.join(xindex_path, 'KIC-KOI.csv')
     kic = _get_KIC_number(name)
     f1 = lambda row: int(row.split(',')[0])
     f2 = lambda row: int(row.split(',')[1])
-    return quickfind_sortedfile(kic,fn,f1,f2)
+    return quickfind_sortedfile(kic, filename, f1, f2)
 
 def KIC_to_Kepler(name):
     '''Convert a KIC name in *Kepler Input Catalog* to Kepler name.
+
+    See also:
+        * :func:`stella.catalog.xindex.Kepler_to_KIC`
+        * :func:`stella.catalog.xindex.KIC_to_KOI`
+        * :func:`stella.catalog.xindex.KOI_to_KIC`
+        * :func:`stella.catalog.xindex.Kepler_to_KOI`
+        * :func:`stella.catalog.xindex.KOI_to_Kepler`
     '''
-    fn = '%s/KIC-Kepler.csv'%xindex_path
+    filename = os.path.join(xindex_path, 'KIC-Kepler.csv')
     kic = _get_KIC_number(name)
     f1 = lambda row: int(row.split(',')[0])
     f2 = lambda row: int(row.split(',')[1])
-    return quickfind_sortedfile(kic,fn,f1,f2)
+    return quickfind_sortedfile(kic, filename, f1, f2)
 
 def KOI_to_KIC(name):
     '''Convert a KOI name to KIC name in *Kepler Input Catalog*.
 
     See also:
+        * :func:`stella.catalog.xindex.KIC_to_KOI`
         * :func:`stella.catalog.xindex.KOI_to_Kepler`
+        * :func:`stella.catalog.xindex.Kepler_to_KOI`
+        * :func:`stella.catalog.xindex.Kepler_to_KIC`
+        * :func:`stella.catalog.xindex.KIC_to_Kepler`
     '''
-    fn = '%s/KOI-KIC.csv'%xindex_path
+    filename = os.path.join(xindex_path, 'KOI-KIC.csv')
     koi = int(name)
     f1 = lambda row: int(row.split(',')[0])
     f2 = lambda row: int(row.split(',')[1])
     if koi < 100:
-        return find_sortedfile(koi,fn,f1,f2)
+        return find_sortedfile(koi, filename, f1, f2)
     else:
-        return quickfind_sortedfile(koi,fn,f1,f2)
+        return quickfind_sortedfile(koi, filename, f1, f2)
 
 def KOI_to_Kepler(name):
     '''Convert a KOI name to Kepler name.
+
+    See also:
+        * :func:`stella.catalog.xindex.Kepler_to_KOI`
+        * :func:`stella.catalog.xindex.KOI_to_KIC`
+        * :func:`stella.catalog.xindex.KIC_to_KOI`
+        * :func:`stella.catalog.xindex.KIC_to_Kepler`
+        * :func:`stella.catalog.xindex.Kepler_to_KIC`
     '''
     filename = os.path.join(xindex_path, 'KOI-Kepler.csv')
     koi = int(name)
@@ -446,7 +471,11 @@ def Kepler_to_KIC(name):
     '''Convert a Kepler name to KIC name.
 
     See also:
+        * :func:`stella.catalog.xindex.KIC_to_Kepler`
         * :func:`stella.catalog.xindex.Kepler_to_KOI`
+        * :func:`stella.catalog.xindex.KOI_to_Kepler`
+        * :func:`stella.catalog.xindex.KOI_to_KIC`
+        * :func:`stella.catalog.xindex.KIC_to_KOI`
     '''
     filename = os.path.join(xindex_path, 'Kepler-KIC.csv')
     kepler = int(name)
@@ -461,7 +490,11 @@ def Kepler_to_KOI(name):
     '''Convert a Kepler name to KOI name.
 
     See also:
+        * :func:`stella.catalog.xindex.KOI_to_Kepler`
         * :func:`stella.catalog.xindex.Kepler_to_KIC`
+        * :func:`stella.catalog.xindex.KIC_to_Kepler`
+        * :func:`stella.catalog.xindex.KOI_to_KIC`
+        * :func:`stella.catalog.xindex.KIC_to_KOI`
     '''
     filename = os.path.join(xindex_path, 'Kepler-KOI.csv')
     kepler = int(name)

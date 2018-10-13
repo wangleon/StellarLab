@@ -117,6 +117,8 @@ Cross Index
     KIC_to_KOI
     KOI_to_Kepler
     KOI_to_KIC
+    TIC_to_TOI
+    TOI_to_TIC
     TYC_to_2MASS
     TYC_to_HIP
 
