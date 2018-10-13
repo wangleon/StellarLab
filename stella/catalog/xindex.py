@@ -271,7 +271,7 @@ def HD_to_HIP(name):
     f2 = lambda row: 'HIP %d'%(int(row.split(',')[1]))
     HIPname = quickfind_sortedfile(hd,fn,f1,f2)
 
-    if HIPname == None:
+    if HIPname is None:
         return None
     else:
         return [HIPname]
@@ -417,6 +417,9 @@ def KIC_to_Kepler(name):
 
 def KOI_to_KIC(name):
     '''Convert a KOI name to KIC name in *Kepler Input Catalog*.
+
+    See also:
+        * :func:`stella.catalog.xindex.KOI_to_Kepler`
     '''
     fn = '%s/KOI-KIC.csv'%xindex_path
     koi = int(name)
@@ -430,39 +433,44 @@ def KOI_to_KIC(name):
 def KOI_to_Kepler(name):
     '''Convert a KOI name to Kepler name.
     '''
-    fn = '%s/KOI-Kepler.csv'%xindex_path
+    filename = os.path.join(xindex_path, 'KOI-Kepler.csv')
     koi = int(name)
     f1 = lambda row: int(row.split(',')[0])
     f2 = lambda row: int(row.split(',')[1])
     if koi < 100:
-        return find_sortedfile(koi,fn,f1,f2)
+        return find_sortedfile(koi, filename, f1, f2)
     else:
-        return quickfind_sortedfile(koi,fn,f1,f2)
+        return quickfind_sortedfile(koi, filename, f1, f2)
 
 def Kepler_to_KIC(name):
     '''Convert a Kepler name to KIC name.
+
+    See also:
+        * :func:`stella.catalog.xindex.Kepler_to_KOI`
     '''
-    fn = '%s/Kepler-KIC.csv'%xindex_path
+    filename = os.path.join(xindex_path, 'Kepler-KIC.csv')
     kepler = int(name)
     f1 = lambda row: int(row.split(',')[0])
     f2 = lambda row: int(row.split(',')[1])
     if kepler < 100:
-        return find_sortedfile(kepler,fn,f1,f2)
+        return find_sortedfile(kepler, filename, f1, f2)
     else:
-        return quickfind_sortedfile(kepler,fn,f1,f2)
+        return quickfind_sortedfile(kepler, filename, f1, f2)
 
 def Kepler_to_KOI(name):
+    '''Convert a Kepler name to KOI name.
+
+    See also:
+        * :func:`stella.catalog.xindex.Kepler_to_KIC`
     '''
-    Convert a Kepler name to KOI name
-    '''
-    fn = '%s/Kepler-KOI.csv'%xindex_path
+    filename = os.path.join(xindex_path, 'Kepler-KOI.csv')
     kepler = int(name)
     f1 = lambda row: int(row.split(',')[0])
     f2 = lambda row: int(row.split(',')[1])
     if kepler < 100:
-        return find_sortedfile(kepler,fn,f1,f2)
+        return find_sortedfile(kepler, filename, f1, f2)
     else:
-        return quickfind_sortedfile(kepler,fn,f1,f2)
+        return quickfind_sortedfile(kepler, filename, f1, f2)
 
 def HIP_to_Gaia(name):
     '''Convert an HIP name in *Hipparcos Catalogue* to Gaia name.
@@ -477,10 +485,34 @@ def HIP_to_Gaia(name):
     else:
         print('Unknown name')
 
-    data = fits.getdata('%s/HIP-Gaia.fits'%xindex_path)
+    filename = os.path.join(xindex_path, 'HIP-Gaia.fits')
+    data = fits.getdata()
     m = data['HIP']==hip
     if m.sum()==0:
         return None
     else:
         return data[m][0]['source_id']
-         
+
+def TOI_to_TIC(name):
+    '''Convert TOI (TESS Object of Interest) name to TIC name.
+
+    See also:
+        * :func:`stella.catalog.xindex.TIC_to_TOI`
+    '''
+    filename = os.path.join(xindex_path, 'TOI-TIC.csv')
+    toi = int(name)
+    f1 = lambda row: int(row.split(',')[0])
+    f2 = lambda row: int(row.split(',')[1])
+    return find_sortedfile(toi, filename, f1, f2)
+
+def TIC_to_TOI(name):
+    '''Convert TIC name to TOI name.
+
+    See also:
+        * :func:`stella.catalog.xindex.TOI_to_TIC`
+    '''
+    filename = os.path.join(xindex_path, 'TIC-TOI.csv')
+    tic = int(name)
+    f1 = lambda row: int(row.split(',')[0])
+    f2 = lambda row: int(row.split(',')[1])
+    return find_sortedfile(tic, filename, f1, f2)
