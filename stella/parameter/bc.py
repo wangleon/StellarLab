@@ -12,7 +12,8 @@ def get_BC(**kwargs):
         * `Alonso1995`: returns *BC* in *V* and *K* bands using (*V* − *K*) and
           [Fe/H] for dwarfs.
         * `Alonso1999`: returns *BC* using *T*:sub:`eff` and [Fe/H] for giants.
-        * `Masana2006`:
+        * `Flower1996`: returns *BC* using *T*:sub:`eff`.
+        * `Masana2006`: returns *BC* using *T*:sub:`eff`.
     '''
 
     ref = kwargs.pop('ref', None)
@@ -22,14 +23,16 @@ def get_BC(**kwargs):
         bc = _get_giant_BC_Alonso1999(**kwargs)
     elif ref == 'Masana2006':
         bc = _get_dwarf_BC_Masana2006(**kwargs)
+    elif ref == 'Flower1996':
+        bc = _get_BC_Flower1996(**kwargs)
     return bc
 
-def _Teff_to_BC_Flower1996(teff):
+def _get_BC_Flower1996(**kwargs):
     '''Get *BC* in *V* band according to *T*:sub:`eff` using the relation given
     by `Flower 1996 <http://adsabs.harvard.edu/abs/1996ApJ...469..355F>`_.
 
     Args:
-        teff (integer or float): Effective temperature (*T*:sub:`eff`).
+        teff (int or float): Effective temperature (*T*:sub:`eff`).
     Returns:
         float: *BC* in *V* band.
 
@@ -56,6 +59,7 @@ def _Teff_to_BC_Flower1996(teff):
               -0.421278819301717E+04,
                0.381476328422343E+03,
              ]
+    teff = kwargs.pop('Teff')
     logt = math.log10(teff)
 
     if logt >= 3.9:
