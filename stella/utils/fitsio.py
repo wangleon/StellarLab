@@ -3,15 +3,14 @@ import numpy as np
 from .memoize import memoized
 
 def tform_to_format(tform):
-    '''
-    Convert `TFORM` string in FITS binary table to format string in Python
+    """Convert `TFORM` string in FITS binary table to format string in Python
     `struct` module.
 
     Args:
         tfrom (str): `TFORM` string in FITS binary table.
     Returns:
         str: A format string used in Python `struct` module.
-    '''
+    """
     if tform == 'L': return 'b' # 1 byte, boolean
     if tform == 'B': return 'B' # 1 byte, unsigned byte
     if tform == 'I': return 'h' # 2 bytes, integer
@@ -27,15 +26,14 @@ def tform_to_format(tform):
 
 
 def tform_to_dtype(tform):
-    '''
-    Convert `TFORM` string in FITS binary table to Numpy dtype.
+    """Convert `TFORM` string in FITS binary table to Numpy dtype.
 
     Args:
         tfrom (str): `TFORM` string in FITS binary table.
     Returns:
         :class:`numpy.dtype`: Numpy dtype object.
 
-    '''
+    """
     if tform == 'L': return np.bool # 1 byte, boolean
     #if tform == 'B': return 'B' # 1 byte, unsigned byte
     if tform == 'I': return np.int16 # 2 bytes, integer
@@ -50,20 +48,19 @@ def tform_to_dtype(tform):
     if tform[-1] == 'A': return 'S'+tform[0:-1] # 1 bytes, character
 
 @memoized
-def get_bintable_info(filename ,extension=1):
-    '''
-    Return the information of the binary table in a given FITS file.
+def get_bintable_info(filename, extension=1):
+    """Return the information of the binary table in a given FITS file.
 
     Args:
-        filename (string): Name of the input FITS file.
-        extension (integer): Extension of the binary table to be read.
+        filename (str): Name of the input FITS file.
+        extension (int): Extension of the binary table to be read.
     Returns:
         tuple: A tuple containing:
 
-            * **naxis1** (*integer*): Length of row in bytes.
-            * **naxis2** (*integer*): Number of rows in the table.
-            * **tfields** (*integer*): Number of columns in the table.
-            * **position** (*integer*): The staring position of the table.
+            * **naxis1** (*int*): Length of row in bytes.
+            * **naxis2** (*int*): Number of rows in the table.
+            * **tfields** (*int*): Number of columns in the table.
+            * **position** (*int*): The starting position of the table.
             * **dtype** (:class:`numpy.dtype`): Numpy dtype of the row.
             * **fmtfunc** (*function*): Function to format the rows.
     Examples:
@@ -73,7 +70,7 @@ def get_bintable_info(filename ,extension=1):
             from stella.utils.fitsio import get_bintable_info
             nbyte, nrow, ncol, pos, dtype, fmtfunc = get_bintable_info(filename)
 
-    '''
+    """
     infile = open(filename,'rb')
     current_hdu = 0
     while(True):
@@ -121,4 +118,3 @@ def get_bintable_info(filename ,extension=1):
     fmt = '>'+(''.join([tform_to_format(v) for v in tform_lst]))
     fmtfunc = lambda string: np.array(struct.unpack(fmt, string),dtype=record)
     return naxis1, naxis2, tfields, position, record, fmtfunc
-

@@ -1,11 +1,11 @@
 from __future__ import print_function
 import time
 
-def find_sortedfile(target,filename,findfunc=None,outfunc=None,header=0,
+def find_sortedfile(target, filename, findfunc=None, outfunc=None, header=0,
         verbose=False):
-    '''
+    """
     Find a value in a sorted ascii file.
-    '''
+    """
     if verbose:
         t1 = time.time()
     find = False
@@ -33,11 +33,11 @@ def find_sortedfile(target,filename,findfunc=None,outfunc=None,header=0,
     else:
         return None
 
-def quickfind_sortedfile(target,filename,findfunc=None,outfunc=None,header=0,
-        verbose=False):
-    '''
+def quickfind_sortedfile(target, filename, findfunc=None, outfunc=None,
+        header=0, verbose=False):
+    """
     Find a value in a sorted ascii file using binary search.
-    '''
+    """
     if verbose:
         t1 = time.time()
     infile = open(filename)

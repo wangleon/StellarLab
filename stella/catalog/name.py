@@ -120,17 +120,17 @@ greek_letters = {
         }
 
 def _get_star_number1(name, key):
-    '''
-    Convert star name with the form of `SSS NNNN` to its integer number `NNNN`.
+    """Convert star name with the form of `SSS NNNN` to its integer number
+    `NNNN`.
 
     Args:
-        name (integer or string): Name of a star.
-        key (string): Prefix of the star name.
+        name (int or str): Name of a star.
+        key (str): Prefix of the star name.
     Returns:
-        integer: Number of the star in the catalog. If fail a *None* value will
+        int: Number of the star in the catalog. If fail a *None* value will
             be returned.
 
-    '''
+    """
     if isinstance(name, int):
         return name
     elif isinstance(name, str):
@@ -147,23 +147,23 @@ def _get_star_number1(name, key):
         return None
 
 def _get_HIP_number(name):
-    '''Convert star name in *Hipparcos Catalogue* to an integer HIP number.
+    """Convert star name in *Hipparcos Catalogue* to an integer HIP number.
 
     Args:
-        name (string or integer): Name of the star.
+        name (str or int): Name of the star.
     Returns:
-        integer: HIP number.
-    '''
+        int: HIP number.
+    """
     return _get_star_number1(name, 'HIP')
 
 def _get_HD_number(name):
-    '''Convert star name in *Henry Draper Catalogue* to an integer HD number.
+    """Convert star name in *Henry Draper Catalogue* to an integer HD number.
 
     Args:
-        name (string or integer): Name of the star.
+        name (str or int): Name of the star.
     Returns:
-        integer: HD number.
-    '''
+        int: HD number.
+    """
     name = name.strip()
 
     # remove companion code
@@ -173,13 +173,13 @@ def _get_HD_number(name):
     return _get_star_number1(name, 'HD')
 
 def _get_SAO_number(name):
-    '''Convert star name in *SAO Catalogue* to an integer SAO number.
+    """Convert star name in *SAO Catalogue* to an integer SAO number.
 
     Args:
-        name (string or integer): Name of the star.
+        name (str or int): Name of the star.
     Returns:
-        integer: SAO number.
-    '''
+        int: SAO number.
+    """
     name = name.strip()
 
     # remove companion code
@@ -189,13 +189,13 @@ def _get_SAO_number(name):
     return _get_star_number1(name, 'SAO')
 
 def _get_HR_number(name):
-    '''Convert star name in *Bright Star Catalogue* to an integer HR number.
+    """Convert star name in *Bright Star Catalogue* to an integer HR number.
 
     Args:
-        name (string or integer): Name of the star.
+        name (str or int): Name of the star.
     Returns:
-        integer: HR number.
-    '''
+        int: HR number.
+    """
     name = name.strip()
 
     # remove companion code
@@ -246,14 +246,14 @@ def _get_TYC_number(name):
         return None
 
 def get_catalog(name):
-    '''Return the name of the star catalog from the name of star.
+    """Return the name of the star catalog from the name of star.
     
     Args:
-        name (string): Name of star.
+        name (str): Name of star.
     Returns:
-        catalog (string): Name of catalog.
+        catalog (str): Name of catalog.
 
-    '''
+    """
     name = ' '.join(name.split())
 
     starcat_re = {
@@ -308,9 +308,8 @@ def get_catalog(name):
     return None
 
 def get_regular_name(starname):
-    '''
-    Get regular name of a star
-    '''
+    """Get regular name of a star
+    """
     cat = get_catalog(starname)
     if cat == 'HIP':
         return _get_regular_HIP_name(starname)
@@ -328,17 +327,17 @@ def get_regular_name(starname):
         return starname
 
 def _get_regular_HIP_name(name):
-    '''Convert an HIP name in *Hipparcos Catalogue* to its regular form
+    """Convert an HIP name in *Hipparcos Catalogue* to its regular form
     `"HIP NNN"`.
 
     Args:
-        name (string or integer): Name or HIP number of a star (e.g. `"HIP8276"`,
+        name (str or int): Name or HIP number of a star (e.g. `"HIP8276"`,
             `"HIP 8276"`, `8443`).
     Returns:
-        string: Regular HD name `"HIP NNNN"`.
+        str: Regular HD name `"HIP NNNN"`.
     See also:
         * :ref:`catalog_hip`
-    '''
+    """
 
     if isinstance(name, str):
         name = name.strip()
@@ -349,20 +348,20 @@ def _get_regular_HIP_name(name):
         raise ValueError
 
 def _get_regular_HD_name(name):
-    '''Convert an HD name in *Henry Draper Catalogue* to its regular form
+    """Convert an HD name in *Henry Draper Catalogue* to its regular form
     `"HD NNNN"` or `"HD NNNN C"`.
     
     Args:
-        name (string or integer): Name or HD number of a star (e.g. `"HD8276"`,
+        name (str or int): Name or HD number of a star (e.g. `"HD8276"`,
             `"HD 8276A"`, `8443`).
     Returns:
-        string: Regular HD name `"HD NNNN"` or `"HD NNNN C"`.
+        str: Regular HD name `"HD NNNN"` or `"HD NNNN C"`.
     See also:
 
         * `Henry Draper Catalogue and Extension (III/135A)
           <http://vizier.u-strasbg.fr/cgi-bin/VizieR?-source=III/135A/catalog>`_
 
-    '''
+    """
     if isinstance(name, str):
         name = name.strip()
         if name[-1].isalpha():
@@ -377,14 +376,14 @@ def _get_regular_HD_name(name):
 
 
 def _get_regular_BD_name(name):
-    '''Convert a BD name in *Bonner Durchmusterung* to its regular form 
+    """Convert a BD name in *Bonner Durchmusterung* to its regular form 
     `"BD+ZZ NNNN"`.
 
     Args:
-        name (string): Name of a star.
+        name (str): Name of a star.
     Returns:
-        string: Regular BD name `"BD+ZZ NNNN"`.
-    '''
+        str: Regular BD name `"BD+ZZ NNNN"`.
+    """
     name = name.strip()
     # parse 'BD+33 23' to 'BD +33 23'
     name = 'BD '+ name[2:].strip()
@@ -419,14 +418,14 @@ def _get_regular_BD_name(name):
     return name
 
 def _get_regular_CD_name(name):
-    '''Convert a CD name in *Cordoba Durchmusterung* to its regular form
+    """Convert a CD name in *Cordoba Durchmusterung* to its regular form
     `"CD+ZZ NNNN"`.
 
     Args:
-        name (string): Name of a star.
+        name (str): Name of a star.
     Returns:
-        string: Regular CD name `"CD+ZZ NNNN"`.
-    '''
+        str: Regular CD name `"CD+ZZ NNNN"`.
+    """
 
     name = name.strip()
 
@@ -452,8 +451,11 @@ def _get_regular_CD_name(name):
 
 
 def _get_regular_G_name(starname):
-    '''Convert a G name to its regular form.
-    '''
+    """Convert a G name to its regular form.
+
+    Args:
+        starname (str):
+    """
 
     starname = starname.strip()
     if starname[0]=='G' and not starname[1].isalpha():
@@ -479,13 +481,13 @@ def _get_regular_G_name(starname):
     return starname
 
 def _get_regular_TYC_name(*args):
-    '''Convert a TYC name in *Tycho-2 Catalogue* to its regular form
+    """Convert a TYC name in *Tycho-2 Catalogue* to its regular form
     `"TYC NNN-NNN-N"`.
-    '''
-    if len(args)==1 and isinstance(args[0], str):
+    """
+    if len(args) == 1 and isinstance(args[0], str):
         name = args[0].strip()
-        return 'TYC '+name[3:].strip()
-    elif len(args)==3:
-        return 'TYC '+'-'.join([str(args[0]),str(args[1]),str(args[2])])
+        return 'TYC ' + name[3:].strip()
+    elif len(args) == 3:
+        return 'TYC '+'-'.join([str(args[0]), str(args[1]), str(args[2])])
     else:
         return None

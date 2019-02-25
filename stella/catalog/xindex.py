@@ -113,12 +113,12 @@ def cross_starnames(starname):
 
 
 def HIP_to_HD(name):
-    '''Convert an HIP name in *Hipparcos Catalogue* to HD name in *Henry Draper
+    """Convert an HIP name in *Hipparcos Catalogue* to HD name in *Henry Draper
     Catalogue*.
 
     Args:
-        name (string or integer): Name of star in *Hipparcos Catalogue*.
-    '''
+        name (str or int): Name of star in *Hipparcos Catalogue*.
+    """
 
     hip = _get_HIP_number(name)
 
@@ -136,11 +136,11 @@ def HIP_to_HD(name):
         return [HDname]
 
 def HIP_to_BD(name):
-    '''Convert an HIP name in *Hipparcos Catalogue* to BD name in *Bonner
+    """Convert an HIP name in *Hipparcos Catalogue* to BD name in *Bonner
     Durchmusterung*.
 
     Args:
-        name (string or integer): Name of star in *Hipparcos Catalogue*.
+        name (str or int): Name of star in *Hipparcos Catalogue*.
 
     See also:
         * :ref:`catalog_hip`
@@ -149,7 +149,7 @@ def HIP_to_BD(name):
         * :func:`stella.catalog.xindex.HIP_to_Gaia`
         * :func:`stella.catalog.xindex.HIP_to_HD`
         * :func:`stella.catalog.xindex.HIP_to_TYC`
-    '''
+    """
 
     hip = _get_HIP_number(name)
 
@@ -167,11 +167,11 @@ def HIP_to_BD(name):
         return [HIPname]
 
 def HIP_to_CD(name):
-    '''Convert an HIP name in *Hipparcos Catalogue* to CD name in *Cordoba
+    """Convert an HIP name in *Hipparcos Catalogue* to CD name in *Cordoba
     Durchmusterung*.
 
     Args:
-        name (string or integer): Name of star in *Hipparcos Catalogue*.
+        name (str or int): Name of star in *Hipparcos Catalogue*.
 
     See also:
         * :ref:`catalog_hip`
@@ -181,7 +181,7 @@ def HIP_to_CD(name):
         * :func:`stella.catalog.xindex.HIP_to_Gaia`
         * :func:`stella.catalog.xindex.HIP_to_HD`
         * :func:`stella.catalog.xindex.HIP_to_TYC`
-    '''
+    """
 
     hip = _get_HIP_number(name)
 
@@ -199,11 +199,11 @@ def HIP_to_CD(name):
         return [CDname]
 
 def HIP_to_TYC(name):
-    '''Convert an HIP name in *Hipparcos Catalogue* to TYC name in *Tycho-2
+    """Convert an HIP name in *Hipparcos Catalogue* to TYC name in *Tycho-2
     Catalogue*.
 
     Args:
-        name (string or integer): Name of star in *Hipparcos Catalogue*.
+        name (str or int): Name of star in *Hipparcos Catalogue*.
 
     See also:
         * :ref:`catalog_hip`
@@ -212,7 +212,7 @@ def HIP_to_TYC(name):
         * :func:`stella.catalog.xindex.HIP_to_CD`
         * :func:`stella.catalog.xindex.HIP_to_Gaia`
         * :func:`stella.catalog.xindex.HIP_to_HD`
-    '''
+    """
 
     hip = _get_HIP_number(name)
 
@@ -227,11 +227,11 @@ def HIP_to_TYC(name):
         return ['TYC %d-%d-%d'%(rec['TYC1'],rec['TYC2'],rec['TYC3']) for rec in data[m]]
 
 def HIP_to_2MASS(name, full=False):
-    '''Convert an HIP name in *Hipparcos Catalogue* to 2MASS name.
+    """Convert an HIP name in *Hipparcos Catalogue* to 2MASS name.
 
     Args:
-        name (string or integer): Name of star in *Hipparcos Catalogue*.
-        full (*bool*):
+        name (str or int): Name of star in *Hipparcos Catalogue*.
+        full (bool):
 
     See also:
         * :ref:`catalog_hip`
@@ -239,7 +239,7 @@ def HIP_to_2MASS(name, full=False):
         * :func:`stella.catalog.xindex.HIP_to_Gaia`
         * :func:`stella.catalog.xindex.HIP_to_HD`
         * :func:`stella.catalog.xindex.HIP_to_TYC`
-    '''
+    """
 
     hip = _get_HIP_number(name)
 
@@ -257,12 +257,12 @@ def HIP_to_2MASS(name, full=False):
         return [des_2mass]
 
 def HD_to_HIP(name):
-    '''Convert an HD name in *Henry Draper Catalogue* to HIP name in *Hipparcos
+    """Convert an HD name in *Henry Draper Catalogue* to HIP name in *Hipparcos
     Catalogue*.
 
     Args:
-        name (string or integer): Name of star in *Henry Draper Catalogue*.
-    '''
+        name (str or int): Name of star in *Henry Draper Catalogue*.
+    """
     name = get_regular_name(name)
     hd = name[2:].strip()
 
@@ -277,12 +277,12 @@ def HD_to_HIP(name):
         return [HIPname]
 
 def HD_to_TYC(name):
-    '''Convert an HD name in *Henry Draper Catalogue* to TYC name in *Tycho-2
+    """Convert an HD name in *Henry Draper Catalogue* to TYC name in *Tycho-2
     Catalogue*.
 
     Args:
-        name (string or integer): Name of star in *Henry Draper Catalogue*.
-    '''
+        name (str or int): Name of star in *Henry Draper Catalogue*.
+    """
     name = get_regular_name(name)
     hd = name[2:].strip()
 
@@ -297,12 +297,12 @@ def HD_to_TYC(name):
         return [TYCname]
 
 def BD_to_HIP(name):
-    '''Convert a BD name in *Bonner Durchmusterung* to HIP name in *Hipparcos
+    """Convert a BD name in *Bonner Durchmusterung* to HIP name in *Hipparcos
     Catalogue*.
 
     Args:
-        name (string): Name of star in *Bonner Durchmusterung*.
-    '''
+        name (str): Name of star in *Bonner Durchmusterung*.
+    """
     name = get_regular_name(name)
     bd = name[2:].strip()
 
@@ -317,12 +317,12 @@ def BD_to_HIP(name):
         return [HIPname]
 
 def CD_to_HIP(name):
-    '''Convert a CD name in *Cordoba Durchmusterung* to HIP name in *Hipparcos
+    """Convert a CD name in *Cordoba Durchmusterung* to HIP name in *Hipparcos
     Catalogue*.
 
     Args:
-        name (string): Name of star in *Cordoba Durchmusterung*.
-    '''
+        name (str): Name of star in *Cordoba Durchmusterung*.
+    """
     name = get_regular_name(name)
     cd = name[2:].strip()
 
@@ -337,12 +337,12 @@ def CD_to_HIP(name):
         return [HIPname]
 
 def TYC_to_HIP(name):
-    '''Convert a TYC name in *Tycho-2 Catalogue* to HIP name in *Hipparcos
+    """Convert a TYC name in *Tycho-2 Catalogue* to HIP name in *Hipparcos
     Catalogue*.
-    '''
-    if name[0:3]=='TYC':
+    """
+    if name[0:3] == 'TYC':
         g = name[3:].split('-')
-        tyc1,tyc2,tyc3 = int(g[0]),int(g[1]),int(g[2])
+        tyc1, tyc2, tyc3 = int(g[0]), int(g[1]), int(g[2])
 
     filename = os.path.join(xindex_path, 'TYC-HIP.fits')
     f = fits.open(filename)
@@ -356,12 +356,19 @@ def TYC_to_HIP(name):
     else:
         return ['HIP %d'%rec['HIP'] for rec in data[m1][m2][m3]]
 
-def TYC_to_2MASS(name,full=False):
-    '''Convert a TYC name to 2MASS name.
-    '''
-    if name[0:3]=='TYC':
+def TYC_to_2MASS(name, full=False):
+    """Convert a TYC name to 2MASS name.
+
+    Args:
+        name (str):
+        full (bool):
+
+    Returns:
+
+    """
+    if name[0:3] == 'TYC':
         g = name[3:].split('-')
-        tyc1,tyc2,tyc3 = int(g[0]),int(g[1]),int(g[2])
+        tyc1, tyc2, tyc3 = int(g[0]), int(g[1]), int(g[2])
 
     filename = os.path.join(xindex_path, 'TYC-2MASS.fits')
     f = fits.open(filename)
@@ -382,9 +389,15 @@ def TYC_to_2MASS(name,full=False):
         return ['2MASS J%s'%row['2MASS'] for row in data[m1][m2][m3]]
 
 def G_to_TYC(name):
-    '''Convert a G name to TYC name in *Tycho-2 Catalogue*.
-    '''
-    if name[0:2]=='G ':
+    """Convert a G name to TYC name in *Tycho-2 Catalogue*.
+
+    Args:
+        name (str):
+
+    Returns:
+        list
+    """
+    if name[0:2] == 'G ':
         Gname = name[2:].strip()
 
     filename = os.path.join(xindex_path, 'G-TYC.csv')
@@ -398,7 +411,10 @@ def G_to_TYC(name):
         return [TYCname]
 
 def KIC_to_KOI(name):
-    '''Convert a KIC name in *Kepler Input Catalog* to KOI name.
+    """Convert a KIC name in *Kepler Input Catalog* to KOI name.
+
+    Args:
+        name (str):
 
     See also:
         * :func:`stella.catalog.xindex.KOI_to_KIC`
@@ -406,7 +422,7 @@ def KIC_to_KOI(name):
         * :func:`stella.catalog.xindex.Kepler_to_KIC`
         * :func:`stella.catalog.xindex.Kepler_to_KOI`
         * :func:`stella.catalog.xindex.KOI_to_Kepler`
-    '''
+    """
     filename = os.path.join(xindex_path, 'KIC-KOI.csv')
     kic = _get_KIC_number(name)
     f1 = lambda row: int(row.split(',')[0])
@@ -414,7 +430,7 @@ def KIC_to_KOI(name):
     return quickfind_sortedfile(kic, filename, f1, f2)
 
 def KIC_to_Kepler(name):
-    '''Convert a KIC name in *Kepler Input Catalog* to Kepler name.
+    """Convert a KIC name in *Kepler Input Catalog* to Kepler name.
 
     See also:
         * :func:`stella.catalog.xindex.Kepler_to_KIC`
@@ -422,7 +438,7 @@ def KIC_to_Kepler(name):
         * :func:`stella.catalog.xindex.KOI_to_KIC`
         * :func:`stella.catalog.xindex.Kepler_to_KOI`
         * :func:`stella.catalog.xindex.KOI_to_Kepler`
-    '''
+    """
     filename = os.path.join(xindex_path, 'KIC-Kepler.csv')
     kic = _get_KIC_number(name)
     f1 = lambda row: int(row.split(',')[0])
@@ -430,7 +446,10 @@ def KIC_to_Kepler(name):
     return quickfind_sortedfile(kic, filename, f1, f2)
 
 def KOI_to_KIC(name):
-    '''Convert a KOI name to KIC name in *Kepler Input Catalog*.
+    """Convert a KOI name to KIC name in *Kepler Input Catalog*.
+
+    Args:
+        name (str):
 
     See also:
         * :func:`stella.catalog.xindex.KIC_to_KOI`
@@ -438,7 +457,7 @@ def KOI_to_KIC(name):
         * :func:`stella.catalog.xindex.Kepler_to_KOI`
         * :func:`stella.catalog.xindex.Kepler_to_KIC`
         * :func:`stella.catalog.xindex.KIC_to_Kepler`
-    '''
+    """
     filename = os.path.join(xindex_path, 'KOI-KIC.csv')
     koi = int(name)
     f1 = lambda row: int(row.split(',')[0])
@@ -449,7 +468,10 @@ def KOI_to_KIC(name):
         return quickfind_sortedfile(koi, filename, f1, f2)
 
 def KOI_to_Kepler(name):
-    '''Convert a KOI name to Kepler name.
+    """Convert a KOI name to Kepler name.
+
+    Args:
+        name (str):
 
     See also:
         * :func:`stella.catalog.xindex.Kepler_to_KOI`
@@ -457,7 +479,7 @@ def KOI_to_Kepler(name):
         * :func:`stella.catalog.xindex.KIC_to_KOI`
         * :func:`stella.catalog.xindex.KIC_to_Kepler`
         * :func:`stella.catalog.xindex.Kepler_to_KIC`
-    '''
+    """
     filename = os.path.join(xindex_path, 'KOI-Kepler.csv')
     koi = int(name)
     f1 = lambda row: int(row.split(',')[0])
@@ -468,7 +490,10 @@ def KOI_to_Kepler(name):
         return quickfind_sortedfile(koi, filename, f1, f2)
 
 def Kepler_to_KIC(name):
-    '''Convert a Kepler name to KIC name.
+    """Convert a Kepler name to KIC name.
+
+    Args:
+        name (str):
 
     See also:
         * :func:`stella.catalog.xindex.KIC_to_Kepler`
@@ -476,7 +501,7 @@ def Kepler_to_KIC(name):
         * :func:`stella.catalog.xindex.KOI_to_Kepler`
         * :func:`stella.catalog.xindex.KOI_to_KIC`
         * :func:`stella.catalog.xindex.KIC_to_KOI`
-    '''
+    """
     filename = os.path.join(xindex_path, 'Kepler-KIC.csv')
     kepler = int(name)
     f1 = lambda row: int(row.split(',')[0])
@@ -487,7 +512,10 @@ def Kepler_to_KIC(name):
         return quickfind_sortedfile(kepler, filename, f1, f2)
 
 def Kepler_to_KOI(name):
-    '''Convert a Kepler name to KOI name.
+    """Convert a Kepler name to KOI name.
+
+    Args:
+        name (str):
 
     See also:
         * :func:`stella.catalog.xindex.KOI_to_Kepler`
@@ -495,7 +523,7 @@ def Kepler_to_KOI(name):
         * :func:`stella.catalog.xindex.KIC_to_Kepler`
         * :func:`stella.catalog.xindex.KOI_to_KIC`
         * :func:`stella.catalog.xindex.KIC_to_KOI`
-    '''
+    """
     filename = os.path.join(xindex_path, 'Kepler-KOI.csv')
     kepler = int(name)
     f1 = lambda row: int(row.split(',')[0])
@@ -506,8 +534,11 @@ def Kepler_to_KOI(name):
         return quickfind_sortedfile(kepler, filename, f1, f2)
 
 def HIP_to_Gaia(name):
-    '''Convert an HIP name in *Hipparcos Catalogue* to Gaia name.
-    '''
+    """Convert an HIP name in *Hipparcos Catalogue* to Gaia name.
+
+    Args:
+        name (str):
+    """
     if isinstance(name, int):
         hip = name
     elif isinstance(name, str):
@@ -527,11 +558,14 @@ def HIP_to_Gaia(name):
         return data[m][0]['source_id']
 
 def TOI_to_TIC(name):
-    '''Convert TOI (TESS Object of Interest) name to TIC name.
+    """Convert TOI (TESS Object of Interest) name to TIC name.
+
+    Args:
+        name (str):
 
     See also:
         * :func:`stella.catalog.xindex.TIC_to_TOI`
-    '''
+    """
     filename = os.path.join(xindex_path, 'TOI-TIC.csv')
     toi = int(name)
     f1 = lambda row: int(row.split(',')[0])
@@ -539,11 +573,14 @@ def TOI_to_TIC(name):
     return find_sortedfile(toi, filename, f1, f2)
 
 def TIC_to_TOI(name):
-    '''Convert TIC name to TOI name.
+    """Convert TIC name to TOI name.
+
+    Args:
+        name (str):
 
     See also:
         * :func:`stella.catalog.xindex.TOI_to_TIC`
-    '''
+    """
     filename = os.path.join(xindex_path, 'TIC-TOI.csv')
     tic = int(name)
     f1 = lambda row: int(row.split(',')[0])
