@@ -2,8 +2,10 @@ import math
 import numpy as np
 from astropy.coordinates import SkyCoord
 
+from ..constant import ALPHA_NGP, DELTA_NGP, L_NCP, AU, tropical_year
+
 def parse_pairwise(arg):
-    ''' parse value with error'''
+    """Parse value with error"""
     if (isinstance(arg, list) or isinstance(arg, tuple)) and \
         len(arg)==2:
         return arg
@@ -23,48 +25,42 @@ def compute_UVW(**kwargs):
     #        ra, dec, rv, parallax, pm_ra, pm_dec,
     #    rv_err=None, parallax_err=None, pm_ra_err=None, pm_dec_err=None,
     #    hand='left'):
-    '''Compute Galactic velocity components (*U*, *V*, *W*)
+    """Compute Galactic velocity components (*U*, *V*, *W*).
 
-    Parameters
-    -----------
-    ra : *float*
-        Right Ascension in degree at epoch J2000.0
-    dec : *float*
-        Declination in degree at epoch J2000.0
-    eqcoord : *astropy.coordinates.SkyCoord* instance
-        Sky coordinate of object. Either (`ra`, `dec`) or `eqcoord` is necessary
-    pm : *list* or *tuple*
-        Proper motion in mas/yr. Either (`pm_RA`, `pm_Dec`) or ((`pm_RA`,
-        `pm_RA_err`), (`pm_Dec`, `pm_Dec_err`))
-    rv : *float*, *list* or *tuple*
-        Radial velocity in km/s. Either `rv` as a float or (`rv`, `rv_err`)
-    parallax : *float*, *list* or *tuple*
-        Parallax in mas. Either `parallax` as a float or (`parallax`,
-        `parallax_err`)
-    U_plus : *string*, [`center`\ \|\ `anticenter`]
-        Positive direction (towards Galactic center or anti-center) of *U*
-        componenet. Default is `center`
+    Args:
+        ra (float): Right Ascension in degree at epoch J2000.0.
+        dec (float): Declination in degree at epoch J2000.0.
+        eqcoord (:py:class:`astropy.coordinates.SkyCoord`): Sky coordinate of
+            object. Either (`ra`, `dec`) or `eqcoord` is necessary
+        pm (list or tuple): Proper motion in mas/yr. Either (`pm_RA`, `pm_Dec`)
+            or ((`pm_RA`, `pm_RA_err`), (`pm_Dec`, `pm_Dec_err`))
+        rv (float, list or tuple): Radial velocity in km/s. Either `rv` as a
+            float or (`rv`, `rv_err`)
+        parallax (float, list, or tuple): Parallax in mas. Either `parallax` as
+            a float or (`parallax`, `parallax_err`).
+        U_plus (str): Positive direction (towards Galactic center or
+            anti-center) of *U* componenet. Default is `center`.
+            [`center`\ \|\ `anticenter`]
+            
+    Returns:
+        UVW: *tuple*
+            (*U*, *V*, *W*) velocities or ((*U*, *U_err*), (*V*, *V_err*),
+            (*W*, *W_err*)) if all the uncertainties to parallax, proper motion
+            and radial velocity are given.
 
-    Returns
-    --------
-    UVW : *tuple*
-        (*U*, *V*, *W*) velocities or ((*U*, *U_err*), (*V*, *V_err*),
-        (*W*, *W_err*)) if all the uncertainties to parallax, proper motion and
-        radial velocity are given.
-
-    Notes
-    -------
-    .. |kms| replace:: km s\ :sup:`−1`
-    Calculate the Galactic space velocity components (*U*, *V*, *W*) using the
-    formula given by `Johnson & Soderblom 1987
-    <http://adsabs.harvard.edu/abs/1987AJ.....93..864J>`_.
-    The coordinate, parallax, and proper motion are required. The resulting
-    velocities are relative to the Sun. The positive direction of *U* is defined
-    as towards Galactic center in right-handed system, and towards Galactic
-    anticenter in left-handed system. To correct to the local standard of rest
-    (LSR), the solar motion (*U*:sub:`LSR`, *V*:sub:`LSR`, *W*:sub:`LSR`) are
-    needed, e.g. (9.6 ± 3.9, 14.6 ± 5.0, 9.3 ± 1.0) |kms| (`Reid et al. 2014
-    <http://adsabs.harvard.edu/abs/2014ApJ...783..130R>`_).
+    Notes:
+        .. |kms| replace:: km s\ :sup:`−1`
+        Calculate the Galactic space velocity components (*U*, *V*, *W*) using
+        the formula given by `Johnson & Soderblom 1987
+        <http://adsabs.harvard.edu/abs/1987AJ.....93..864J>`_.
+        The coordinate, parallax, and proper motion are required. The resulting
+        velocities are relative to the Sun. The positive direction of *U* is
+        defined as towards Galactic center in right-handed system, and towards
+        Galactic anticenter in left-handed system. To correct to the local
+        standard of rest (LSR), the solar motion (*U*:sub:`LSR`, *V*:sub:`LSR`,
+        *W*:sub:`LSR`) are needed, e.g. (9.6 ± 3.9, 14.6 ± 5.0, 9.3 ± 1.0) |kms|
+        (`Reid et al. 2014
+        <http://adsabs.harvard.edu/abs/2014ApJ...783..130R>`_).
     
 
     Examples
@@ -91,8 +87,7 @@ def compute_UVW(**kwargs):
     * `Johnson & Soderblom, 1987, AJ, 93, 864 <http://adsabs.harvard.edu/abs/1987AJ.....93..864J>`_
     * `Reid et al. 2014, ApJ, 783, 130 <http://adsabs.harvard.edu/abs/2014ApJ...783..130R>`_
 
-    '''
-    from ..constant import ALPHA_NGP, DELTA_NGP, L_NCP, AU, tropical_year
+    """
 
     sin = math.sin
     cos = math.cos
@@ -211,8 +206,7 @@ def compute_UVW(**kwargs):
         return ((U, U_err), (V, V_err), (W, W_err))
 
 def compute_GalXYZ(**kwargs):
-    '''
-    Compute Galactic position (*X*, *Y*, *Z*) in unit of kpc.
+    """Compute Galactic position (*X*, *Y*, *Z*) in unit of kpc.
 
     Args:
         ra (float): Right Ascension in degree at epoch J2000.0
@@ -231,7 +225,7 @@ def compute_GalXYZ(**kwargs):
     Returns:
         tuple: Galactic position (*x*, *y*, *z*) in unit of kpc
 
-    '''
+    """
     # parse RA and Dec
     if 'eqcoord' in kwargs:
         eqcoord = kwargs.pop('eqcoord')
@@ -283,65 +277,57 @@ def compute_GalXYZ(**kwargs):
     return (x, y, z)
 
 def compute_Galorbit(**kwargs):
-    '''
-    Calculate the stellar orbit in the Milky Way.
+    """Calculate the stellar orbit in the Milky Way.
 
-    Parameters
-    -----------
-    potential : *list*
-        List of Galactic potentials
-    xyz : *tuple* or *list*
-        Galactic positions
-    uvw : *tuple* or *list*
-        Galactic space velocity
-    solar_uvw : *tuple* or *list*
-        Solar space velocity
-    t : *list*
-        List of integration time
+    Args:
+        potential (list): List of Galactic potentials.
+        xyz (tuple or list): Galactic positions
+        uvw (tuple or list): Galactic space velocity
+        solar_uvw (tuple or list): Solar space velocity
+        t (list): List of integration time
 
-    Returns
-    --------
-    x_lst : *numpy.array*
-    y_lst : *numpy.array*
-    z_lst : *numpy.array*
+    Returns:
+        A tuple containing:
+            * x_lst (:class:`numpy.ndarray`)
+            * y_lst (:class:`numpy.ndarray`)
+            * z_lst (:class:`numpy.ndarray`)
 
-    Examples
-    ---------
-    Calculate the orbit of the Sun
+    Examples:
+        Calculate the orbit of the Sun
 
-    .. code-block:: python
+        .. code-block:: python
 
-        solar_uvw = (9.6, 255.2, 9.3) # from Reid et al. 2014
-        t_lst = np.arange(0, 0.4, 0.0001) # in Gyr
+            solar_uvw = (9.6, 255.2, 9.3) # from Reid et al. 2014
+            t_lst = np.arange(0, 0.4, 0.0001) # in Gyr
 
-        x_lst, y_lst, z_lst = orbit.compute_Galorbit(
-                                potential = potential_lst,
-                                xyz=(R0,0.,0.),
-                                uvw=(0.,0.,0.),
-                                solar_uvw=solar_uvw,
-                                t=t_lst)
-
-    Calculate the orbit of `HD 122563
-    <http://simbad.u-strasbg.fr/simbad/sim-id?Ident=HD+122563>`_ (HIP 68594)
-
-    .. code-block:: python
-
-        from stella.catalog  import find_catalog
-        hip = 68594
-        item = find_catalog.find_HIP2(hip)
-        ra, dec = item['RAdeg'], item['DEdeg']
-        rv = (-26.58, 0.15) # from SIMBAD
-        parallax = (item['Plx'], item['e_Plx'])
-        pm = ((item['pmRA'], item['e_pmRA']),(item['pmDE'], item['e_pmDE']))
-        uvw = orbit.compute_UVW(ra=ra,dec=dec,rv=rv,parallax=parallax,pm=pm,U_plus='center')
-        xyz = orbit.compute_GalXYZ(ra=ra,dec=dec,parallax=parallax,R0=R0)
-        x1_lst, y1_lst, z1_lst = orbit.compute_Galorbit(
+            x_lst, y_lst, z_lst = orbit.compute_Galorbit(
                                     potential = potential_lst,
-                                    xyz=xyz,
-                                    uvw=uvw,
+                                    xyz=(R0,0.,0.),
+                                    uvw=(0.,0.,0.),
                                     solar_uvw=solar_uvw,
                                     t=t_lst)
-    '''
+
+        Calculate the orbit of `HD 122563
+        <http://simbad.u-strasbg.fr/simbad/sim-id?Ident=HD+122563>`_ (HIP 68594)
+
+        .. code-block:: python
+
+            from stella.catalog  import find_catalog
+            hip = 68594
+            item = find_catalog.find_HIP2(hip)
+            ra, dec = item['RAdeg'], item['DEdeg']
+            rv = (-26.58, 0.15) # from SIMBAD
+            parallax = (item['Plx'], item['e_Plx'])
+            pm = ((item['pmRA'], item['e_pmRA']),(item['pmDE'], item['e_pmDE']))
+            uvw = orbit.compute_UVW(ra=ra,dec=dec,rv=rv,parallax=parallax,pm=pm,U_plus='center')
+            xyz = orbit.compute_GalXYZ(ra=ra,dec=dec,parallax=parallax,R0=R0)
+            x1_lst, y1_lst, z1_lst = orbit.compute_Galorbit(
+                                        potential = potential_lst,
+                                        xyz=xyz,
+                                        uvw=uvw,
+                                        solar_uvw=solar_uvw,
+                                        t=t_lst)
+    """
     from scipy.integrate import odeint
     from ..constant import pc
 

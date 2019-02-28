@@ -6,36 +6,35 @@ import astropy.io.fits as fits
 from scipy.interpolate import RectBivariateSpline
 
 class SFDMapClass(object):
-    '''
-    Galactic dust map of `Schlegel+ 1998
+    """Galactic dust map of `Schlegel+ 1998
     <http://adsabs.harvard.edu/abs/1998ApJ...500..525S>`_.
 
-    Examples
-    --------
+    Examples:
     .. code-block:: python
 
         from stella.extinction import SFDMap
         EBV = SFDMap.get_EBV(l,b)
 
-    where *l*, *b* are Galactic coordinate
-    '''
+    where *l*, *b* are Galactic coordinate.
+    """
     def __init__(self):
 
         self.data = {'n': None, 's': None}
         self.head = {'n': None, 's': None}
 
     def _read_data(self, key):
-        '''Read FITS data.
+        """Read FITS data.
 
         Args:
-            key (string): 'n' (northern hemisphere) or 's' (southern hemisphere)
-        '''
+            key (str): Either 'n' (northern hemisphere) or 's' (southern
+                hemisphere)
+        """
         filename = os.path.join(os.getenv('STELLA_DATA'),
                     'extinction/SFD_dust_4096_%sgp.fits'%key)
         self.data[key], self.head[key] = fits.getdata(filename, header=True)
 
     def get_EBV(self, l, b):
-        '''get *E(B-V)* from the SFD dust map.
+        """get *E(B-V)* from the SFD dust map.
 
         Args:
             l (float): Galactic longitude in degree
@@ -48,7 +47,7 @@ class SFDMapClass(object):
             from stella.extinction import SFDMap
             EBV = SFDMap.get_EBV(l,b)
 
-        '''
+        """
         if b >= 0:
             key = 'n'
         else:

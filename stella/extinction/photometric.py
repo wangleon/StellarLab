@@ -2,19 +2,21 @@ import numpy as np
 from scipy.interpolate import InterpolatedUnivariateSpline
 
 def get_Stromgren_Eby(by,m1,c1,beta):
-    '''
-    Get *E*\ (*b* − *y*) using the method of `Olsen 1988
+    """Get *E*\ (*b* − *y*) using the method of `Olsen 1988
     <http://adsabs.harvard.edu/abs/1988A&A...189..173O>`_.
 
     Args:
         by (float): Color index (*b* − *y*) in Strömgren system.
-        m1 (float): Color index *m*:sub:`1` = (*v* − *b*) − (*b* − *y*) in Strömgren system.
-        c1 (float): Color index *c*:sub:`1` = (*u* − *v*) − (*v* − *b*) in Strömgren system.
-        beta (float): Color index *β* = *β*:sub:`narrow` − *β*:sub:`wide` in Strömgren system.
+        m1 (float): Color index *m*:sub:`1` = (*v* − *b*) − (*b* − *y*) in
+            Strömgren system.
+        c1 (float): Color index *c*:sub:`1` = (*u* − *v*) − (*v* − *b*) in
+            Strömgren system.
+        beta (float): Color index *β* = *β*:sub:`narrow` − *β*:sub:`wide` in
+            Strömgren system.
     Returns:
         float: Value of *E*\ (*b* − *y*).
     
-    '''
+    """
 
     # interpolated table from Crawford, 1975, AJ, 80, 955 table 1
     beta_lst = np.arange(2.590,2.720+1e-6, 0.01)
