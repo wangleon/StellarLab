@@ -1,6 +1,8 @@
 from . import specwcs
-def wl_vac_to_air(wl_vac, unit='Angstrom',ref='Ciddor1996'):
-    '''
+
+
+def wl_vac_to_air(wl_vac, unit='Angstrom' ,ref='Ciddor1996'):
+    """
     Convert vacuum wavelength to air wavelength.
 
     Args:
@@ -8,9 +10,9 @@ def wl_vac_to_air(wl_vac, unit='Angstrom',ref='Ciddor1996'):
         ref (str): Reference.
     Returns:
         float: Air wavelength
-    '''
+    """
 
-    if ref in ['IAU','Edlen1953']:
+    if ref in ['IAU', 'Edlen1953']:
         a, b1, b2, c1, c2 = 6.4328e-5, 2.94981e-2, 2.5540e-4, 146.0, 41.0
         eq = 1
     elif ref=='Edlen1966':

@@ -6,7 +6,7 @@ from ..utils.asciitable import structitem_to_dict
 from .name import _get_HD_number
 
 class _HD(object):
-    '''Class for *Hennry Draper Catalogue* (`III/135A
+    """Class for *Hennry Draper Catalogue* (`III/135A
     <http://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=III/135A>`_, Cannon &
     Pickering 1918-1924).
 
@@ -25,14 +25,14 @@ class _HD(object):
         Int,   string,    ,    Photographic intensity of spectrum
         Rem,   character, ,    Remarks
 
-    '''
+    """
 
     def __init__(self):
         self.catfile = os.path.join(os.getenv('STELLA_DATA'), 'catalog/HD.fits')
         self._data_info = None
 
     def _get_data_info(self):
-        '''Get information of FITS table.'''
+        """Get information of FITS table."""
         nbyte, nrow, ncol, pos, dtype, fmtfunc = get_bintable_info(self.catfile)
         self._data_info = {
                 'nbyte'  : nbyte,
@@ -44,12 +44,11 @@ class _HD(object):
                 }
 
     def find_object(self, name, output='dict'):
-        '''
-        Find record for an object in *Henry Draper Catalogue*.
+        """Find record for an object in *Henry Draper Catalogue*.
 
         Args:
-            name (string or integer): Name or number of star.
-            output (string): Type of output results. Either *"dict"* or
+            name (str or int): Name or number of star.
+            output (str): Type of output results. Either *"dict"* or
                 *"dtype"* (:class:`numpy.dtype`).
         Returns:
             dict or :class:`numpy.dtype`: Record in catalogue.
@@ -63,7 +62,7 @@ class _HD(object):
                 >>> rec['RAdeg'], rec['DEdeg'], rec['Ptm'], rec['Ptg'], rec['SpT']
                 (24.85, -16.466666666666665, 3.6500000953674316, 4.650000095367432, 'K0')
 
-        '''
+        """
 
         hd = _get_HD_number(name)
 

@@ -6,7 +6,7 @@ from ..utils.asciitable import structitem_to_dict
 from .name import _get_HR_number
 
 class _BSC(object):
-    '''Class for *Bright Star Catalogue* 5th Edition (`V/50
+    """Class for *Bright Star Catalogue* 5th Edition (`V/50
     <http://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=V/50>`_, Hoffleit+
     1991).
 
@@ -42,14 +42,14 @@ class _BSC(object):
         MultID,    string4,   ,       Identifications of components in Dmag
         MultCnt,   integer16, ,       Number of components assigned to a multiple
         
-    '''
+    """
 
     def __init__(self):
         self.catfile = os.path.join(os.getenv('STELLA_DATA'), 'catalog/BSC.fits')
         self._data_info = None
 
     def _get_data_info(self):
-        '''Get information of FITS table.'''
+        """Get information of FITS table."""
         nbyte, nrow, ncol, pos, dtype, fmtfunc = get_bintable_info(self.catfile)
         self._data_info = {
                 'nbyte'  : nbyte,
@@ -61,18 +61,17 @@ class _BSC(object):
                 }
 
     def find_object(self, name, output='dict'):
-        '''
-        Find record for an object in *Bright Star Catalogue*, 5th Edition.
+        """Find record for an object in *Bright Star Catalogue*, 5th Edition.
 
         Args:
-            name (string or integer): Name or number of star.
-            output (string): Type of output results. Either *"dict"* or
+            name (str or int): Name or number of star.
+            output (str): Type of output results. Either *"dict"* or
                 *"dtype"* (:class:`numpy.dtype`).
         Returns:
             dict or :class:`numpy.dtype`: Record in catalogue.
         Examples:
 
-        '''
+        """
 
         hr = _get_HR_number(name)
 

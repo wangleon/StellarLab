@@ -7,7 +7,7 @@ from ..utils.asciitable import structitem_to_dict
 from .name import _get_EPIC_number
 
 class _EPIC(object):
-    '''Class for *K2 Ecliptic Plane Input Catalog* (EPIC, `Huber+ 2016
+    """Class for *K2 Ecliptic Plane Input Catalog* (EPIC, `Huber+ 2016
     <http://adsabs.harvard.edu/abs/2016ApJS..224....2H>`_).
 
     For more details, see :ref:`K2 Ecliptic Plane Input Catalog<catalog_epic>`.
@@ -84,7 +84,7 @@ class _EPIC(object):
         ue_E(B-V), float32,   mag,         Upper uncertainty on *E*\ (*B* − *V*)
         le_E(B-V), float32,   mag,         Lower uncertainty on *E*\ (*B* − *V*)
 
-    '''
+    """
 
     def __init__(self):
         self.catfile = {dataset: os.path.join(os.getenv('STELLA_DATA'),
@@ -102,14 +102,14 @@ class _EPIC(object):
         self._data_info = {}
         
     def _get_data_info(self, dataset):
-        '''Get information of FITS table.
+        """Get information of FITS table.
         
         Args:
-            dataset (integer): Number of EPIC table (1~6).
+            dataset (int): Number of EPIC table (1~6).
         Returns:
             No returns
 
-        '''
+        """
         nbyte, nrow, ncol, pos, dtype, fmtfunc = get_bintable_info(self.catfile[dataset])
         self._data_info[dataset] = {
                 'nbyte'  : nbyte,
@@ -121,7 +121,7 @@ class _EPIC(object):
                 }
         
     def find_object(self, name, output='dict'):
-        '''Find records in *K2 Ecliptic Plane Input Catalog*.
+        """Find records in *K2 Ecliptic Plane Input Catalog*.
 
         Args:
             name (string or integer): Name or number of star.
@@ -141,7 +141,7 @@ class _EPIC(object):
                 >>> rec['kepmag'], rec['Teff'], rec['logg'], rec['FeH']
                 (11.112000465393066, 4899, 2.9719998836517334, -0.3970000147819519)
 
-        '''
+        """
         
         epic = _get_EPIC_number(name)
         for dataset, (epic1, epic2) in sorted(self._epic_ranges.items()):

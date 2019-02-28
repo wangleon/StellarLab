@@ -8,24 +8,30 @@ planet_files = {
 
 
 def load_systems(release):
-    '''Return a planetary system list in the given data releases.
-    '''
+    """Return a planetary system list in the given data releases.
+
+    Args:
+        release:
+    """
     pass
 
 def load_planets(release):
-    '''Return a planet list in the given data releases.
-    '''
+    """Return a planet list in the given data releases.
+
+    Args:
+        release:
+    """
     pass
 
 def find_system(koi, release):
-    '''Find parameters of a planetary system in the given data releases.
+    """Find parameters of a planetary system in the given data releases.
 
     Args:
-        koi (integer): KOI number of a planetary system.
-        release (integer): List of data releases.
+        koi (int): KOI number of a planetary system.
+        release (int): List of data releases.
     Return:
         dict: A dict containing parameters of planets in the system.
-    '''
+    """
     result = {}
     for dataset in release:
         if dataset == 1:
@@ -47,14 +53,14 @@ def find_system(koi, release):
     return result
 
 def find_planet(planet_id, release):
-    '''Find parameters of a planet in the given data releases.
+    """Find parameters of a planet in the given data releases.
     
     Args:
         planet_id (float): KOI number `NNN.NN` of a planet candidate.
-        release (integer): List of data releases.
+        release (int): List of data releases.
     Return:
         list: A list containing parameter tuple as elements.
-    '''
+    """
     result = []
     for dataset in release:
         if dataset == 2:
@@ -71,14 +77,14 @@ def find_planet(planet_id, release):
     return result
 
 def _parse_planet_record_r1(row):
-    '''Parse a planet record in the table of `Borucki+ 2011a
+    """Parse a planet record in the table of `Borucki+ 2011a
     <http://adsabs.harvard.edu/abs/2011ApJ...728..117B>`_.
 
     Args:
-        row (string): The row in Borucki et al. 2011a.
+        row (str): The row in Borucki et al. 2011a.
     Returns:
         dict: A dict containing the planet parameters.
-    '''
+    """
     koi       = int(row[0:3])
     planet_id = float(row[0:6])
     r         = float(row[21:25])*11.209
@@ -92,14 +98,14 @@ def _parse_planet_record_r1(row):
             }
 
 def _parse_planet_record_r2(row):
-    '''Parse a planet record in the table of `Borucki+ 2011b
+    """Parse a planet record in the table of `Borucki+ 2011b
     <http://adsabs.harvard.edu/abs/2011ApJ...736...19B>`_.
 
     Args:
-        row (string): The row in Borucki et al. 2011b.
+        row (str): The row in Borucki et al. 2011b.
     Returns:
         dict: A dict containing the planet parameters.
-    '''
+    """
     koi       = int(row[12:16])
     planet_id = float(row[12:19])
     Tdur      = _str_to_float(row[20:27])
@@ -133,9 +139,8 @@ def _parse_planet_record_r2(row):
 
 
 def find_Kepler_cands_r2(koi):
-    '''
-    Find planet candidates in the second release of *Kepler Mission* on Feb. 2,
-    2011 (Borucki+ 2011).
+    """Find planet candidates in the second release of *Kepler Mission* on Feb.
+    2, 2011 (Borucki+ 2011).
 
     On Feb. 2, 2011, the *Kepler* team announced the second planet candidate
     list based on the data taken between May 2 and Sep. 16, 2010
@@ -163,13 +168,13 @@ def find_Kepler_cands_r2(koi):
         ref,    string,    ,            Reference. fixed to 'Borucki et al. 2011b'
 
     Args:
-        koi (integer or float): KOI number of the star (if finding all planets
+        koi (int or float): KOI number of the star (if finding all planets
             orbiting a star) or planet name (if finding a planet).
     Returns:
         dict: A dict containing parameters of all planets around a host star or
             the parameters of the input planet.
 
-    '''
+    """
 
     filename = os.path.join(os.getenv('STELLA_DATA'),
                 'catalog/Kepler/ApJ.736.19.table2.dat')

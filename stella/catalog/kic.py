@@ -6,7 +6,7 @@ from ..utils.asciitable import structitem_to_dict
 from .name import _get_KIC_number
 
 class _KIC(object):
-    '''Class for *Kepler Input Catalog* (`V/133
+    """Class for *Kepler Input Catalog* (`V/133
     <http://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=V/133>`_, Kepler
     Mission Team, 2009).
 
@@ -48,13 +48,13 @@ class _KIC(object):
         R,      float32,   *R*:sub:`⊙`, Stellar radius
 
 
-    '''
+    """
     def __init__(self):
         self.catfile = os.path.join(os.getenv('STELLA_DATA'), 'catalog/KIC.fits')
         self._data_info = None
 
     def _get_data_info(self):
-        '''Get information of FITS table.'''
+        """Get information of FITS table."""
         nbyte, nrow, ncol, pos, dtype, fmtfunc = get_bintable_info(self.catfile)
         self._data_info = {
                 'nbyte'  : nbyte,
@@ -66,12 +66,11 @@ class _KIC(object):
                 }
         
     def find_object(self, name, output='dict'):
-        '''
-        Find records in *Kepler Input Catalog*.
+        """Find records in *Kepler Input Catalog*.
 
         Args:
-            name (string or integer): Name or number of star.
-            output (string): Type of output results. Either *"dict"* or
+            name (str or int): Name or number of star.
+            output (str): Type of output results. Either *"dict"* or
                 *"dtype"* (:class:`numpy.dtype`).
         Returns:
             dict or :class:`numpy.dtype`: Record in catalogue.
@@ -87,7 +86,7 @@ class _KIC(object):
                 >>> rec['kepmag']
                 9.958000183105469
 
-        '''
+        """
 
         kic = _get_KIC_number(name)
 

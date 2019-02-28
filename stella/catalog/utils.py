@@ -7,22 +7,20 @@ from astropy.coordinates import SkyCoord
 
 def plot_skymap(ra, dec, figfile, projection='hammer', figsize=(8,4.5), dpi=150,
     size=1, alpha=0.1):
-    '''Plot a skymap of sample stars.
+    """Plot a skymap of sample stars.
 
     Args:
-        ra (list or :class:`numpy.array`): List of RA.
-        dec (list or :class:`numpy.array`): List of Dec.
-        figfile (string): Name of output figure.
-        projection (string): Projection of map. Avialable options include
+        ra (list or :class:`numpy.ndarray`): List of RA.
+        dec (list or :class:`numpy.ndarray`): List of Dec.
+        figfile (str): Name of output figure.
+        projection (str): Projection of map. Avialable options include
             'aitoff', 'mollweide', and 'hammer'.
         figsize (tuple): Size of figure in tuple (width, height).
-        dpi (integer): DPI of figure.
+        dpi (int): DPI of figure.
         size (float): Size of data points.
         alpha (float): A float between (0, 1] representing the transparency of
             data points.
-    Returns:
-        No returns.
-    '''
+    """
 
     fig = plt.figure(figsize=figsize, dpi=dpi)
     ax  = fig.add_axes([0.05, 0.05, 0.9, 0.9], projection=projection)
@@ -57,28 +55,26 @@ def plot_skymap(ra, dec, figfile, projection='hammer', figsize=(8,4.5), dpi=150,
 def plot_histogram(x, xlabel, figfile, bins, figsize=(8,6), dpi=150,
     color='#1166aa', alpha=1, rwidth=0.9, yscale='log', xlim=None, ylim=None,
     xticks=None, ticksize=13, labelsize=15):
-    '''Plot a histogram.
+    """Plot a histogram.
 
     Args:
-        x (list or :class:`numpy.array`): List of data.
-        xlabel (string): Label in X-axis.
-        figfile (string): Name of output figure.
-        bins (list or :class:`numpy.array`): Bins of data.
+        x (list or :class:`numpy.ndarray`): List of data.
+        xlabel (str): Label in X-axis.
+        figfile (str): Name of output figure.
+        bins (list or :class:`numpy.ndarray`): Bins of data.
         figsize (tuple): Size of figure in tuple (width, height).
-        dpi (integer): DPI of figure.
-        color (string): Color of histogram bars.
+        dpi (int): DPI of figure.
+        color (str): Color of histogram bars.
         alpha (float): A float between (0, 1] representing the transparency of
             histogram bars.
         rwidth (float): Relative width of histogram bars.
-        yscale (string): Scale of Y axis. Either 'linear' or 'log'.
+        yscale (str): Scale of Y axis. Either 'linear' or 'log'.
         xlim (tuple): Limits of X axis.
         ylim (tuple): Limits of Y axis.
         xticks (list): List of ticks in X axis.
-        ticksize (integer): Size of tick labels.
-        labelsize (integer): Size of X and Y axis labels.
-    Returns:
-        No returns.
-    '''
+        ticksize (int): Size of tick labels.
+        labelsize (int): Size of X and Y axis labels.
+    """
 
     fig = plt.figure(figsize=figsize, dpi=dpi)
     ax = fig.add_axes([0.1,0.1,0.88,0.85])
@@ -111,26 +107,24 @@ def plot_histogram(x, xlabel, figfile, bins, figsize=(8,6), dpi=150,
 def plot_histogram2d(x, y, xbins, ybins, xlabel, ylabel, figfile,
     figsize=(8,6), dpi=150, reverse_x=False, reverse_y=False, scale='log',
     ticksize=13, labelsize=15):
-    '''Plot a 2-D histogram of H-R diagram.
+    """Plot a 2-D histogram of H-R diagram.
 
     Args:
-        x (list or :class:`numpy.array`): List of x data.
-        y (list or :class:`numpy.array`): List of y data.
-        xbins (list or :class:`numpy.array`): Bins of data along x axis.
-        ybins (list or :class:`numpy.array`): Bins of data along y axis.
-        xlabel (string): Label in x-axis.
-        ylabel (string): Label in y-axis.
-        figfile (string): Name of output figure.
+        x (list or :class:`numpy.ndarray`): List of x data.
+        y (list or :class:`numpy.ndarray`): List of y data.
+        xbins (list or :class:`numpy.ndarray`): Bins of data along x axis.
+        ybins (list or :class:`numpy.ndarray`): Bins of data along y axis.
+        xlabel (str): Label in x-axis.
+        ylabel (str): Label in y-axis.
+        figfile (str): Name of output figure.
         figsize (tuple): Size of figure in tuple (width, height).
-        dpi (integer): DPI of figure.
+        dpi (int): DPI of figure.
         reverse_x (bool): Reverse x axis if *True*.
         reverse_y (bool): Reverse y axis if *True*.
-        scale (string): Scale of y axis.
-        ticksize (integer): Size of tick labels.
-        labelsize (integer): Size of X and Y axis labels.
-    Returns:
-        No returns.
-    '''
+        scale (str): Scale of y axis.
+        ticksize (int): Size of tick labels.
+        labelsize (int): Size of X and Y axis labels.
+    """
 
     fig = plt.figure(figsize=figsize, dpi=dpi)
     ax1 = fig.add_axes([0.1,0.1,0.75,0.85])

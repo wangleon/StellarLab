@@ -7,8 +7,7 @@ from ..utils.asciitable import structitem_to_dict
 from .name import _get_HIP_number
 
 def _find_HIP_object(name, catfile, data_info, epoch=2000.0, output='dict'):
-    '''
-    Find record for an object in either HIP catalogue (`I/239
+    """Find record for an object in either HIP catalogue (`I/239
     <http://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=I/239>`_, Perryman+
     1997) or HIP New Reduction (`I/311
     <http://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=I/311>`_, van Leeuwen
@@ -23,7 +22,7 @@ def _find_HIP_object(name, catfile, data_info, epoch=2000.0, output='dict'):
             (:class:`numpy.dtype`).
     Returns:
         dict or :class:`numpy.dtype`: Record in catalogue.
-    '''
+    """
 
     def change_epoch(item, epoch):
         pm_ra = item['pmRA']*1e-3/3600. # convert pm_RA from mas/yr to deg/yr
@@ -59,7 +58,7 @@ def _find_HIP_object(name, catfile, data_info, epoch=2000.0, output='dict'):
 
 
 class _HIP(object):
-    '''Class for *Hipparcos Catalogue* (`I/239
+    """Class for *Hipparcos Catalogue* (`I/239
     <http://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=I/239>`_, Perryman+
     1997).
 
@@ -97,14 +96,14 @@ class _HIP(object):
         o_Hpmag,  integer16, ,       Number of observations for *Hp* magnitude
         SpType,   string,    mag,    Spectral type
         r_SpType, character, ,       Source of Spectral type
-    '''
+    """
 
     def __init__(self):
         self.catfile = os.path.join(os.getenv('STELLA_DATA'), 'catalog/HIP.fits')
         self._data_info = None
 
     def _get_data_info(self):
-        '''Get information of FITS table.'''
+        """Get information of FITS table."""
         nbyte, nrow, ncol, pos, dtype, fmtfunc = get_bintable_info(self.catfile)
         self._data_info = {
                 'nbyte'  : nbyte,
@@ -116,8 +115,7 @@ class _HIP(object):
                 }
 
     def find_object(self, name, epoch=2000.0, output='dict'):
-        '''
-        Find record for an object in *Hipparcos Catalogue*.
+        """Find record for an object in *Hipparcos Catalogue*.
     
         Args:
             name (string or integer): Name or number of star.
@@ -138,7 +136,7 @@ class _HIP(object):
                 >>> rec['Vmag'], rec['B-V'], rec['Plx'], rec['e_Plx']
                 (3.490000009536743, 0.7269999980926514, 274.1700134277344, 0.800000011920929)
     
-        '''
+        """
 
         if self._data_info is None:
             self._get_data_info()
@@ -147,7 +145,7 @@ class _HIP(object):
 
 
 class _HIP2(object):
-    '''Class for *Hipparcos Catalogue New Reduction* (`I/311
+    """Class for *Hipparcos Catalogue New Reduction* (`I/311
     <http://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=I/311>`_, van Leeuwen
     2007).
 
@@ -175,14 +173,14 @@ class _HIP2(object):
         e_Hpmag, float32,   mag,    Error in *Hp* magnitude
         Hpscat,  float32,   mag,    Scatter on *Hp* magnitude
     
-    '''
+    """
 
     def __init__(self):
         self.catfile = os.path.join(os.getenv('STELLA_DATA'), 'catalog/HIP2.fits')
         self._data_info = None
 
     def _get_data_info(self):
-        '''Get information of FITS table.'''
+        """Get information of FITS table."""
         nbyte, nrow, ncol, pos, dtype, fmtfunc = get_bintable_info(self.catfile)
         self._data_info = {
                 'nbyte'  : nbyte,
@@ -194,13 +192,12 @@ class _HIP2(object):
                 }
 
     def find_object(self, name, epoch=2000.0, output='dict'):
-        '''
-        Find record for an object in *Hipparcos Catalogue New Reduction*.
+        """Find record for an object in *Hipparcos Catalogue New Reduction*.
 
         Args:
-            name (string or integer): Name or number of star.
+            name (str or int): Name or number of star.
             epoch (float): Epoch of output astrometric parameters.
-            output (string): Type of output results. Either *"dict"* or *"dtype"*
+            output (str): Type of output results. Either *"dict"* or *"dtype"*
                 (:class:`numpy.dtype`).
         Returns:
             dict or :class:`numpy.dtype`: Record in catalogue.
@@ -219,7 +216,7 @@ class _HIP2(object):
                 >>> rec2['RAdeg'], rec2['DEdeg']
                 (26.017014215650022, -15.937479641367434)
 
-        '''
+        """
 
         if self._data_info is None:
             self._get_data_info()

@@ -6,7 +6,7 @@ from ..utils.asciitable import structitem_to_dict
 from .name import _get_SAO_number
 
 class _SAO(object):
-    '''Class for *Smithsonian Astrophysical Observatory Star Catalog* (`I/131A
+    """Class for *Smithsonian Astrophysical Observatory Star Catalog* (`I/131A
     <http://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=I/131A>`_, SAO Staff
     1966).
 
@@ -33,14 +33,14 @@ class _SAO(object):
         pmRA2000,  float32,   mas/yr, Proper motion in Right ascension in FK5 system
         pmDE2000,  float32,   mas/yr, Proper motion in Declination in FK5 system
 
-    '''
+    """
 
     def __init__(self):
         self.catfile = os.path.join(os.getenv('STELLA_DATA'), 'catalog/SAO.fits')
         self._data_info = None
 
     def _get_data_info(self):
-        '''Get information of FITS table.'''
+        """Get information of FITS table."""
         nbyte, nrow, ncol, pos, dtype, fmtfunc = get_bintable_info(self.catfile)
         self._data_info = {
                 'nbyte'  : nbyte,
@@ -52,13 +52,12 @@ class _SAO(object):
                 }
 
     def find_object(self, name, output='dict'):
-        '''
-        Find record for an object in *Smithsonian Astrophysical Observatory Star
-        Catalog*.
+        """Find record for an object in *Smithsonian Astrophysical Observatory
+        Star Catalog*.
 
         Args:
-            name (string or integer): Name or number of star.
-            output (string): Type of output results. Either *"dict"* or
+            name (str or int): Name or number of star.
+            output (str): Type of output results. Either *"dict"* or
                 *"dtype"* (:class:`numpy.dtype`).
         Returns:
             dict or :class:`numpy.dtype`: Record in catalogue.
@@ -72,7 +71,7 @@ class _SAO(object):
                 >>> rec['RAdeg2000'], rec['DEdeg2000']
                 (26.017158333333334, -15.937394444444445)
 
-        '''
+        """
 
         sao = _get_SAO_number(name)
 

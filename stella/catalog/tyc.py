@@ -7,7 +7,7 @@ from ..utils.asciitable import structitem_to_dict
 from .name import _get_TYC_number
 
 class _TYC(object):
-    '''Class for *Tycho Catalogue* (`I/239/tyc_main
+    """Class for *Tycho Catalogue* (`I/239/tyc_main
     <http://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=I/239/tyc_main>`_, ESA
     1997).
 
@@ -45,14 +45,14 @@ class _TYC(object):
         VarFlag,  character, ,       Variability flag
         MultFlag, character, ,       Duplicity flag
         
-    '''
+    """
 
     def __init__(self):
         self.catfile = os.path.join(os.getenv('STELLA_DATA'), 'catalog/TYC.fits')
         self._data_info = None
 
     def _get_data_info(self):
-        '''Get information of FITS table.'''
+        """Get information of FITS table."""
         nbyte, nrow, ncol, pos, dtype, fmtfunc = get_bintable_info(self.catfile)
         self._data_info = {
                 'nbyte'  : nbyte,
@@ -64,8 +64,7 @@ class _TYC(object):
                 }
 
     def find_object(self, name, epoch=2000.0, output='dict'):
-        '''
-        Find record for an object in *Tycho Catalogue*.
+        """Find record for an object in *Tycho Catalogue*.
     
         Args:
             name (string or tuple): Name or nunmber tuple of star.
@@ -86,7 +85,7 @@ class _TYC(object):
                 >>> rec['pmRA'], rec['pmDE']
                 (-516.4000244140625, -25.299999237060547)
 
-        '''
+        """
 
         tyc1, tyc2, tyc3 = _get_TYC_number(name)
     
@@ -138,7 +137,7 @@ class _TYC(object):
             return None
 
 class _TYC2(object):
-    '''Class for *Tycho-2 Catalogue* (`I/259
+    """Class for *Tycho-2 Catalogue* (`I/259
     <http://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=I/259>`_, Høg+ 2000).
 
     The *Tycho-2 Catalogue* contains 2,539,913 records, and additonal 17,588
@@ -171,14 +170,14 @@ class _TYC2(object):
         e_VTmag,  float32,   mag,    Error in *V*:sub:`T` magnitude
         prox,     float32,   arcsec, "Proximity, or distance to the nearest entry (truncated to 99.9 if >99.9)"
 
-    '''
+    """
 
     def __init__(self):
         self.catfile = os.path.join(os.getenv('STELLA_DATA'), 'catalog/TYC2.fits')
         self._data_info = None
 
     def _get_data_info(self):
-        '''Get information of FITS table.'''
+        """Get information of FITS table."""
         nbyte, nrow, ncol, pos, dtype, fmtfunc = get_bintable_info(self.catfile)
         self._data_info = {
                 'nbyte'  : nbyte,
@@ -190,8 +189,7 @@ class _TYC2(object):
                 }
 
     def find_object(self, name, epoch=2000.0, output='dict'):
-        '''
-        Find record for an object in *Tycho-2 Catalogue*.
+        """Find record for an object in *Tycho-2 Catalogue*.
     
         Args:
             name (string or tuple): Name or nunmber tuple of star.
@@ -212,7 +210,7 @@ class _TYC2(object):
                 >>> rec['pmRA'], rec['pmDE']
                 (-798.7999877929688, 10277.2998046875)
 
-        '''
+        """
 
         tyc1, tyc2, tyc3 = _get_TYC_number(name)
     
