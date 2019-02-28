@@ -2,9 +2,8 @@ import numpy as np
 from scipy.interpolate import griddata
 
 def feh_to_z(feh, alpha=0.0):
-    '''
-    Convert stellar [Fe/H] abundances between [−3.0, +1.0] and [α/Fe] abundances
-    between [0.0, +0.6] to *Z*.
+    """Convert stellar [Fe/H] abundances between [−3.0, +1.0] and [α/Fe]
+    abundances between [0.0, +0.6] to *Z*.
 
     Args:
         feh (float): Iron abundance ([Fe/H]).
@@ -20,9 +19,7 @@ def feh_to_z(feh, alpha=0.0):
        :width: 800px
        :figwidth: 800px
 
-
-
-    '''
+    """
     ydata,xdata = np.mgrid[0.0:0.6+1e-3:0.3,-3.0:1.0+1e-3:0.5]
     coor = np.concatenate((xdata.reshape(-1,1),
                            ydata.reshape(-1,1)),axis=1)

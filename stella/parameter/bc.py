@@ -5,7 +5,7 @@ import numpy.polynomial as poly
 from .errors import ColorIndexError, ParamRangeError, MissingParamError
 
 def get_BC(**kwargs):
-    '''Get bolometric correction (BC) using a variety of calibration relations.
+    """Get bolometric correction (BC) using a variety of calibration relations.
 
     Available calibration relations:
 
@@ -14,7 +14,7 @@ def get_BC(**kwargs):
         * `Alonso1999`: returns *BC* using *T*:sub:`eff` and [Fe/H] for giants.
         * `Flower1996`: returns *BC* using *T*:sub:`eff`.
         * `Masana2006`: returns *BC* using *T*:sub:`eff`.
-    '''
+    """
 
     ref = kwargs.pop('ref', None)
     if ref == 'Alonso1995':
@@ -28,7 +28,7 @@ def get_BC(**kwargs):
     return bc
 
 def _get_BC_Flower1996(**kwargs):
-    '''Get *BC* in *V* band according to *T*:sub:`eff` using the relation given
+    """Get *BC* in *V* band according to *T*:sub:`eff` using the relation given
     by `Flower 1996 <http://adsabs.harvard.edu/abs/1996ApJ...469..355F>`_.
 
     Args:
@@ -40,7 +40,7 @@ def _get_BC_Flower1996(**kwargs):
     <http://adsabs.harvard.edu/abs/1996ApJ...469..355F>`_ missed powers of ten.
     `Torres 2010 <http://adsabs.harvard.edu/abs/2010AJ....140.1158T>`_ gave the
     corrent version in Table 1.
-    '''
+    """
     coeff1 = [-0.118115450538963E+06,
                0.137145973583929E+06,
               -0.636233812100225E+05,
@@ -74,13 +74,13 @@ def _get_BC_Flower1996(**kwargs):
 
 
 def _get_dwarf_BC_Alonso1995(**kwargs):
-    '''Get *BC* in *V* or *K* for dwarfs using the calibration relations given
+    """Get *BC* in *V* or *K* for dwarfs using the calibration relations given
     by `Alonso+ 1995 <http://adsabs.harvard.edu/abs/1995A&A...297..197A>`_.
     
     Parameters:
         V_K (float): (*V* − *K*) color
         FeH (float): [Fe/H] ratio
-        band (string, optional): Either "V" or "K"
+        band (str, optional): Either "V" or "K"
 
     Returns:
         float or dict: *BC*:sub:`V` or *BC*:sub:`K`, if `band` is given; or
@@ -105,7 +105,7 @@ def _get_dwarf_BC_Alonso1995(**kwargs):
 
     References:
         * `Alonso et al., 1995, A&A, 297, 197 <http://adsabs.harvard.edu/abs/1995A&A...297..197A>`_
-    '''
+    """
     reference = 'Alonso, 1995, A&A, 297, 197'
 
     V_K           = kwargs.pop('V_K', None)
@@ -176,7 +176,7 @@ def _get_dwarf_BC_Alonso1995(**kwargs):
 
 
 def _get_giant_BC_Alonso1999(**kwargs):
-    '''Get BC for giants using the calibrations relations given by `Alonso+ 1999
+    """Get BC for giants using the calibrations relations given by `Alonso+ 1999
     <http://adsabs.harvard.edu/abs/1999A&AS..140..261A>`_.
 
     Args:
@@ -188,7 +188,7 @@ def _get_giant_BC_Alonso1999(**kwargs):
 
     References:
         * `Alonso et al., 1999, A&AS, 140, 261 <http://adsabs.harvard.edu/abs/1999A&AS..140..261A>`_
-    '''
+    """
 
     teff          = kwargs.pop('Teff', None)
     FeH           = kwargs.pop('FeH', 0.0)
@@ -223,19 +223,19 @@ def _get_giant_BC_Alonso1999(**kwargs):
     return bc
     
 def _get_dwarf_BC_Masana2006(**kwargs):
-    '''Get BC for dwarfs using the calibration relations given by `Masana+ 2006
+    """Get BC for dwarfs using the calibration relations given by `Masana+ 2006
     <http://adsabs.harvard.edu/abs/2006A&A...450..735M>`_.
 
     References
     ----------
     * `Masana et al. 2006, A&A, 450, 735 <http://adsabs.harvard.edu/abs/2006A&A...450..735M>`_
 
-    '''
+    """
     index = kwargs.pop('index')
     color = kwargs.pop('color')
-    FeH   = kwargs.pop('FeH',0.0)
-    logg  = kwargs.pop('logg',4.2)
-    extrapolation = kwargs.pop('extrapolation',False)
+    FeH   = kwargs.pop('FeH', 0.0)
+    logg  = kwargs.pop('logg', 4.2)
+    extrapolation = kwargs.pop('extrapolation', False)
 
     if index == 'V-K':
         if extrapolation or \

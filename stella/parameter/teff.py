@@ -7,12 +7,12 @@ def get_Teff():
     pass
 
 def color_to_Teff(index, color, ref, **kwargs):
-    '''Convert color to *T*:sub:`eff` using a variety of calibration relations.
+    """Convert color to *T*:sub:`eff` using a variety of calibration relations.
 
     Args:
-        index (string): Name of color index.
+        index (str): Name of color index.
         color (float): Value of color index.
-        ref (string): Reference.
+        ref (str): Reference.
         extrapolation (bool): Extend the applicable ranges if *True*. Default is
             *False*.
     Returns:
@@ -40,7 +40,7 @@ def color_to_Teff(index, color, ref, **kwargs):
         * `Masana et al. 2006, A&A, 450, 735 <http://adsabs.harvard.edu/abs/2006A&A...450..735M>`_
         * `Önehag et al., 2009, A&A, 498, 527 <http://adsabs.harvard.edu/abs/2009A&A...498..527O>`_
         * `Ramírez & Meléndez, 2005, ApJ, 626, 465 <http://adsabs.harvard.edu/abs/2005ApJ...626..465R>`_
-    '''
+    """
     if ref == 'Flower1996':
         is_supergiant = kwargs.pop('is_supergiant', False)
         Teff = _BV_to_Teff_Flower1996(color, is_supergiant)
@@ -88,7 +88,7 @@ def color_to_Teff(index, color, ref, **kwargs):
     return Teff
 
 def _BV_to_Teff_Flower1996(BV, is_supergiant=False):
-    '''Convert *B* − *V* to *T*:sub:`eff` using the calibration relations given
+    """Convert *B* − *V* to *T*:sub:`eff` using the calibration relations given
     by `Flower 1996 <http://adsabs.harvard.edu/abs/1996ApJ...469..355F>`_.
 
     The coefficients are given in Table 5 of `Flower 1996
@@ -108,7 +108,7 @@ def _BV_to_Teff_Flower1996(BV, is_supergiant=False):
         * `Flower, 1996, ApJ, 469, 355 <http://adsabs.harvard.edu/abs/1996ApJ...469..355F>`_
         * `Torres, 2010, AJ, 140, 1158 <http://adsabs.harvard.edu/abs/2010AJ....140.1158T>`_
 
-    '''
+    """
     if is_supergiant:
         coeffs = [4.012559732366214,
                  -1.055043117465989,
@@ -130,7 +130,7 @@ def _BV_to_Teff_Flower1996(BV, is_supergiant=False):
     return 10**logTeff
 
 def _fitfunc1(a, color, FeH, err):
-    '''Fitting function of *θ* = 5040/|Teff| vs color index and [Fe/H].
+    """Fitting function of *θ* = 5040/|Teff| vs color index and [Fe/H].
 
     This function calculates *θ* as a function of (color, [Fe/H]) using the
     following relation:
@@ -171,7 +171,7 @@ def _fitfunc1(a, color, FeH, err):
             * *float*: *θ* = 5040/|Teff|
             * *float*: Δ\ *θ*
 
-    '''
+    """
     color, color_err = color
     FeH,   FeH_err   = FeH
 

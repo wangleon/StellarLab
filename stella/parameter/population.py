@@ -2,24 +2,18 @@ import math
 import numpy as np
 
 def get_pop_prob(U, V, W, norm=False):
-    '''Get relative probability of thin disk, thick disk and halo based on
+    """Get relative probability of thin disk, thick disk and halo based on
     kinetic parameters
 
-    Parameters
-    ----------
-    U : *float*
-        Galactic velocity component *U* in km/s relative to the LSR
-    V : *float*
-        Galactic velocity component *V* in km/s relative to the LSR
-    W : *float*
-        Galactic velocity component *W* in km/s relative to the LSR
-    norm : *bool*
-        Normalized the probabilites to 1 if `True`
+    Args:
+        U (float): Galactic velocity component *U* in km/s relative to the LSR.
+        V (float): Galactic velocity component *V* in km/s relative to the LSR.
+        W (float): Galactic velocity component *W* in km/s relative to the LSR.
+        norm (bool): Normalized the probabilites to 1 if `True`.
 
-    Returns
-    --------
-    prob_lst : *tuple*
-        Relative probabilities of thin disk, thick disk and halo
+    Returns:
+        prob_lst (tuple): Relative probabilities of thin disk, thick disk and
+            halo.
 
     Notes
     ------
@@ -113,7 +107,7 @@ def get_pop_prob(U, V, W, norm=False):
     * `Bensby et al., 2003, A&A, 410, 527 <http://adsabs.harvard.edu/abs/2003A&A...410..527B>`_
     * `Reid et al. 2014, ApJ, 783, 130 <http://adsabs.harvard.edu/abs/2014ApJ...783..130R>`_
 
-    '''
+    """
 
     X = {'thin':0.94, 'thick':0.06, 'halo':0.0015}
     e_U = {'thin': 35.0, 'thick': 67.0, 'halo': 160.0}
