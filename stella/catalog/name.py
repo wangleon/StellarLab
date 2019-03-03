@@ -260,8 +260,8 @@ def get_catalog(name):
         '^HD\s*\d+\s*[ABC]?$'               : 'HD',
         '^HIP\s*\d+$'                       : 'HIP',
         '^HR\s*\d+$'                        : 'HR',
-        '^BD\s*[\+\-]\d+\s\d+[a-zA-Z]?$'    : 'BD',
-        '^CD\s*\-\d+\s\d+[a-zA-Z]?$'        : 'CD',
+        '^BD\s*[\+\-]\d+\s*\d+[a-zA-Z]?$'   : 'BD',
+        '^CD\s*\-\d+\s*\d+[a-zA-Z]?$'       : 'CD',
         '^EPIC\s*\d+$'                      : 'EPIC',
         '^FK5\s*\d+$'                       : 'FK5',
         '^GC\s*\d+$'                        : 'GC',
@@ -275,10 +275,10 @@ def get_catalog(name):
         '^TYC\s*\d+\-\d+\-\d?$'             : 'TYC',
     }
     for exp in starcat_re:
-        if re.match(exp, name) != None:
+        if re.match(exp, name) is not None:
             return starcat_re[exp]
 
-    if re.match('^\s[ABC]?$', name[-2:]) != None:
+    if re.match('^\s[ABC]?$', name[-2:]) is not None:
         comp = name[-1]
         name = name[0:-1].strip()
     else:
@@ -384,42 +384,33 @@ def _get_regular_BD_name(name):
     Returns:
         str: Regular BD name `"BD+ZZ NNNN"`.
     """
-    name = name.strip()
-    # parse 'BD+33 23' to 'BD +33 23'
-    name = 'BD '+ name[2:].strip()
-    # parse 'BD 33 23' to 'BD +33 23'
-    g = name.split()
-    if g[1][0].isdigit():
-        g[1] = '+'+g[1]
-        name = ' '.join(g)
+    # match 'BD+062932', 'BD +062932', 'BD+062932a', or 'BD +062932 a'
+    mobj = re.match('^BD\s*([\+\-]\d\d)(\d+)\s*([a-z]?)$', name)
+    if mobj:
+        return 'BD{0:s} {1:s}{2:s}'.format(*mobj.group(1,2,3))
 
-    # parse 'BD +33 23A' to 'BD +33 23 A'
-    # but keep 'BD +33 23a'
-    if name[-1].isalpha():
-        comp = name[-1]
-        if comp.isupper():
-            name = name[:-1].strip()+' '+comp
-        elif comp.islower():
-            name = name[:-1].strip()+comp
-        else:
-            raise ValueError
+    # match 'BD+062932', 'BD +062932', 'BD+062932A', or 'BD +062932 B'
+    mobj = re.match('^BD\s*([\+\-]\d\d)(\d+)\s*([A-Z]?)$', name)
+    if mobj:
+        return 'BD{0:s} {1:s} {2:s}'.format(*mobj.group(1,2,3)).strip()
 
-    # parse 'BD -3 23' to 'BD -03 23'
-    g = name.split()
-    if len(g[1])!=3:
-        pm = g[1][0]
-        num = abs(int(g[1]))
-        g[1] = pm + str(num).rjust(2,'0')
+    # match 'BD+06 2932', 'BD +06 2932', 'BD+6 2932a', or 'BD +6 2932a'
+    mobj = re.match('^BD\s*([\+\-]?\d+)\s+(\d+)\s*([a-z]?)$', name)
+    if mobj:
+        code1 = int(mobj.group(1))
+        return 'BD{0:=+03d} {1:s}{2:s}'.format(code1, *mobj.group(2,3))
 
-    # parse 'BD -03 0023' to 'BD -03 23'
-    g[2] = str(int(g[2]))
-    name = ' '.join(g)
+    # match 'BD+06 2932', 'BD +06 2932', 'BD+6 2932A', or 'BD +6 2932 A'
+    mobj = re.match('^BD\s*([\+\-]?\d+)\s+(\d+)\s*([A-Z]?)$', name)
+    if mobj:
+        code1 = int(mobj.group(1))
+        return 'BD{0:=+03d} {1:s} {2:s}'.format(code1, *mobj.group(2,3)).strip()
 
-    return name
+    return None
 
 def _get_regular_CD_name(name):
     """Convert a CD name in *Cordoba Durchmusterung* to its regular form
-    `"CD+ZZ NNNN"`.
+    `"CD+ZZ NNNNs"`.
 
     Args:
         name (str): Name of a star.
@@ -427,28 +418,29 @@ def _get_regular_CD_name(name):
         str: Regular CD name `"CD+ZZ NNNN"`.
     """
 
-    name = name.strip()
+    # match 'CD-062932', 'CD -062932', 'CD-062932a', or 'CD -062932 a'
+    mobj = re.match('^CD\s*(\-\d\d)(\d+)\s*([a-z]?)$', name)
+    if mobj:
+        return 'CD{0:s} {1:s}{2:s}'.format(*mobj.group(1,2,3))
 
-    # parse 'CD-33 23' to 'CD -33 23'
-    name = 'CD '+name[2:].strip()
+    # match 'CD-062932', 'CD -062932', 'CD-062932A', or 'CD -062932 B'
+    mobj = re.match('^CD\s*(\-\d\d)(\d+)\s*([A-Z]?)$', name)
+    if mobj:
+        return 'CD{0:s} {1:s} {2:s}'.format(*mobj.group(1,2,3)).strip()
 
-    # parse 'CD -33 23A' to 'CD -33 23 A'
-    if name[-1].isalpha():
-        comp = name[-1]
-        if comp.isupper():
-            name = name[:-1].strip()+' '+comp
-        elif comp.islower():
-            name = name[:-1].strip()+comp
-        else:
-            raise ValueError
+    # match 'CD-06 2932', 'CD -06 2932', 'CD-6 2932a', or 'CD -6 2932a'
+    mobj = re.match('^CD\s*(\-\d+)\s+(\d+)\s*([a-z]?)$', name)
+    if mobj:
+        code1 = int(mobj.group(1))
+        return 'CD{0:=+03d} {1:s}{2:s}'.format(code1, *mobj.group(2,3))
 
-    # parse 'CD -22 0023' to 'CD -22 23'
-    g = name.split()
-    g[2] = str(int(g[2]))
-    name = ' '.join(g)
+    # match 'CD-06 2932', 'CD -06 2932', 'CD-6 2932A', or 'CD -6 2932 A'
+    mobj = re.match('^CD\s*(\-\d+)\s+(\d+)\s*([A-Z]?)$', name)
+    if mobj:
+        code1 = int(mobj.group(1))
+        return 'CD{0:=+03d} {1:s} {2:s}'.format(code1, *mobj.group(2,3)).strip()
 
-    return name
-
+    return None
 
 def _get_regular_G_name(starname):
     """Convert a G name to its regular form.
