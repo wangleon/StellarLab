@@ -10,6 +10,8 @@ def wl_vac_to_air(wl_vac, unit='Angstrom' ,ref='Ciddor1996'):
         ref (str): Reference.
     Returns:
         float: Air wavelength
+    See also:
+        * :func:`wl_air_to_vac`
     """
 
     if ref in ['IAU', 'Edlen1953']:
@@ -52,3 +54,22 @@ def wl_vac_to_air(wl_vac, unit='Angstrom' ,ref='Ciddor1996'):
         n = 1. + 2.735182e-4 + 131.4182*wn**2 + 2.76249e8*wn**4
 
     return wl_vac/n
+
+def wl_air_to_vac(wl_air, unit='Angstrom' ,ref='Ciddor1996'):
+    """
+    Convert air wavelength to vacuum wavelength.
+
+    Args:
+        wl_air (float): Air wavelength in unit of Angstrom
+        ref (str): Reference.
+    Returns:
+        float: Air wavelength
+    See also:
+        * :func:`wl_vac_to_air`
+    """
+
+    wl = wl_air
+    for i in range(3):
+        r = w/wl_vacuum_to_air(wl, unit=unit, ref=ref)
+        wl = wl_air*r
+    return wl
