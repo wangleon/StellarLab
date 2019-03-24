@@ -30,8 +30,8 @@ Some studies suggest that this map seems to systematically overesimate the
 reddening.
 For example, Arce & Goodman 1999 [#Arce1999]_ shows a factor of 1.3-1.5 in
 regions of smooth extinction with |Av| > 0.5 mag.
-Bonifacio et al. 2000 [#Bonifacio2000]_ uses a slight revision of |EBV| in
-SFD map for |EBV| > 0.10.
+Bonifacio et al. 2000 [#Bonifacio2000]_ uses a revision of |EBV| in SFD map for
+|EBV| > 0.10.
 Whereas Meléndez et al. 2006 [#Melendez2006]_ adopts both a −10% linear
 correction and a zero-point correction of 0.01 mag.
 Schlafly & Finkbeiner 2011 [#Schlafly2011]_ suggests a correction of −14% of
