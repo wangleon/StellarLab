@@ -13,7 +13,7 @@ def feh_to_z(feh, alpha=0.0):
 
     The returned values are shown as below:
 
-    .. figure:: ../../examples/zmetal/zmetal.png
+    .. figure:: ../examples/zmetal/zmetal.png
        :alt: Metallicity v.s. [Fe/H] and [alpha/Fe]
        :align: center
        :width: 800px
