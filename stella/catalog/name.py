@@ -258,7 +258,7 @@ def get_catalog(name):
 
     starcat_re = {
         '^HD\s*\d+\s*[ABC]?$'               : 'HD',
-        '^HIP\s*\d+$'                       : 'HIP',
+        '^HIP\s*\d+\s*[ABC]?$'              : 'HIP',
         '^HR\s*\d+$'                        : 'HR',
         '^BD\s*[\+\-]\d+\s*\d+[a-zA-Z]?$'   : 'BD',
         '^CD\s*\-\d+\s*\d+[a-zA-Z]?$'       : 'CD',
@@ -341,7 +341,11 @@ def _get_regular_HIP_name(name):
 
     if isinstance(name, str):
         name = name.strip()
-        return 'HIP ' + name[3:].strip()
+        if name[-1].isalpha():
+            comp = name[-1]
+            return 'HIP %d %s'%(int(name[3:-1]), comp)
+        else:
+            return 'HIP %d'%(int(name[3:]))
     elif isinstance(name, int):
         return 'HIP %d'%name
     else:
