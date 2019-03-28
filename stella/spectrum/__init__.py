@@ -73,3 +73,111 @@ def wl_air_to_vac(wl_air, unit='Angstrom' ,ref='Ciddor1996'):
         r = w/wl_vacuum_to_air(wl, unit=unit, ref=ref)
         wl = wl_air*r
     return wl
+
+def load_stis_x1d(filename):
+    """load HST x1d fits
+    """
+    head = fits.getheader(filename)
+    if filename.lower()[-9:]=='_x1d.fits' and \
+       head['TELESCOP'] == 'HST' and \
+       head['INSTRUME'] == 'STIS':
+        data = pf.getdata(filename)
+        order_lst = data['SPORDER']
+        spec = Spec()
+        for o in range(order_lst.size):
+            wv = data['WAVELENGTH'][o]
+            flux = data['FLUX'][o]
+            spd = SpecData(wv=wv, flux=flux)
+            spec.add_order(order_lst[o],spd)
+        return spec
+    else:
+        raise ValueError
+
+def load_iue_mxhi(filename):
+    '''
+    load IUE .MXHI fits
+    '''
+    head = pf.getheader(filename)
+    if filename.lower()[-5:]=='.mxhi' and \
+        head['TELESCOP'] == 'IUE':
+        data = pf.getdata(filename)
+        spec = Spec()
+        for i in range(data['ORDER'].size):
+            order      = data['ORDER'][i]
+            npoints    = data['NPOINTS'][i]
+            wavelength = data['WAVELENGTH'][i]
+            startpix   = data['STARTPIX'][i]
+            deltaw     = data['DELTAW'][i]
+            abs_cal    = data['ABS_CAL'][i]
+            wv   = np.arange(npoints)*deltaw + wavelength
+            flux = abs_cal[startpix-1:startpix-1+npoints]
+            spd = SpecData(wv=wv,flux=flux)
+            spec.add_order(order,spd)
+        return spec
+    else:
+        raise ValueError
+
+def load_harps_e2ds(filename):
+    '''
+    load HARPS e2ds fits
+    '''
+    head = pf.getheader(filename)
+    if 'e2ds' in filename.lower() and \
+        head['TELESCOP'] == 'ESO-3P6' and\
+        head['INSTRUME'] == 'HARPS':
+        data = pf.getdata(filename)
+        spec = Spec()
+        npix  = head['NAXIS1']
+        nap   = head['NAXIS2']
+        nblue = head['HIERARCH ESO DRS CAL TH ORDER NBLUE']
+        nred  = head['HIERARCH ESO DRS CAL TH ORDER NRED']
+        ngap  = head['HIERARCH ESO DRS CAL TH ORDER NGAP']
+        o1    = head['HIERARCH ESO DRS CAL TH ORDER START']
+        ndeg  = head['HIERARCH ESO DRS CAL TH DEG LL']
+        for ap in np.arange(nap):
+            if ap < nblue:
+                order = o1 - ap
+            else:
+                order = o1 - ap - ngap
+
+            wv = np.zeros(npix)
+            for i in np.arange(ndeg+1):
+                a = ap*(ndeg+1) + i
+                key = 'HIERARCH ESO DRS CAL TH COEFF LL%d'%a
+                coeff = head[key]
+                wv += coeff*(np.arange(npix)+1)**i
+            flux = data[ap]
+
+            spec.add_order(order,SpecData(wv=wv,flux=flux))
+
+        return spec
+    else:
+        raise ValueError
+
+def load_uves_swca(filename):
+    '''
+    load UVES SWCA fits
+    '''
+    head = pf.getheader(filename)
+    if head['TELESCOP'] == 'ESO-VLT-U2' and \
+       head['INSTRUME'] == 'UVES' and \
+       head['NAXIS'] == 2 and \
+       head['CTYPE2'] == 'ORDER':
+        data = pf.getdata(filename)
+        spec = Spec()
+        npts   = head['NAXIS1']
+        norder = head['NAXIS2']
+        for i in range(norder):
+            o = i + 1
+            wv0 = head['WSTART%d'%o]
+            wv1 = head['WEND%d'%o]
+            wv = np.linspace(wv0,wv1,npts)
+            flux = data[i,:]
+            specdata = SpecData(wv=wv,flux=flux)
+            spec.add_order(o,specdata)
+
+        return spec
+
+    else:
+        raise ValueError
+
