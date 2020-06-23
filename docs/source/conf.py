@@ -57,7 +57,7 @@ source_suffix = '.rst'
 master_doc = 'content'
 
 # General information about the project.
-project = u'Stella'
+project = u'StellarLab'
 copyright = u'2016, Liang Wang'
 author = u'Liang Wang'
 
@@ -185,7 +185,7 @@ html_sidebars = {
 #html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'Stelladoc'
+htmlhelp_basename = 'StellarLabdoc'
 
 
 # -- Options for LaTeX output --------------------------------------------------
@@ -204,7 +204,7 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  (master_doc, 'Stella.tex', u'Stella Documentation',
+  (master_doc, 'StellarLab.tex', u'StellarLab Documentation',
    u'Liang Wang', 'manual'),
 ]
 
@@ -234,7 +234,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'stella', u'Stella Documentation',
+    (master_doc, 'stellarlab', u'StellarLab Documentation',
      [u'Liang Wang'], 1)
 ]
 
@@ -248,8 +248,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  (master_doc, 'Stella', u'Stella Documentation',
-   u'Liang Wang', 'Stella', 'One line description of project.',
+  (master_doc, 'StellarLab', u'StellarLab Documentation',
+   u'Liang Wang', 'StellarLab', 'One line description of project.',
    'Miscellaneous'),
 ]
 

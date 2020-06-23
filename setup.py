@@ -2,7 +2,7 @@
 from distutils.core import setup
 
 setup(
-    name = 'stella',
+    name = 'StellarLab',
     version = '0.1',
     description = '',
     author = 'Liang Wang',
@@ -12,13 +12,13 @@ setup(
         'scripts/findstar',
         ],
     packages = [
-        'stella',
-        'stella/catalog',
-        'stella/evolution',
-        'stella/extinction',
-        'stella/parameter',
-        'stella/spectrum',
-        'stella/kinetics',
-        'stella/utils',
+        'stellarlab',
+        'stellarlab/catalog',
+        'stellarlab/evolution',
+        'stellarlab/extinction',
+        'stellarlab/parameter',
+        'stellarlab/spectrum',
+        'stellarlab/kinetics',
+        'stellarlab/utils',
         ],
     )

@@ -6,7 +6,7 @@ SPHINXOPTS    =
 SPHINXBUILD   = sphinx-build
 PAPER         =
 #BUILDDIR      = build
-BUILDDIR      = /var/www/docs/stella
+BUILDDIR      = /var/www/docs/stellarlab
 
 # Internal variables.
 PAPEROPT_a4     = -D latex_paper_size=a4
