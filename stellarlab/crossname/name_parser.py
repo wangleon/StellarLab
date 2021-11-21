@@ -28,11 +28,12 @@ greek_letter_abbr_lst = {
 greek_letter_lst = greek_letter_abbr_lst.values()
 
 def is_Bayer_name(starname):
-    mobj = re.match('^([a-zA-Q\.]+)(\d*)\s*([a-zA-Z]{3})$', starname)
+    mobj = re.match('^([a-zA-Q\.]+)(\d*)\s*([a-zA-Z]{3})\s?([A-D]?)$', starname)
     if mobj:
         letter = mobj.group(1)
         number = mobj.group(2)
         conste = mobj.group(3)
+        comp   = mobj.group(4)
         if conste in constellation_abbr_lst and \
             (letter in greek_letter_abbr_lst \
             or letter in greek_letter_lst \
@@ -43,20 +44,24 @@ def is_Bayer_name(starname):
     return False
 
 def parse_Bayer_name(starname):
-    mobj = re.match('^([a-zA-Q\.]+)(\d*)\s*([a-zA-Z]{3})$', starname)
+    mobj = re.match('^([a-zA-Q\.]+)(\d*)\s*([a-zA-Z]{3})\s?([A-D]?)$', starname)
     if mobj:
         letter = mobj.group(1)
         number = mobj.group(2)
         conste = mobj.group(3)
+        comp   = mobj.group(4)
         if letter in greek_letter_abbr_lst:
             letter = greek_letter_abbr_lst[letter]
-        return '{}{} {}'.format(letter, number, conste)
+        newname = '{}{} {}'.format(letter, number, conste)
+        if len(comp)>0:
+            newname = newname+' '+comp
+        return newname
     else:
         return ''
 
 def is_Flamsteed_name(starname):
 
-    mobj = re.match('^(\d+)\s+([a-zA-Z]{3})$', starname)
+    mobj = re.match('^(\d+)\s+([a-zA-Z]{3})\s?([A-D]?)$', starname)
     if mobj:
         number = mobj.group(1)
         conste = mobj.group(2)
@@ -68,11 +73,15 @@ def is_Flamsteed_name(starname):
 
 def parse_Flamsteed_name(starname):
     
-    mobj = re.match('^(\d+)\s+([a-zA-Z]{3})$', starname)
+    mobj = re.match('^(\d+)\s+([a-zA-Z]{3})\s?([A-D]?)$', starname)
     if mobj:
         number = mobj.group(1)
         conste = mobj.group(2)
-        return '{} {}'.format(number, conste)
+        comp   = mobj.group(3)
+        newname = '{} {}'.format(number, conste)
+        if len(comp)>0:
+            newname = newname+' '+comp
+        return newname
     else:
         return ''
 
@@ -90,6 +99,22 @@ def parse_DM_name(starname):
         number  = int(mobj.group(3))
         comp    = mobj.group(4)
         return '{}{:=+03d} {:d}{}'.format(catalog, zone, number, comp)
+    else:
+        return ''
+
+def is_CPD_name(starname):
+    if re.match('CPD[+\-]?\d+\s*\d+[a-zA-Z]?$', starname):
+        return True
+    else:
+        return False
+
+def parse_CPD_name(starname):
+    mobj = re.match('CPD([+\-]?\d+)\s*(\d+)([a-zA-Z]?)$', starname)
+    if mobj:
+        zone    = int(mobj.group(1))
+        number  = int(mobj.group(2))
+        comp    = mobj.group(3)
+        return 'CPD{:=+03d} {:d}{}'.format(zone, number, comp)
     else:
         return ''
 

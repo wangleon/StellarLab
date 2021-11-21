@@ -14,6 +14,7 @@ setup(
     packages = [
         'stellarlab',
         'stellarlab/catalog',
+        'stellarlab/crossname',
         'stellarlab/evolution',
         'stellarlab/extinction',
         'stellarlab/parameter',
