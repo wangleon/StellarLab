@@ -12,10 +12,11 @@ def interpolate_data(track, n, k=1):
     Returns:
         tuple: A tuple of numpy arrays.
     '''
-    tck, u = splprep([track[0], track[1], track[2], track[3]], s=0, k=1)
+    nparam = len(track)
+    tck, u = splprep([track[iparam] for iparam in range(nparam)], s=0, k=1)
     newx   = np.linspace(0, 1, n)
     newt   = splev(newx, tck)
-    return (newt[0], newt[1], newt[2], newt[3])
+    return tuple(newt[iparam] for iparam in range(nparam))
 
 def interpolate_param(track_lst, param_lst, param):
     '''Interpolate the tracks over a certain parameter space.
