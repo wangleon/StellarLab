@@ -32,8 +32,8 @@ class _YaPSI(object):
         np.arange(3.00, 5.01, 0.20),
     ))
 
-    # alm: alpha mixing length
-    _alm1, _alm2 = 1.82126, 1.91804
+    # amlt: alpha mixing length
+    _amlt1, _amlt2 = 1.82126, 1.91804
 
     def __init__(self):
         self._track_data = {}
@@ -42,14 +42,14 @@ class _YaPSI(object):
         '''Read evoution tracks.
         '''
 
-    def _get_trackid(self, y, feh, mass, alm):
+    def _get_trackid(self, y, feh, mass, amlt):
         '''Get Track ID.
 
         Args:
             y (float): Initial helium content.
             feh (float): Metallcity.
             mass (float): Stellar mass.
-            alm (float): Mixing length.
+            amlt (float): Mixing length.
         Returns:
             tuple: A tuple of four integers (`y_id`, `feh_id`, `mass_id`,
                 `alpha_id`) as the track ID.
@@ -57,15 +57,15 @@ class _YaPSI(object):
         y_id    = int(round(y*100))
         feh_id  = int(round(feh*10))
         mass_id = int(round(mass*100))
-        if abs(alm-self._alm1)<1e-5:
-            alm_id = 1
-        elif abs(alm-self._alm2)<1e-5:
-            alm_id = 2
+        if abs(amlt-self._amlt1)<1e-5:
+            amlt_id = 1
+        elif abs(amlt-self._amlt2)<1e-5:
+            amlt_id = 2
         else:
             print('Alpha ID does not exist')
             raise ValueError
 
-        return (y_id, feh_id, mass_id, alm_id)
+        return (y_id, feh_id, mass_id, amlt_id)
 
     def get_track(self, y, feh, mass, n=0, minage=0):
         '''
@@ -111,7 +111,7 @@ class _YaPSI(object):
         i = min(i, len(nodes)-4)
         return i
 
-    def _load_track(self, y, feh, mass, alm):
+    def _load_track(self, y, feh, mass, amlt):
         '''
         Load the track of given *y* and *feh* values and pack it into the cache.
 
@@ -119,7 +119,7 @@ class _YaPSI(object):
             y (float): Helium content (*Y*).
             feh (float): Metallicity ([Fe/H]).
             mass (float): Stellar mass (*M*).
-            alm (float): Mixing-length (*alpha*).
+            amlt (float): Mixing-length (*alpha*).
 
         Notes:
             The track data is a tuple containing four arrays
@@ -133,7 +133,7 @@ class _YaPSI(object):
         data_path  = 'thirdpartydata/yapsi'
         folder = 'X{:8.6f}_Z{:8.6f}'.format(x, z).replace('.','p')
         fname = 'M{:4.2f}_X{:8.6f}_Z{:8.6f}_A{:7.5f}'.format(
-                mass, x, z, alm).replace('.', 'p')+'.trk'
+                mass, x, z, amlt).replace('.', 'p')+'.trk'
         filepath = os.path.join(data_path, folder, fname)
         filename = get_file(filepath)
 
@@ -174,12 +174,13 @@ class _YaPSI(object):
         # check if input mass is in mass nodes
         m = np.abs(self._mass_nodes - mass)<1e-3
         if m.sum()>0:
-            alm = (self._alm1, self._alm2)[mass<=1.1]
-            # get track
-            track = self._load_track(y, feh, mass, alm)
-            # put track into cache
-            trackid = self._get_trackid(y, feh, mass, alm)
-            self._track_data[trackid] = track
+            amlt = (self._amlt1, self._amlt2)[mass<=1.1]
+            trackid = self._get_trackid(y, feh, mass, amlt)
+            if trackid in self._track_data:
+                track = self._track_data[trackid]
+            else:
+                track = self._load_track(y, feh, mass, amlt)
+                self._track_data[trackid] = track
 
             if minage!=0:
                 m = track[2] > minage
@@ -192,13 +193,21 @@ class _YaPSI(object):
             imass = self._get_inodes(self._mass_nodes, mass)
             mass_lst = self._mass_nodes[imass:imass+4]
             for _mass in mass_lst:
-                alm = (self._alm1, self._alm2)[_mass<=1.1]
-                trackid = self._get_trackid(y, feh, _mass, alm)
-                track = self._track_data[trackid]
-                m = track[2] > minage
-                track = (track[0][m], track[1][m], track[2][m],
-                         track[3][m], track[4][m])
-                track = interpolate_data(track, n)
+                amlt = (self._amlt1, self._amlt2)[_mass<=1.1]
+
+                trackid = self._get_trackid(y, feh, _mass, amlt)
+                if trackid in self._track_data:
+                    track = self._track_data[trackid]
+                else:
+                    track = self._load_track(y, feh, _mass, amlt)
+                    self._track_data[trackid] = track
+
+                if minage!=0:
+                    m = track[2] > minage
+                    track = (track[0][m], track[1][m], track[2][m],
+                             track[3][m], track[4][m])
+                if n>0:
+                    track = interpolate_data(track, n)
                 track_lst.append(track)
             track = interpolate_param(track_lst, mass_lst, mass)
         return track
@@ -210,9 +219,9 @@ class _YaPSI(object):
 
         if feh in self._feh_nodes:
             # load missing tracks
-            #trackid0 = self._get_trackid(y, feh, 1.0, self._alm1)
+            #trackid0 = self._get_trackid(y, feh, 1.0, self._amlt1)
             #if trackid0 not in self._track_data:
-            #    self._load_track(y, feh, mass, alm)
+            #    self._load_track(y, feh, mass, amlt)
             track = self._get_track_of_mass(y, feh, mass, n, minage)
         else:
             # need interpolation over feh
@@ -221,7 +230,7 @@ class _YaPSI(object):
             feh_lst = self._feh_nodes[ifeh:ifeh+4]
             for _feh in feh_lst:
                 # load missing tracks
-                #trackid0 = self._get_trackid(y, _feh, 1.0, self._alm1)
+                #trackid0 = self._get_trackid(y, _feh, 1.0, self._amlt1)
                 #if trackid0 not in self._track_data:
                 #    self._load_track(y, _feh)
                 track = self._get_track_of_mass(y, _feh, mass, n, minage)
