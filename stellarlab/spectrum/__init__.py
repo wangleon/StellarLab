@@ -1,5 +1,5 @@
 from . import specwcs
-
+from .speclib import get_phoenix_r10kspec, get_phoenix_hires
 
 def wl_vac_to_air(wl_vac, unit='Angstrom' ,ref='Ciddor1996'):
     """
@@ -70,7 +70,7 @@ def wl_air_to_vac(wl_air, unit='Angstrom' ,ref='Ciddor1996'):
 
     wl = wl_air
     for i in range(3):
-        r = w/wl_vacuum_to_air(wl, unit=unit, ref=ref)
+        r = wl/wl_vac_to_air(wl, unit=unit, ref=ref)
         wl = wl_air*r
     return wl
 
