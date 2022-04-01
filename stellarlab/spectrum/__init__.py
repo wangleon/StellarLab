@@ -1,5 +1,5 @@
 from . import specwcs
-from .speclib import get_phoenix_r10kspec
+from .speclib import get_phoenix_r10kspec, get_phoenix_hires
 
 def wl_vac_to_air(wl_vac, unit='Angstrom' ,ref='Ciddor1996'):
     """
